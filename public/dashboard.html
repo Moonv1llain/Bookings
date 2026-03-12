@@ -111,6 +111,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .btn-confirm:hover{background:rgba(74,180,74,0.1)}
 .btn-sms{background:transparent;border:1px solid rgba(100,160,255,0.3);color:#88aaff}
 .btn-sms:hover{background:rgba(100,160,255,0.1)}
+.btn-reschedule{background:transparent;border:1px solid rgba(196,169,125,0.35);color:var(--gold)}
+.btn-reschedule:hover{background:rgba(196,169,125,0.1)}
+.btn-done{background:transparent;border:1px solid rgba(74,180,74,0.35);color:#7cd47c}
+.btn-done:hover{background:rgba(74,180,74,0.12)}
+.btn-confirm-sent{background:rgba(74,180,74,0.08);border:1px solid rgba(74,180,74,0.2);color:#4a9a4a;cursor:default}
 .qt-row{display:block;padding:12px 14px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;text-decoration:none;cursor:pointer;transition:background 0.15s}
 .qt-row:hover{background:var(--s1)}
 .qt-label{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;letter-spacing:0.02em}
@@ -1282,12 +1287,21 @@ function openQuickText(id) {
   window._qtTemplates = templates;
 }
 
+function openSMS(phone, msg) {
+  const clean = phone.replace(/\D/g,'');
+  const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
+  const a = document.createElement('a');
+  a.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => document.body.removeChild(a), 500);
+}
+
 function sendQTByIdx(idx) {
   const msg = window._qtTemplates[idx].msg;
-  const clean = (window._qtPhone || '').replace(/\D/g,'');
-  const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
   closeQT();
-  setTimeout(() => { window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`; }, 150);
+  setTimeout(() => openSMS(window._qtPhone, msg), 150);
 }
 
 function closeQT() {
@@ -1345,7 +1359,7 @@ function renderSchedule() {
   const now = new Date();
   const nowMins = now.getHours() * 60 + now.getMinutes();
 
-  const dayBks = DATA.bookings.filter(b => b.date === ds && b.status === 'confirmed');
+  const dayBks = DATA.bookings.filter(b => b.date === ds && b.status !== 'cancelled' && b.status !== 'completed');
   const dayBlocks = BLOCKS.filter(b => b.date === ds);
   const isWorkDay = WORK_DAYS.includes(schedDay.getDay());
 
@@ -1384,10 +1398,10 @@ function renderSchedule() {
             <div class="ts-svc">${bk.service} · ${bk.price}</div>
           </div>
           <div class="ts-actions">
-            <button class="btn btn-confirm btn-sm" onclick="confirmClient('${bk.id}')">✓ Confirm</button>
-            <button class="btn btn-sms btn-sm" onclick="openQuickText('${bk.id}')">💬 Text</button>
-            <button class="btn btn-ghost btn-sm" onclick="cancelBooking('${bk.id}')">✕</button>
-            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ + Text</button>
+            <button class="btn btn-sm ${bk.smsConfirmed?'btn-confirm-sent':'btn-confirm'}" onclick="confirmClient('${bk.id}')">${bk.smsConfirmed?'✓ Sent':'✓ Confirm'}</button>
+            <button class="btn btn-reschedule btn-sm" onclick="rescheduleClient('${bk.id}')">🔁 Reschedule</button>
+            <button class="btn btn-done btn-sm" onclick="doneBooking('${bk.id}')">✓ Done</button>
+            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ Cancel</button>
           </div>
         </div>`;
       } else {
@@ -1549,9 +1563,9 @@ function confirmClient(id) {
   const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
   const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   const msg = `Hey ${b.name}! Your ${b.service} is confirmed for ${dl} at ${b.time}. See you then! — ${shop}`;
-  const clean = b.phone.replace(/\D/g,'');
-  const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
-  window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`;
+  b.smsConfirmed = true;
+  renderSchedule();
+  openSMS(b.phone, msg);
   toast(`Confirmation sent to ${b.name}`, 'ok');
 }
 
@@ -1561,14 +1575,31 @@ function cancelClient(id) {
   const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
   const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   const msg = `Hey ${b.name}, sorry — we have to cancel your ${b.service} on ${dl} at ${b.time}. Please rebook at a different time. — ${shop}`;
-  const clean = b.phone.replace(/\D/g,'');
-  const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
-  // open SMS then cancel the booking
-  window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`;
-  setTimeout(() => cancelBooking(id), 600);
+  // Cancel booking FIRST so dismissing SMS doesn't leave ghost bookings
+  cancelBooking(id);
+  setTimeout(() => openSMS(b.phone, msg), 300);
 }
 
 
+
+function rescheduleClient(id) {
+  const b = DATA.bookings.find(x => x.id === id);
+  if (!b) return;
+  const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
+  const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const bookingUrl = window.location.origin + '/index.html';
+  const msg = `Hey ${b.name}, sorry we can't do ${dl} at ${b.time} for your ${b.service}. Can we reschedule? Book a new time here: ${bookingUrl} — ${shop}`;
+  openSMS(b.phone, msg);
+}
+
+async function doneBooking(id) {
+  const b = DATA.bookings.find(x => x.id === id);
+  if (!b) return;
+  b.status = 'completed';
+  await saveData();
+  renderAll();
+  toast(`${b.name} marked done ✓`, 'ok');
+}
 
 // ── AVAILABILITY ──────────────────────────────────────────
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
