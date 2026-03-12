@@ -80,20 +80,20 @@ body{
 .pin-err.show{opacity:1}
 
 /* ══ APP ══ */
-#app{display:none;flex-direction:column;min-height:100vh;padding-bottom:80px}
+#app{display:none;flex-direction:column;min-height:100vh;padding-bottom:60px}
 #app.unlocked{display:flex}
 
 /* ══ TOPBAR ══ */
 .topbar{
   background:var(--ink);color:var(--paper);
-  padding:14px 20px 12px;
+  padding:8px 14px 6px;
   display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100;
 }
 /* sb-logo-main used by JS to update shop name */
 .sb-logo-main{
-  font-family:var(--display);font-size:1.5rem;
-  letter-spacing:-0.02em;color:var(--paper);
+  font-family:var(--display);font-size:1.05rem;
+  letter-spacing:-0.01em;color:var(--paper);
 }
 .topbar-clock{
   font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;
@@ -105,7 +105,7 @@ body{
 #topbarTitle{display:none}
 .tb-pill{
   background:var(--ink2);border:1px solid var(--ink3);border-radius:20px;
-  padding:7px 14px;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;
+  padding:5px 10px;font-size:0.44rem;letter-spacing:0.1em;text-transform:uppercase;
   color:var(--dim2);cursor:pointer;transition:all 0.15s;white-space:nowrap;
 }
 .tb-pill:hover{color:var(--paper)}
@@ -117,7 +117,7 @@ body{
 
 /* ══ BOTTOM NAV ══ */
 .bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;height:80px;
+  position:fixed;bottom:0;left:0;right:0;height:60px;
   background:var(--ink);border-top:1px solid var(--ink2);
   display:flex;z-index:200;
   padding-bottom:env(safe-area-inset-bottom,0);
@@ -134,41 +134,55 @@ body{
 
 /* ══ STATS ══ */
 #statsRow{
-  display:grid;grid-template-columns:1fr 1fr;
-  border-bottom:1px solid var(--rule);background:var(--paper);
+  display:flex;border-bottom:1px solid var(--rule);background:var(--paper);
 }
 .stat-card{
-  padding:16px 20px;border-right:1px solid var(--rule);
+  flex:1;padding:7px 10px;border-right:1px solid var(--rule);display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;
 }
 .stat-card:last-child{border-right:none}
 .stat-val{
-  font-family:var(--display);font-size:2.4rem;line-height:1;
-  color:var(--ink);
+  font-family:var(--display);font-size:1.2rem;line-height:1;
+  color:var(--ink);white-space:nowrap;
 }
 .stat-val.gold{color:var(--gold)}
-.stat-lbl{
-  font-size:0.45rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--dim);margin-top:4px;
+.stat-lbl,.stat-label{
+  font-size:0.32rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--dim);
 }
+
+
+/* ══ SWIPE TO DELETE ══ */
+.swipe-wrap{position:relative;overflow:hidden;}
+.swipe-inner{
+  position:relative;transition:transform 0.2s ease;
+  will-change:transform;touch-action:pan-y;
+}
+.swipe-del{
+  position:absolute;right:0;top:0;bottom:0;width:80px;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:2px;cursor:pointer;
+  font-size:0.4rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;
+}
+.swipe-del svg{width:18px;height:18px;margin-bottom:2px}
 
 /* ══ SECTION HEADER ══ */
 .sec-hdr{
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px 14px;
+  padding:8px 14px;
   background:var(--paper);border-bottom:1px solid var(--rule);
 }
 .sec-hdr-title{
-  font-family:var(--display);font-size:1.6rem;letter-spacing:-0.02em;color:var(--ink);
+  font-family:var(--display);font-size:1.0rem;letter-spacing:-0.01em;color:var(--ink);white-space:nowrap;
 }
-.sec-hdr-sub{font-size:0.45rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+.sec-hdr-sub{font-size:0.4rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-top:1px}
 .day-nav{display:flex;gap:6px}
 .sched-arrow{
   background:var(--paper2);border:1px solid var(--rule);border-radius:8px;
-  padding:8px 14px;font-size:0.52rem;font-weight:500;letter-spacing:0.08em;
+  padding:6px 12px;font-size:0.46rem;font-weight:500;letter-spacing:0.06em;
   color:var(--dim);cursor:pointer;transition:all 0.15s;
 }
 .sched-arrow:hover{background:var(--paper3);color:var(--ink)}
-.sched-arrow:first-child,.sched-arrow:last-child{font-size:1rem;padding:6px 12px}
+.sched-arrow:first-child,.sched-arrow:last-child{font-size:0.9rem;padding:6px 10px}
 
 /* ══ SCHEDULE SLOTS ══ */
 .time-slot-list{background:var(--paper2)}
@@ -180,32 +194,32 @@ body{
 
 /* time column */
 .ts-time{
-  width:68px;flex-shrink:0;
-  padding:16px 0 16px 20px;
-  font-size:0.48rem;font-weight:500;letter-spacing:0.08em;
-  color:var(--dim);text-transform:uppercase;padding-top:20px;
+  width:66px;flex-shrink:0;
+  padding:12px 0 10px 14px;
+  font-size:0.6rem;font-weight:500;letter-spacing:0.03em;
+  color:var(--dim);text-transform:uppercase;
 }
 
 /* content column */
-.ts-content{flex:1;padding:14px 16px 14px 0;min-width:0}
+.ts-content{flex:1;padding:12px 12px 12px 0;min-width:0}
 
 /* open slot */
 .ts-open{
-  font-size:0.46rem;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--rule2);padding-top:4px;
+  font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--dim);padding-top:4px;opacity:0.45;
 }
 
 /* booked slot */
 .time-slot.booked{background:#fff}
 .ts-client-name{
-  font-family:var(--display);font-size:1.2rem;letter-spacing:-0.01em;
+  font-family:var(--display);font-size:1.15rem;letter-spacing:-0.01em;
   color:var(--ink);line-height:1;margin-bottom:3px;
 }
 .ts-svc-line{
-  font-size:0.48rem;letter-spacing:0.08em;
-  color:var(--dim);margin-bottom:12px;
+  font-size:0.58rem;letter-spacing:0.04em;
+  color:var(--dim);margin-bottom:6px;
 }
-.ts-actions{display:flex;gap:6px;flex-wrap:wrap}
+.ts-actions{display:flex;gap:5px;flex-wrap:wrap;padding-bottom:2px}
 
 /* blocked */
 .time-slot.blocked{background:var(--paper2)}
@@ -219,10 +233,10 @@ body{
 
 /* action buttons */
 .act-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  border-radius:20px;padding:7px 13px;
-  font-size:0.46rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
-  cursor:pointer;border:1.5px solid var(--rule);background:var(--paper2);color:var(--dim);
+  display:inline-flex;align-items:center;gap:4px;
+  border-radius:16px;padding:5px 10px;
+  font-size:0.42rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;border:1px solid var(--rule);background:var(--paper2);color:var(--dim);
   transition:all 0.12s;white-space:nowrap;
 }
 .act-btn:active{transform:scale(0.94)}
@@ -236,14 +250,14 @@ body{
 
 /* remind banner */
 #remindBanner{
-  margin:12px 20px;padding:14px 16px;
-  background:#fdf8ee;border:1.5px solid #e8d080;border-radius:12px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:6px 12px;padding:7px 12px;
+  background:#fdf8ee;border:1px solid #d4b86a;border-radius:6px;
+  display:none;align-items:center;justify-content:space-between;gap:8px;
 }
-#remindText{font-size:0.5rem;font-weight:500;letter-spacing:0.08em;color:var(--gold)}
+#remindText{font-size:0.4rem;font-weight:500;letter-spacing:0.05em;color:#8a6a10}
 #btnRemindAll{
-  background:var(--gold);color:#fff;border:none;border-radius:20px;
-  padding:9px 16px;font-size:0.5rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--gold);color:#fff;border:none;border-radius:4px;
+  padding:5px 10px;font-size:0.38rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
   cursor:pointer;white-space:nowrap;
 }
 
@@ -467,24 +481,29 @@ body{
 .range-val{font-family:var(--display);font-size:1.1rem;color:var(--ink);min-width:36px;text-align:right}
 
 /* theme grid */
-.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 20px}
-.theme-btn{
-  border-radius:10px;padding:12px 6px 8px;cursor:pointer;text-align:center;
-  border:2px solid var(--rule);background:var(--paper2);transition:all 0.15s;
+/* theme grid — classes emitted by renderThemeGrid() */
+.theme-grid{padding:14px 20px}
+.theme-group-label{font-size:0.4rem;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.theme-grid-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.theme-card{
+  border-radius:10px;padding:12px 8px 10px;cursor:pointer;text-align:center;
+  border:2px solid transparent;transition:all 0.15s;
 }
-.theme-btn.sel{border-color:var(--gold)}
-.theme-swatch{width:24px;height:24px;border-radius:50%;margin:0 auto 6px;border:1px solid rgba(0,0,0,0.1)}
-.theme-name{font-size:0.38rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)}
+.theme-card.active{border-color:var(--gold)!important}
+.theme-card-name{font-size:0.5rem;font-weight:700;letter-spacing:0.04em;margin-bottom:2px}
+.theme-card-desc{font-size:0.38rem;letter-spacing:0.06em;margin-bottom:8px}
+.theme-card-dots{display:flex;gap:4px;justify-content:center}
+.theme-card-dot{width:8px;height:8px;border-radius:50%}
 
-/* font grid */
+/* font grid — classes emitted by renderFontGrid() */
 .font-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 20px}
-.font-btn{
+.font-card{
   background:var(--paper2);border:2px solid var(--rule);border-radius:10px;
-  padding:14px;cursor:pointer;text-align:center;transition:all 0.15s;
+  padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.15s;
 }
-.font-btn.sel{border-color:var(--gold);background:#fdf8ee}
-.font-sample{font-size:1.4rem;color:var(--ink);margin-bottom:4px}
-.font-lbl{font-size:0.4rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim)}
+.font-card.active{border-color:var(--gold);background:#fdf8ee}
+.font-card-name{font-size:1.4rem;color:var(--ink);margin-bottom:4px;line-height:1.2}
+.font-card-desc{font-size:0.38rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)}
 
 /* swatch row */
 .swatch-row{display:flex;gap:10px;flex-wrap:wrap;padding:14px 20px}
@@ -492,7 +511,7 @@ body{
   width:34px;height:34px;border-radius:50%;cursor:pointer;
   border:3px solid transparent;transition:all 0.15s;
 }
-.swatch.sel{border-color:var(--ink);transform:scale(1.12)}
+.swatch.active{border-color:var(--ink)!important;transform:scale(1.15)}
 .color-custom{display:flex;align-items:center;gap:10px;padding:0 20px 14px}
 .color-preview{width:34px;height:34px;border-radius:50%;border:2px solid var(--rule);flex-shrink:0}
 
@@ -503,7 +522,7 @@ body{
   padding:12px 20px;border-bottom:1px solid var(--rule);
 }
 .svc-name{font-family:var(--display);font-size:1.05rem;flex:1;color:var(--ink)}
-.svc-price{font-family:var(--display);font-size:1.1rem;color:var(--gold)}
+.svc-price{font-family:var(--display);font-size:1.1rem;color:var(--ink)}
 .svc-dur{font-size:0.42rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);min-width:36px;text-align:right}
 .svc-del{background:none;border:none;font-size:1.1rem;color:var(--dim2);cursor:pointer;padding:4px;transition:color 0.15s}
 .svc-del:hover{color:var(--red)}
@@ -628,7 +647,6 @@ body{
 .day-card-status.open{color:var(--green)}
 .day-card-hours{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
 .dh-sel{background:var(--paper2);border:1.5px solid var(--rule);border-radius:6px;padding:7px 10px;font-family:var(--font);font-size:0.82rem;color:var(--ink);outline:none;flex:1}
-/* svc-row for service editor */
 .svc-row{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--paper)}
 /* qt-row for quick text modal */
 .qt-row{padding:12px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:background 0.12s;border-radius:4px}
@@ -636,6 +654,29 @@ body{
 .qt-row:hover{background:var(--paper2)}
 .qt-label{font-size:0.54rem;font-weight:500;color:var(--ink);margin-bottom:3px;letter-spacing:0.04em}
 .qt-preview{font-size:0.44rem;letter-spacing:0.04em;color:var(--dim);line-height:1.5}
+
+/* ── THEME GRID (JS renders these classes) ── */
+.theme-grid{padding:14px 20px 4px}
+.theme-group-label{font-size:0.4rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;margin-top:4px}
+.theme-grid-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.theme-card{border-radius:10px;padding:10px 6px 8px;cursor:pointer;text-align:center;border:2px solid transparent;transition:all 0.15s}
+.theme-card.active{outline:2px solid var(--gold);outline-offset:2px}
+.theme-card-name{font-size:0.48rem;font-weight:700;letter-spacing:0.02em;margin-bottom:2px;line-height:1.2}
+.theme-card-desc{font-size:0.35rem;letter-spacing:0.04em;margin-bottom:7px;line-height:1.3;opacity:0.8}
+.theme-card-dots{display:flex;gap:4px;justify-content:center}
+.theme-card-dot{width:8px;height:8px;border-radius:50%}
+
+/* ── FONT GRID (JS renders these classes) ── */
+.font-card{background:var(--paper2);border:2px solid var(--rule);border-radius:10px;padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.15s}
+.font-card.active{border-color:var(--gold);background:#fdf8ee}
+.font-card-name{font-size:1.4rem;color:var(--ink);margin-bottom:4px;line-height:1.2}
+.font-card-desc{font-size:0.38rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)}
+
+/* ── SWATCH active state (JS uses .active not .sel) ── */
+.swatch.active{border-color:var(--ink)!important;transform:scale(1.15)}
+
+/* ── stat-label alias (JS emits stat-label, CSS only had stat-lbl) ── */
+.stat-label{font-size:0.45rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);margin-top:4px}
 </style>
 </head>
 <body>
@@ -1060,7 +1101,7 @@ let CFG = {
   venmo:        MOON_CONFIG.VENMO          || '',
   paypal:       MOON_CONFIG.PAYPAL         || '',
   accent:       '#c4a97d',
-  bgTheme:      'dark',
+  bgTheme:      'smoke',
   openHour:     MOON_CONFIG.OPEN_HOUR      || 9,
   closeHour:    MOON_CONFIG.CLOSE_HOUR     || 18,
   slotLen:      30,
@@ -1311,14 +1352,25 @@ function remindAllTomorrow() {
   const ds = dStr(tomorrow);
   const bks = DATA.bookings.filter(b => b.date===ds && b.status==='confirmed');
   if (!bks.length) { toast('No bookings tomorrow', 'err'); return; }
-  // open them sequentially with slight delays so each SMS app pre-fills
-  bks.forEach((bk, i) => {
-    setTimeout(() => {
-      const msg = buildReminderMsg(bk.name, bk.service, bk.date, bk.time);
-      window.location.href = smsLink(bk.phone, msg);
-    }, i * 1500);
-  });
-  toast(`Opening ${bks.length} reminder${bks.length>1?'s':''}…`, 'ok');
+  // Show a modal with one-tap SMS buttons per client (avoids group chat issues)
+  const rows = bks.map(bk => {
+    const msg = encodeURIComponent(buildReminderMsg(bk.name, bk.service, bk.date, bk.time));
+    const clean = bk.phone.replace(/\D/g,'');
+    const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
+    return `<a href="sms:${clean}${sep}body=${msg}" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--rule);text-decoration:none;gap:12px;">
+      <div>
+        <div style="font-family:var(--display);font-size:1rem;color:var(--ink);line-height:1">${bk.name}</div>
+        <div style="font-size:0.55rem;color:var(--dim);margin-top:2px">${bk.service} · ${bk.time}</div>
+      </div>
+      <div style="background:var(--green);color:#fff;border-radius:20px;padding:7px 14px;font-size:0.5rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;flex-shrink:0">📱 Text</div>
+    </a>`;
+  }).join('');
+  document.getElementById('modalTitle').textContent = `Remind Tomorrow (${bks.length})`;
+  document.getElementById('modalBody').innerHTML = `
+    <div style="font-size:0.55rem;color:var(--dim);margin-bottom:4px;letter-spacing:0.06em">Tap each client to open a pre-filled text message</div>
+    ${rows}`;
+  document.getElementById('modalFooter').innerHTML = `<button class="act-btn cancel-silent" onclick="closeModal()">Done</button>`;
+  document.getElementById('modal').classList.add('open');
 }
 
 // ── SCHEDULE ──────────────────────────────────────────────
@@ -1375,13 +1427,13 @@ function renderSchedule() {
           <div class="ts-content">
             <div class="ts-client-name">${bk.name}</div>
             <div class="ts-svc-line">${bk.service} · ${bk.price}</div>
-          </div>
-          <div class="ts-actions">
-            <button class="act-btn confirm ${bk.smsConfirmed?'sent':''}" onclick="confirmClient('${bk.id}')">${bk.smsConfirmed?'✓ Sent':'✓ Confirm'}</button>
-            <button class="act-btn reschedule" onclick="rescheduleClient('${bk.id}')">🔁 Reschedule</button>
-            <button class="act-btn done" onclick="doneBooking('${bk.id}')">✓ Done</button>
-            <button class="act-btn cancel-text" onclick="cancelClient('${bk.id}')">✕ + Text</button>
-            <button class="act-btn cancel-silent" onclick="cancelBooking('${bk.id}')">✕</button>
+            <div class="ts-actions">
+              <button class="act-btn confirm ${bk.smsConfirmed?'sent':''}" onclick="confirmClient('${bk.id}')">${bk.smsConfirmed?'✓ Sent':'✓ Confirm'}</button>
+              <button class="act-btn reschedule" onclick="rescheduleClient('${bk.id}')">🔁</button>
+              <button class="act-btn done" onclick="doneBooking('${bk.id}')">✓ Done</button>
+              <button class="act-btn cancel-text" onclick="cancelClient('${bk.id}')">✕ Text</button>
+              <button class="act-btn cancel-silent" onclick="cancelBooking('${bk.id}')">✕</button>
+            </div>
           </div>
         </div>`;
       } else {
@@ -1401,9 +1453,14 @@ function renderSchedule() {
     const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
     const tmrBks = DATA.bookings.filter(b => b.date===dStr(tomorrow) && b.status==='confirmed');
     const banner = document.getElementById('remindBanner');
-    if(banner) banner.style.display = isToday && tmrBks.length ? 'flex' : 'none';
-    remindBtn.style.display = '';
-    remindBtn.textContent = `📱 Remind Tomorrow (${tmrBks.length})`;
+    if(banner) {
+      const show = isToday && tmrBks.length > 0;
+      banner.style.display = show ? 'flex' : 'none';
+      if(show) {
+        document.getElementById('remindText').textContent = `${tmrBks.length} client${tmrBks.length>1?'s':''} booked tomorrow`;
+        remindBtn.textContent = `📱 Remind All`;
+      }
+    }
   }
 }
 
@@ -1415,6 +1472,80 @@ function isTimeBlocked(time, from, to) {
 }
 
 // ── BOOKINGS ──────────────────────────────────────────────
+
+// ── DELETE BOOKING / CLIENT ────────────────────────────────
+function deleteBookingById(id) {
+  if (!confirm('Delete this booking?')) return;
+  DATA.bookings = DATA.bookings.filter(b => b.id !== id);
+  saveData();
+  renderBookings();
+  toast('Booking deleted', 'ok');
+}
+
+function deleteClientByPhone(phone) {
+  if (!confirm('Remove this client and all their bookings?')) return;
+  DATA.clients  = DATA.clients.filter(c => c.phone !== phone);
+  DATA.bookings = DATA.bookings.filter(b => b.phone !== phone);
+  saveData();
+  renderClients();
+  renderBookings();
+  toast('Client removed', 'ok');
+}
+
+// ── SWIPE TO DELETE ────────────────────────────────────────
+function initSwipe(wrap, onDelete) {
+  const inner = wrap.querySelector('.swipe-inner');
+  if (!inner) return;
+  let startX = 0, curX = 0, dragging = false, opened = false;
+  const THRESH = 60;
+
+  inner.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    curX = 0;
+    dragging = true;
+  }, { passive: true });
+
+  inner.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    curX = e.touches[0].clientX - startX;
+    if (curX > 0) { inner.style.transform = 'translateX(0)'; return; }
+    const dx = Math.max(curX, -80);
+    inner.style.transform = `translateX(${dx}px)`;
+  }, { passive: true });
+
+  inner.addEventListener('touchend', () => {
+    dragging = false;
+    if (curX < -THRESH) {
+      inner.style.transform = 'translateX(-80px)';
+      opened = true;
+    } else {
+      inner.style.transform = 'translateX(0)';
+      opened = false;
+    }
+  });
+
+  // tap outside to close
+  wrap.addEventListener('touchstart', e => {
+    if (opened && e.target.closest('.swipe-inner')) {
+      inner.style.transform = 'translateX(0)';
+      opened = false;
+    }
+  }, { passive: true });
+
+  // delete button
+  const delBtn = wrap.querySelector('.swipe-del');
+  if (delBtn) delBtn.addEventListener('click', onDelete);
+}
+
+function initAllSwipes() {
+  document.querySelectorAll('.swipe-wrap[data-id]').forEach(wrap => {
+    const id    = wrap.dataset.id;
+    const type  = wrap.dataset.type;
+    if (type === 'booking') initSwipe(wrap, () => deleteBookingById(id));
+    if (type === 'client')  initSwipe(wrap, () => deleteClientByPhone(id));
+  });
+}
+
 function renderBookings() {
   const q = (document.getElementById('bookingSearch')?.value || '').toLowerCase();
   const statusOrder = { confirmed: 0, completed: 1, cancelled: 2 };
@@ -1449,19 +1580,25 @@ function renderBookings() {
     const dotCls = b.status==='confirmed' ? 'confirmed' : b.status==='cancelled' ? 'cancelled' : b.status==='completed' ? 'completed' : 'other';
     const timeNote = b.cancelledAt ? ' · <span style="color:var(--red);font-size:0.4rem">Cancelled '+new Date(b.cancelledAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</span>'
                    : b.completedAt ? ' · <span style="color:var(--blue);font-size:0.4rem">Done '+new Date(b.completedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</span>' : '';
-    return `<div class="bk-row" onclick="viewBooking('${b.id}')">
-      <div class="bk-dot ${dotCls}"></div>
-      <div class="bk-info">
-        <div class="bk-name">${b.name||'—'}</div>
-        <div class="bk-sub">${b.service||'—'} · ${b.time||''}${timeNote}</div>
+    return `<div class="swipe-wrap" data-id="${b.id}" data-type="booking">
+      <div class="swipe-inner">
+        <div class="bk-row" onclick="viewBooking('${b.id}')">
+          <div class="bk-dot ${dotCls}"></div>
+          <div class="bk-info">
+            <div class="bk-name">${b.name||'—'}</div>
+            <div class="bk-sub">${b.service||'—'} · ${b.time||''}${timeNote}</div>
+          </div>
+          <div class="bk-right">
+            <div class="bk-price">${b.price||'—'}</div>
+            <div class="bk-date">${dl}</div>
+            <div class="bk-status-lbl ${dotCls}">${b.status||'confirmed'}</div>
+          </div>
+        </div>
       </div>
-      <div class="bk-right">
-        <div class="bk-price">${b.price||'—'}</div>
-        <div class="bk-date">${dl}</div>
-        <div class="bk-status-lbl ${dotCls}">${b.status||'confirmed'}</div>
-      </div>
+      <div class="swipe-del"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>DEL</div>
     </div>`;
   }).join('');
+  initAllSwipes();
 }
 
 // ── CLIENTS ───────────────────────────────────────────────
@@ -1480,12 +1617,18 @@ function renderClients() {
 
   grid.innerHTML = clients.map(c => {
     const lastDate = c.lastVisit ? new Date(c.lastVisit+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
-    return `<div class="cl-row" onclick="viewClient('${c.phone}')">
-      <div class="cl-avatar">${(c.name||'??')[0].toUpperCase()}</div>
-      <div class="cl-info"><div class="cl-name">${c.name||'Unknown'}</div><div class="cl-phone">${c.phone||'—'} · Last: ${lastDate}</div></div>
-      <div class="cl-visits-wrap"><div class="cl-count">${c.visits||0}</div><div class="cl-count-lbl">visits</div></div>
+    return `<div class="swipe-wrap" data-id="${c.phone}" data-type="client">
+      <div class="swipe-inner">
+        <div class="cl-row" onclick="viewClient('${c.phone}')">
+          <div class="cl-avatar">${(c.name||'??')[0].toUpperCase()}</div>
+          <div class="cl-info"><div class="cl-name">${c.name||'Unknown'}</div><div class="cl-phone">${c.phone||'—'} · Last: ${lastDate}</div></div>
+          <div class="cl-visits-wrap"><div class="cl-count">${c.visits||0}</div><div class="cl-count-lbl">visits</div></div>
+        </div>
+      </div>
+      <div class="swipe-del"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>DEL</div>
     </div>`;
   }).join('');
+  initAllSwipes();
 }
 
 function viewClient(phone) {
@@ -2080,9 +2223,12 @@ function pickFont(id) {
 function setBgTheme(theme) { pickTheme(theme); }
 
 function saveAppearance() {
-  CFG.accent = document.getElementById('cfgAccent').value.trim() || CFG.accent;
+  // bgTheme and fontId are already set on CFG when user clicks a card
+  // Just make sure accent is captured too
+  const accentInput = document.getElementById('cfgAccent');
+  if (accentInput && accentInput.value.trim()) CFG.accent = accentInput.value.trim();
   persist();
-  toast('Appearance saved', 'ok');
+  toast('Appearance saved — booking page will update ✓', 'ok');
 }
 
 // ── BOOKING RULES ─────────────────────────────────────────
@@ -2117,13 +2263,13 @@ function loadDashReviews() {
     return;
   }
   list.innerHTML = reviews.slice().reverse().map((r,i) => `
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:12px 14px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:12px 14px">
       <div>
         <div style="color:var(--gold);font-size:12px;letter-spacing:2px;margin-bottom:3px">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-        <div style="font-size:13px;color:var(--text);margin-bottom:4px">${r.text||'No comment'}</div>
+        <div style="font-size:13px;color:var(--ink);margin-bottom:4px">${r.text||'No comment'}</div>
         <div style="font-size:11px;color:var(--dim)">${r.name} · ${r.date?new Date(r.date).toLocaleDateString():'—'}</div>
       </div>
-      <button class="btn btn-danger btn-sm" onclick="deleteReview(${reviews.length-1-i})">✕</button>
+      <button class="act-btn cancel-text" onclick="deleteReview(${reviews.length-1-i})">✕</button>
     </div>`
   ).join('');
 }
@@ -2270,8 +2416,8 @@ async function initPin() {
     unlock();
     return;
   }
-  // show pin screen
-  document.getElementById('pinScreen').classList.remove('unlocked');
+  // pin screen is visible by default — ensure app stays hidden
+  document.getElementById('app').classList.remove('unlocked');
 }
 
 function pinKey(d) {
