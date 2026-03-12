@@ -107,8 +107,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .btn-danger:hover{background:rgba(192,57,43,0.1)}
 .ts-past{opacity:0.4}
 .ts-past .ts-time{text-decoration:line-through}
-.btn-sms{background:transparent;border:1px solid rgba(74,180,74,0.3);color:#7cd47c}
-.btn-sms:hover{background:rgba(74,180,74,0.1)}
+.btn-confirm{background:transparent;border:1px solid rgba(74,180,74,0.3);color:#7cd47c}
+.btn-confirm:hover{background:rgba(74,180,74,0.1)}
+.btn-sms{background:transparent;border:1px solid rgba(100,160,255,0.3);color:#88aaff}
+.btn-sms:hover{background:rgba(100,160,255,0.1)}
 .qt-row{display:block;padding:12px 14px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;text-decoration:none;cursor:pointer;transition:background 0.15s}
 .qt-row:hover{background:var(--s1)}
 .qt-label{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;letter-spacing:0.02em}
@@ -1388,9 +1390,9 @@ function renderSchedule() {
             <div class="ts-svc">${bk.service} · ${bk.price}</div>
           </div>
           <div class="ts-actions">
-            <button class="btn btn-ghost btn-sm" onclick="viewBooking('${bk.id}')">View</button>
+            <button class="btn btn-confirm btn-sm" onclick="confirmClient('${bk.id}')">✓ Confirm</button>
             <button class="btn btn-sms btn-sm" onclick="openQuickText('${bk.id}')">💬 Text</button>
-            <button class="btn btn-danger btn-sm" onclick="promptCancel('${bk.id}')">Cancel</button>
+            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ Cancel</button>
           </div>
         </div>`;
       } else {
@@ -1546,10 +1548,32 @@ async function cancelBooking(id) {
   toast('Booking cancelled', 'ok');
 }
 
-function promptCancel(id) {
-  // open quick text modal in cancel mode — barber can text first, then it cancels
-  openQuickText(id, true);
+function confirmClient(id) {
+  const b = DATA.bookings.find(x => x.id === id);
+  if (!b) return;
+  const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
+  const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const msg = `Hey ${b.name}! Your ${b.service} is confirmed for ${dl} at ${b.time}. See you then! — ${shop}`;
+  const clean = b.phone.replace(/\D/g,'');
+  const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
+  window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`;
+  toast(`Confirmation sent to ${b.name}`, 'ok');
 }
+
+function cancelClient(id) {
+  const b = DATA.bookings.find(x => x.id === id);
+  if (!b) return;
+  const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
+  const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const msg = `Hey ${b.name}, sorry — we have to cancel your ${b.service} on ${dl} at ${b.time}. Please rebook at a different time. — ${shop}`;
+  const clean = b.phone.replace(/\D/g,'');
+  const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
+  // open SMS then cancel the booking
+  window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`;
+  setTimeout(() => cancelBooking(id), 600);
+}
+
+
 
 // ── AVAILABILITY ──────────────────────────────────────────
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
