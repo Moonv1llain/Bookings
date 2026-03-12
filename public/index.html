@@ -750,19 +750,20 @@ async function loadBookings(){
 }
 
 async function saveBooking(bk){
-  try{
-    const r=await fetch(`https://api.jsonbin.io/v3/b/${CFG.JSONBIN_BIN_ID}/latest`,{headers:{'X-Master-Key':CFG.JSONBIN_API_KEY}});
-    let d={bookings:[],clients:[]};
-    if(r.ok){ const j=await r.json(); d=j.record||d; }
-    if(!d.bookings) d.bookings=[];
-    if(!d.clients)  d.clients=[];
-    d.bookings.push(bk);
-    const c=d.clients.find(x=>x.phone===bk.phone);
-    if(c){c.visits++;c.points=(c.points||0)+10;c.streak=(c.streak||0)+1;c.lastVisit=bk.date;}
-    else d.clients.push({name:bk.name,phone:bk.phone,visits:1,points:10,streak:1,lastVisit:bk.date,joinDate:new Date().toISOString().split('T')[0]});
-    const w=await fetch(`https://api.jsonbin.io/v3/b/${CFG.JSONBIN_BIN_ID}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CFG.JSONBIN_API_KEY},body:JSON.stringify(d)});
-    if(!w.ok) throw new Error('Failed to save booking: '+w.status);
-  }catch(e){ throw e; } // re-throw so confirmBooking catch handles it
+  // Fresh GET immediately before PUT to avoid race conditions / overwriting concurrent changes
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${CFG.JSONBIN_BIN_ID}/latest`,{headers:{'X-Master-Key':CFG.JSONBIN_API_KEY}});
+  if(!r.ok) throw new Error('Could not reach booking system: '+r.status);
+  const j=await r.json();
+  const record=j.record||{};
+  // Preserve everything in the record (settings etc) — only touch bookings + clients
+  if(!record.bookings) record.bookings=[];
+  if(!record.clients)  record.clients=[];
+  record.bookings.push(bk);
+  const c=record.clients.find(x=>x.phone===bk.phone);
+  if(c){c.visits++;c.lastVisit=bk.date;}
+  else record.clients.push({name:bk.name,phone:bk.phone,visits:1,lastVisit:bk.date,joinDate:new Date().toISOString().split('T')[0]});
+  const w=await fetch(`https://api.jsonbin.io/v3/b/${CFG.JSONBIN_BIN_ID}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':CFG.JSONBIN_API_KEY},body:JSON.stringify(record)});
+  if(!w.ok) throw new Error('Failed to save booking: '+w.status);
 }
 
 function renderSvcs(){
