@@ -70,7 +70,6 @@ header{
   gap:4px;padding-bottom:14px;
 }
 .hdr-date{font-size:0.44rem;letter-spacing:0.18em;color:var(--dim);text-transform:uppercase}
-}
 
 /* red accent line — subtle nod to the pole without being corny */
 .hdr-accent{
@@ -340,19 +339,10 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
 .succ.show .succ-sub{transform:translateY(0);opacity:1}
 
 .succ-card{background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:16px 18px;width:100%;text-align:left;margin-bottom:12px;transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.55s}
-}
 .succ.show .succ-card{transform:translateY(0);opacity:1}
 .sr{display:flex;justify-content:space-between;align-items:center;font-size:0.6rem;letter-spacing:0.08em;padding:7px 0;border-bottom:1px solid var(--border)}
 .sr:last-child{border-bottom:none}
 .sr .k{color:var(--dim)}.sr .v{color:var(--cut)}
-
-}
-}
-
-/* ── POST-BOOKING REVIEW PROMPT ── */
-}
-}
-}
 
 /* date strip — show scroll indicator */
 .date-strip-wrap{position:relative;flex-shrink:0}
@@ -368,6 +358,83 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
 .t-grid-wrap{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;min-height:0;scrollbar-width:none;padding-right:2px}
 .t-grid-wrap::-webkit-scrollbar{display:none}
 .t-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+
+/* ── LOCK BTN ── */
+.lock-btn{background:none;border:none;cursor:pointer;color:var(--dim2);font-size:0.75rem;padding:2px 4px;transition:color 0.2s;flex-shrink:0;line-height:1;-webkit-user-select:none;user-select:none}
+.lock-btn:hover{color:var(--dim)}
+
+/* ── QUICK TEXT BUTTON ── */
+.quick-text-btn{display:none;align-items:center;gap:6px;background:rgba(196,169,125,0.08);border:1px solid rgba(196,169,125,0.2);border-radius:3px;padding:5px 12px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;cursor:pointer;transition:all 0.15s;flex-shrink:0}
+.quick-text-btn.on{display:flex}
+.quick-text-btn:hover{background:rgba(196,169,125,0.14)}
+
+/* ── ABOUT STRIP ── */
+.about-strip{background:var(--s1);border-bottom:1px solid var(--border);padding:12px 16px;display:none}
+.about-strip.on{display:block}
+.about-text{font-size:11px;letter-spacing:0.06em;color:var(--dim);line-height:1.7}
+.about-insta{display:inline-flex;align-items:center;gap:5px;font-size:11px;letter-spacing:0.08em;color:var(--gold);text-decoration:none;margin-top:4px}
+
+/* ── GALLERY STRIP ── */
+.gallery-strip{display:none;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-bottom:1px solid var(--border)}
+.gallery-strip.on{display:flex}
+.gallery-strip::-webkit-scrollbar{display:none}
+.gallery-img{width:72px;height:72px;border-radius:4px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);cursor:pointer;transition:opacity 0.2s}
+.gallery-img:hover{opacity:0.8}
+
+/* ── WALK-IN BAR ── */
+.walkin-bar{display:none;flex-shrink:0;background:rgba(196,169,125,0.06);border-bottom:1px solid rgba(196,169,125,0.2);padding:8px 16px;align-items:center;justify-content:space-between;gap:10px}
+.walkin-bar.on{display:flex}
+.walkin-label{font-size:11px;letter-spacing:0.1em;color:var(--dim)}
+.walkin-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;background:var(--gold);color:var(--bg);border:none;border-radius:3px;padding:6px 14px;cursor:pointer;text-decoration:none;white-space:nowrap}
+
+/* ── VACATION SCREEN ── */
+.vaca-screen{position:fixed;inset:0;background:var(--bg);z-index:5000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center}
+.vaca-screen.on{display:flex}
+.vaca-icon{font-size:3rem;margin-bottom:16px}
+.vaca-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:2.8rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--cut);margin-bottom:8px;line-height:1}
+.vaca-msg{font-size:13px;letter-spacing:0.08em;color:var(--dim);line-height:1.8}
+
+/* ── LIGHTBOX ── */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:8000;display:none;align-items:center;justify-content:center;padding:20px}
+.lightbox.on{display:flex}
+.lightbox img{max-width:100%;max-height:90vh;border-radius:6px;object-fit:contain}
+.lightbox-close{position:absolute;top:16px;right:20px;font-size:1.6rem;color:var(--dim);cursor:pointer;background:none;border:none}
+
+/* ── PAY OPTIONS ── */
+.pay-section{margin-top:10px}
+.pay-label{font-size:0.44rem;letter-spacing:0.28em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;display:block}
+.pay-options{display:flex;flex-direction:column;gap:7px}
+.pay-opt{display:flex;align-items:center;gap:14px;background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:13px 16px;cursor:pointer;transition:all 0.18s;-webkit-user-select:none;user-select:none;position:relative}
+.pay-opt::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;border-radius:4px 0 0 4px;transform:scaleY(0);transition:transform 0.2s cubic-bezier(0.34,1.3,0.64,1)}
+.pay-opt:active{transform:scale(0.98)}
+.pay-opt.sel{background:rgba(196,169,125,0.05);border-color:var(--gold)}
+.pay-opt.sel::before{transform:scaleY(1);background:var(--gold)}
+.pay-opt-cash::before{background:var(--gold)}
+.pay-opt-cashapp::before{background:#00d632}
+.pay-opt-venmo::before{background:#3d95ce}
+.pay-opt-paypal::before{background:#0070ba}
+.pay-opt.sel.pay-opt-cashapp{border-color:#00d632}
+.pay-opt.sel.pay-opt-venmo{border-color:#3d95ce}
+.pay-opt.sel.pay-opt-paypal{border-color:#0070ba}
+.pay-icon{font-size:1.3rem;flex-shrink:0;width:28px;text-align:center}
+.pay-info{flex:1}
+.pay-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--cut);line-height:1;margin-bottom:2px}
+.pay-desc{font-size:0.5rem;letter-spacing:0.08em;color:var(--dim)}
+.pay-radio{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
+.pay-radio-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);transform:scale(0);transition:transform 0.18s cubic-bezier(0.34,1.56,0.64,1)}
+.pay-opt.sel .pay-radio{border-color:var(--gold)}
+.pay-opt.sel .pay-radio-dot{transform:scale(1)}
+
+/* ── BAGAIN BUTTON ── */
+.bagain{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.15em;color:var(--dim);background:none;border:1px solid var(--border);border-radius:4px;padding:12px 26px;cursor:pointer;text-transform:uppercase;transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.75s,border-color 0.2s,color 0.2s}
+.succ.show .bagain{transform:translateY(0);opacity:1}
+.bagain:hover{border-color:var(--dim);color:var(--cream)}
+.succ.show #cashReminder{transform:translateY(0);opacity:1}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--s2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:0.54rem;letter-spacing:0.1em;padding:10px 16px;z-index:9999;opacity:0;transition:all 0.2s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{border-color:#6b2020;color:#d07070}
 
 </style>
 </head>
@@ -402,8 +469,6 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
 
   <!-- GALLERY -->
   <div class="gallery-strip" id="galleryStrip"></div>
-
-  </div>
 
   <div class="step-strip">
     <div class="stp active" id="st1"><span class="stp-num">01</span>Service</div>
@@ -1008,7 +1073,6 @@ function applyGallery() {
 }
 
 // ── REVIEWS ────────────────────────────────────────────────
-}
 
 // ── CUSTOM SMS ─────────────────────────────────────────────
 function buildSMS(name, svc, dl, time, payLabel) {
