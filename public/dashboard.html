@@ -2,534 +2,654 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOON — Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;1,700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dashboard — Moon Cuts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior:none}
 
 :root{
-  --bg:     #090909;
-  --s1:     #111;
-  --s2:     #161616;
-  --s3:     #1c1c1c;
-  --border: #222;
-  --border2:#2a2a2a;
-  --text:   #ede8df;
-  --dim:    #555;
-  --dim2:   #333;
-  --cream:  #e2d9c8;
-  --gold:   #c4a97d;
-  --gold2:  #d4ba8e;
-  --green:  #4caf72;
-  --red:    #c0392b;
-  --blue:   #4a7fa5;
-  --accent: #e2d9c8;
+  --ink:    #1a1410;
+  --ink2:   #2e2620;
+  --ink3:   #3d3328;
+  --paper:  #f5f0e8;
+  --paper2: #ede8dc;
+  --paper3: #e3ddd0;
+  --rule:   #d4cdc0;
+  --rule2:  #c8c0b0;
+  --dim:    #8a8070;
+  --dim2:   #b0a898;
+  --gold:   #b8860b;
+  --gold2:  #d4a017;
+  --green:  #2d6a3f;
+  --red:    #8b2525;
+  --blue:   #1a4a6e;
+  --cream:  #1a1410;
+  --font:   'Archivo', sans-serif;
+  --display:'Archivo Black', sans-serif;
 }
 
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;-webkit-font-smoothing:antialiased}
-
-/* ── LAYOUT ── */
-.layout{display:flex;min-height:100vh}
-
-/* ── SIDEBAR ── */
-.sidebar{
-  width:200px;flex-shrink:0;
-  background:var(--s1);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  position:fixed;top:0;left:0;bottom:0;
-  z-index:100;
+body{
+  background:var(--paper2);
+  color:var(--ink);
+  font-family:var(--font);
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
 }
 
-.sb-logo{
-  padding:22px 20px 18px;
-  border-bottom:1px solid var(--border);
+/* ══ PIN ══ */
+#pinScreen{
+  position:fixed;inset:0;z-index:9000;
+  background:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 24px;
 }
-.sb-logo-main{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:28px;letter-spacing:0.18em;
-  color:var(--cream);line-height:1;
+.pin-wordmark{
+  font-family:var(--display);font-size:3.5rem;
+  color:var(--paper);letter-spacing:-0.02em;
+  margin-bottom:4px;
 }
-.sb-logo-sub{font-size:11px;letter-spacing:0.3em;color:var(--dim);text-transform:uppercase;margin-top:3px}
-
-.sb-nav{flex:1;padding:16px 0;overflow-y:auto}
-
-.sb-section{font-size:11px;letter-spacing:0.3em;color:var(--dim2);text-transform:uppercase;padding:0 20px;margin:14px 0 6px}
-
-.sb-item{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 20px;cursor:pointer;
-  font-size:14px;letter-spacing:0.1em;color:var(--dim);
-  text-transform:uppercase;transition:all 0.15s;
-  border-left:2px solid transparent;
-  -webkit-user-select:none;user-select:none;
+.pin-tagline{
+  font-size:0.62rem;font-weight:300;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:48px;
 }
-.sb-item:hover{color:var(--text);background:var(--s2)}
-.sb-item.active{color:var(--cream);border-left-color:var(--gold);background:rgba(196,169,125,0.05)}
-.sb-icon{font-size:0.85rem;width:16px;text-align:center;flex-shrink:0}
+.pin-dots{display:flex;gap:16px;margin-bottom:40px}
+.pin-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--ink3);border:1px solid var(--ink3);
+  transition:all 0.18s;
+}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:260px}
+.pin-key{
+  background:var(--ink2);border:1px solid var(--ink3);border-radius:14px;
+  padding:22px 0;text-align:center;cursor:pointer;
+  font-family:var(--display);font-size:1.8rem;color:var(--paper);
+  transition:all 0.12s;user-select:none;
+}
+.pin-key:active{background:var(--ink3);transform:scale(0.92)}
+.pin-key.zero{grid-column:2}
+.pin-key.del{font-family:var(--font);font-size:1.3rem;color:var(--dim)}
+.pin-err{
+  margin-top:20px;min-height:20px;
+  font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--red);opacity:0;transition:opacity 0.2s;
+}
+.pin-err.show{opacity:1}
 
-.sb-footer{padding:16px 20px;border-top:1px solid var(--border)}
-.sb-time{font-size:13px;letter-spacing:0.1em;color:var(--dim)}
-.sb-date{font-size:12px;letter-spacing:0.08em;color:var(--dim2);margin-top:2px}
+/* ══ APP ══ */
+#app{display:none;flex-direction:column;min-height:100vh;padding-bottom:80px}
+#app.unlocked{display:flex}
 
-/* ── MAIN ── */
-.main{margin-left:200px;flex:1;min-height:100vh;display:flex;flex-direction:column;min-width:0;overflow-x:hidden}
-
-/* ── TOPBAR ── */
+/* ══ TOPBAR ══ */
 .topbar{
+  background:var(--ink);color:var(--paper);
+  padding:14px 20px 12px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px 28px;
-  border-bottom:1px solid var(--border);
-  background:var(--bg);
-  position:sticky;top:0;z-index:50;
+  position:sticky;top:0;z-index:100;
 }
-.topbar-title{
-  font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;font-size:25px;
-  letter-spacing:0.06em;text-transform:uppercase;color:var(--cream);
+/* sb-logo-main used by JS to update shop name */
+.sb-logo-main{
+  font-family:var(--display);font-size:1.5rem;
+  letter-spacing:-0.02em;color:var(--paper);
 }
-.topbar-right{display:flex;align-items:center;gap:12px}
-
-.btn{
-  font-family:'DM Mono',monospace;
-  font-size:13px;letter-spacing:0.12em;text-transform:uppercase;
-  padding:8px 16px;border-radius:3px;cursor:pointer;
-  transition:all 0.15s;border:none;
-  -webkit-user-select:none;user-select:none;
+.topbar-clock{
+  font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--dim);margin-top:1px;display:flex;gap:8px;
 }
-.btn-ghost{background:var(--s1);border:1px solid var(--border);color:var(--dim)}
-.btn-ghost:hover{border-color:var(--dim);color:var(--text)}
-.btn-primary{background:var(--cream);color:var(--bg)}
-.btn-primary:hover{background:var(--gold2)}
-.btn-danger{background:transparent;border:1px solid rgba(192,57,43,0.3);color:var(--red)}
-.btn-danger:hover{background:rgba(192,57,43,0.1)}
-.ts-past{opacity:0.4}
-.ts-past .ts-time{text-decoration:line-through}
-.btn-confirm{background:transparent;border:1px solid rgba(74,180,74,0.3);color:#7cd47c}
-.btn-confirm:hover{background:rgba(74,180,74,0.1)}
-.btn-sms{background:transparent;border:1px solid rgba(100,160,255,0.3);color:#88aaff}
-.btn-sms:hover{background:rgba(100,160,255,0.1)}
-.btn-reschedule{background:transparent;border:1px solid rgba(196,169,125,0.35);color:var(--gold)}
-.btn-reschedule:hover{background:rgba(196,169,125,0.1)}
-.btn-done{background:transparent;border:1px solid rgba(74,180,74,0.35);color:#7cd47c}
-.btn-done:hover{background:rgba(74,180,74,0.12)}
-.btn-confirm-sent{background:rgba(74,180,74,0.08);border:1px solid rgba(74,180,74,0.2);color:#4a9a4a;cursor:default}
-.qt-row{display:block;padding:12px 14px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;text-decoration:none;cursor:pointer;transition:background 0.15s}
-.qt-row:hover{background:var(--s1)}
-.qt-label{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;letter-spacing:0.02em}
-.qt-preview{font-size:11px;color:var(--dim);line-height:1.4}
-.btn-sm{padding:5px 10px;font-size:13px}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.topbar-right a{text-decoration:none}
+/* topbarTitle used by JS — keep it, just hide it */
+#topbarTitle{display:none}
+.tb-pill{
+  background:var(--ink2);border:1px solid var(--ink3);border-radius:20px;
+  padding:7px 14px;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--dim2);cursor:pointer;transition:all 0.15s;white-space:nowrap;
+}
+.tb-pill:hover{color:var(--paper)}
+.tb-pill.accent{background:var(--gold);border-color:var(--gold);color:var(--ink)}
 
-/* ── CONTENT ── */
-.content{padding:24px 28px;flex:1;box-sizing:border-box;min-width:0;overflow-x:hidden}
-
-/* ── PANELS ── */
-.panel{display:none;width:100%;overflow-x:hidden}
+/* ══ PANELS ══ */
+.panel{display:none}
 .panel.active{display:block}
 
-/* ── STATS ROW ── */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:16px 18px}
-.stat-val{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:0.06em;color:var(--cream);line-height:1;margin-bottom:3px}
-.stat-val.gold{color:var(--gold)}
-.stat-label{font-size:12px;letter-spacing:0.22em;color:var(--dim);text-transform:uppercase}
+/* ══ BOTTOM NAV ══ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;height:80px;
+  background:var(--ink);border-top:1px solid var(--ink2);
+  display:flex;z-index:200;
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+/* sb-item used by JS — keep class on nav items */
+.sb-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;cursor:pointer;
+  font-size:0.42rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--dim);transition:color 0.15s;border-top:2px solid transparent;
+}
+.sb-item.active{color:var(--paper);border-top-color:var(--gold)}
+.sb-icon{font-size:1.2rem;line-height:1}
 
-/* ── SECTION HEADER ── */
+/* ══ STATS ══ */
+#statsRow{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--rule);background:var(--paper);
+}
+.stat-card{
+  padding:16px 20px;border-right:1px solid var(--rule);
+}
+.stat-card:last-child{border-right:none}
+.stat-val{
+  font-family:var(--display);font-size:2.4rem;line-height:1;
+  color:var(--ink);
+}
+.stat-val.gold{color:var(--gold)}
+.stat-lbl{
+  font-size:0.45rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--dim);margin-top:4px;
+}
+
+/* ══ SECTION HEADER ══ */
 .sec-hdr{
   display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:14px;padding-bottom:10px;
-  border-bottom:1px solid var(--border);
+  padding:16px 20px 14px;
+  background:var(--paper);border-bottom:1px solid var(--rule);
 }
-.sec-hdr-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;letter-spacing:0.06em;text-transform:uppercase;color:var(--cream)}
-.sec-hdr-sub{font-size:13px;letter-spacing:0.1em;color:var(--dim)}
-
-/* ── TABLE ── */
-.tbl{width:100%;border-collapse:collapse;font-size:14px;letter-spacing:0.05em}
-.tbl th{text-align:left;padding:8px 12px;font-size:11px;letter-spacing:0.22em;color:var(--dim);text-transform:uppercase;border-bottom:1px solid var(--border);font-weight:400}
-.tbl td{padding:12px 12px;border-bottom:1px solid var(--border2);vertical-align:middle}
-.tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:rgba(255,255,255,0.02)}
-
-.badge{
-  display:inline-flex;align-items:center;
-  padding:3px 8px;border-radius:2px;
-  font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+.sec-hdr-title{
+  font-family:var(--display);font-size:1.6rem;letter-spacing:-0.02em;color:var(--ink);
 }
-.badge-green{background:rgba(76,175,114,0.12);color:var(--green);border:1px solid rgba(76,175,114,0.2)}
-.badge-red{background:rgba(192,57,43,0.12);color:#e07060;border:1px solid rgba(192,57,43,0.2)}
-.badge-gold{background:rgba(196,169,125,0.12);color:var(--gold);border:1px solid rgba(196,169,125,0.2)}
-.badge-dim{background:rgba(255,255,255,0.04);color:var(--dim);border:1px solid var(--border)}
-.badge-blue{background:rgba(74,127,165,0.12);color:#7aaac8;border:1px solid rgba(74,127,165,0.2)}
-
-/* ── CLIENT CARD ── */
-.client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
-.client-card{
-  background:var(--s1);border:1px solid var(--border);border-radius:4px;
-  padding:16px 18px;cursor:pointer;transition:border-color 0.15s;
+.sec-hdr-sub{font-size:0.45rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+.day-nav{display:flex;gap:6px}
+.sched-arrow{
+  background:var(--paper2);border:1px solid var(--rule);border-radius:8px;
+  padding:8px 14px;font-size:0.52rem;font-weight:500;letter-spacing:0.08em;
+  color:var(--dim);cursor:pointer;transition:all 0.15s;
 }
-.client-card:hover{border-color:var(--border2)}
-.cc-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin-bottom:4px}
-.cc-phone{font-size:13px;letter-spacing:0.08em;color:var(--dim);margin-bottom:10px}
-.cc-stats{display:flex;gap:16px}
-.cc-stat{display:flex;flex-direction:column;gap:2px}
-.cc-stat-val{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:0.06em;color:var(--gold)}
-.cc-stat-l{font-size:11px;letter-spacing:0.18em;color:var(--dim);text-transform:uppercase}
+.sched-arrow:hover{background:var(--paper3);color:var(--ink)}
+.sched-arrow:first-child,.sched-arrow:last-child{font-size:1rem;padding:6px 12px}
 
-/* ── SCHEDULE ── */
-.sched-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.sched-date-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:0.06em;text-transform:uppercase;color:var(--cream);flex:1}
-.sched-arrow{width:32px;height:32px;background:var(--s1);border:1px solid var(--border);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--dim);transition:all 0.15s;-webkit-user-select:none;user-select:none}
-.sched-arrow:hover{border-color:var(--dim);color:var(--text)}
-
-.time-slot-list{display:flex;flex-direction:column;gap:6px}
+/* ══ SCHEDULE SLOTS ══ */
+.time-slot-list{background:var(--paper2)}
 .time-slot{
+  display:flex;align-items:stretch;
+  border-bottom:1px solid var(--rule);background:var(--paper);
+}
+.time-slot:last-child{border-bottom:none}
+
+/* time column */
+.ts-time{
+  width:68px;flex-shrink:0;
+  padding:16px 0 16px 20px;
+  font-size:0.48rem;font-weight:500;letter-spacing:0.08em;
+  color:var(--dim);text-transform:uppercase;padding-top:20px;
+}
+
+/* content column */
+.ts-content{flex:1;padding:14px 16px 14px 0;min-width:0}
+
+/* open slot */
+.ts-open{
+  font-size:0.46rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--rule2);padding-top:4px;
+}
+
+/* booked slot */
+.time-slot.booked{background:#fff}
+.ts-client-name{
+  font-family:var(--display);font-size:1.2rem;letter-spacing:-0.01em;
+  color:var(--ink);line-height:1;margin-bottom:3px;
+}
+.ts-svc-line{
+  font-size:0.48rem;letter-spacing:0.08em;
+  color:var(--dim);margin-bottom:12px;
+}
+.ts-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+/* blocked */
+.time-slot.blocked{background:var(--paper2)}
+.ts-blocked{
+  font-size:0.46rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--dim2);font-style:italic;padding-top:4px;
+}
+
+/* past dimmed */
+.time-slot.past{opacity:0.4}
+
+/* action buttons */
+.act-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  border-radius:20px;padding:7px 13px;
+  font-size:0.46rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;border:1.5px solid var(--rule);background:var(--paper2);color:var(--dim);
+  transition:all 0.12s;white-space:nowrap;
+}
+.act-btn:active{transform:scale(0.94)}
+.act-btn.confirm{border-color:#8fc29a;color:var(--green);background:#f0f8f2}
+.act-btn.confirm.sent{color:#9aaf9f;border-color:#c8dece;cursor:default}
+.act-btn.reschedule{border-color:#d4b86a;color:var(--gold);background:#fdf8ee}
+.act-btn.done{border-color:#8ab0c8;color:var(--blue);background:#f0f4f8}
+.act-btn.cancel-text{border-color:#d09090;color:var(--red);background:#fdf2f2}
+.act-btn.cancel-silent{color:var(--dim2);border-color:var(--rule)}
+.act-btn.cancel-silent:hover{color:var(--red)}
+
+/* remind banner */
+#remindBanner{
+  margin:12px 20px;padding:14px 16px;
+  background:#fdf8ee;border:1.5px solid #e8d080;border-radius:12px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+#remindText{font-size:0.5rem;font-weight:500;letter-spacing:0.08em;color:var(--gold)}
+#btnRemindAll{
+  background:var(--gold);color:#fff;border:none;border-radius:20px;
+  padding:9px 16px;font-size:0.5rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;white-space:nowrap;
+}
+
+/* empty */
+.empty-state{
+  padding:60px 24px;text-align:center;
+}
+.empty-icon{font-size:2.5rem;margin-bottom:14px;opacity:0.3}
+.empty-label{
+  font-size:0.52rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ══ BOOKINGS ══ */
+.search-bar{
+  padding:12px 20px;background:var(--paper);border-bottom:1px solid var(--rule);
+}
+.search-bar input{
+  width:100%;background:var(--paper2);border:1.5px solid var(--rule);border-radius:24px;
+  padding:10px 16px;font-family:var(--font);font-size:0.9rem;
+  color:var(--ink);outline:none;
+}
+.search-bar input::placeholder{color:var(--dim2)}
+.search-bar input:focus{border-color:var(--ink)}
+
+/* booking rows */
+.bk-row{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 20px;border-bottom:1px solid var(--rule);
+  background:var(--paper);cursor:pointer;transition:background 0.12s;
+}
+.bk-row:hover{background:var(--paper2)}
+.bk-dot{
+  width:9px;height:9px;border-radius:50%;flex-shrink:0;
+}
+.bk-dot.confirmed{background:var(--green)}
+.bk-dot.cancelled{background:var(--red)}
+.bk-dot.completed{background:var(--blue)}
+.bk-dot.other{background:var(--dim2)}
+.bk-info{flex:1;min-width:0}
+.bk-name{
+  font-family:var(--display);font-size:1.1rem;letter-spacing:-0.01em;
+  color:var(--ink);line-height:1;margin-bottom:3px;
+}
+.bk-sub{font-size:0.46rem;letter-spacing:0.08em;color:var(--dim)}
+.bk-right{text-align:right;flex-shrink:0}
+.bk-price{font-family:var(--display);font-size:1.2rem;color:var(--ink)}
+.bk-date{font-size:0.44rem;letter-spacing:0.06em;color:var(--dim);margin-top:2px}
+.bk-status-lbl{
+  font-size:0.38rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;margin-top:3px;
+}
+.bk-status-lbl.confirmed{color:var(--green)}
+.bk-status-lbl.cancelled{color:var(--red)}
+.bk-status-lbl.completed{color:var(--blue)}
+
+/* ══ CLIENTS ══ */
+.cl-row{
   display:flex;align-items:center;gap:14px;
-  background:var(--s1);border:1px solid var(--border);
-  border-radius:4px;padding:12px 16px;
-  transition:border-color 0.15s;
+  padding:14px 20px;border-bottom:1px solid var(--rule);
+  background:var(--paper);cursor:pointer;transition:background 0.12s;
 }
-.ts-time{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:0.06em;color:var(--dim);width:68px;flex-shrink:0}
-.ts-body{flex:1}
-.ts-name{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:17px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);line-height:1;margin-bottom:2px}
-.ts-svc{font-size:13px;letter-spacing:0.1em;color:var(--dim)}
-.ts-actions{display:flex;gap:6px}
-.ts-empty{color:var(--dim2);font-size:13px;letter-spacing:0.1em}
-.ts-blocked{border-left:2px solid var(--red);opacity:0.6}
-.ts-booked{border-left:2px solid var(--gold)}
-
-/* ── AVAILABILITY ── */
-.avail-section{margin-bottom:28px}
-.avail-title{font-size:13px;letter-spacing:0.25em;color:var(--dim);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.avail-title::after{content:'';flex:1;height:1px;background:var(--border)}
-
-.days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
-.day-toggle{
-  background:var(--s1);border:1px solid var(--border);border-radius:4px;
-  padding:12px 6px;text-align:center;cursor:pointer;
-  transition:all 0.18s cubic-bezier(0.34,1.3,0.64,1);
-  -webkit-user-select:none;user-select:none;
+.cl-row:hover{background:var(--paper2)}
+.cl-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--ink);display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-size:1.1rem;color:var(--paper);flex-shrink:0;
 }
-.day-toggle.on{background:rgba(196,169,125,0.08);border-color:var(--gold)}
-.day-toggle.off{opacity:0.35}
-.day-toggle:active{transform:scale(0.95)}
-.dt-name{font-size:12px;letter-spacing:0.14em;color:var(--dim);text-transform:uppercase;margin-bottom:5px}
-.dt-dot{width:8px;height:8px;border-radius:50%;background:var(--border);margin:0 auto;transition:background 0.2s}
-.day-toggle.on .dt-dot{background:var(--gold)}
-.dt-short{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.06em;color:var(--dim);text-transform:uppercase;display:block;margin-bottom:2px}
-.day-toggle.on .dt-short{color:var(--cream)}
+.cl-info{flex:1;min-width:0}
+.cl-name{font-family:var(--display);font-size:1.1rem;letter-spacing:-0.01em;color:var(--ink);margin-bottom:2px}
+.cl-phone{font-size:0.46rem;letter-spacing:0.06em;color:var(--dim)}
+.cl-visits-wrap{text-align:right}
+.cl-count{font-family:var(--display);font-size:1.6rem;color:var(--gold)}
+.cl-count-lbl{font-size:0.4rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim)}
 
-.block-form{
-  background:var(--s1);border:1px solid var(--border);border-radius:4px;
-  padding:18px 20px;margin-bottom:16px;
+/* ══ AVAILABILITY ══ */
+.avail-section{
+  background:var(--paper);border-bottom:1px solid var(--rule);
+  padding:16px 20px;
 }
-.block-form-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px}
-.bf-group{display:flex;flex-direction:column;gap:6px;flex:1;min-width:120px}
-.bf-label{font-size:12px;letter-spacing:0.22em;color:var(--dim);text-transform:uppercase}
-.bf-input,.bf-select{
-  background:var(--s2);border:1px solid var(--border);border-radius:3px;
-  color:var(--text);font-family:'DM Mono',monospace;font-size:15px;
-  padding:8px 10px;outline:none;transition:border-color 0.2s;
-  -webkit-appearance:none;
+.avail-title{
+  font-family:var(--display);font-size:1rem;color:var(--ink);margin-bottom:4px;
 }
-.bf-input:focus,.bf-select:focus{border-color:var(--gold)}
-.bf-select option{background:var(--s2)}
+.avail-hint{font-size:0.46rem;letter-spacing:0.06em;color:var(--dim);margin-bottom:14px;line-height:1.6}
 
-.block-list{display:flex;flex-direction:column;gap:6px}
+/* days toggle grid */
+#daysGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day-tog{
+  border:1.5px solid var(--rule);border-radius:8px;
+  padding:10px 4px;text-align:center;cursor:pointer;background:var(--paper2);
+  transition:all 0.15s;
+}
+.day-tog.on{background:#f0f8f2;border-color:#8fc29a}
+.day-tog-name{font-size:0.38rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:5px}
+.day-tog-dot{width:6px;height:6px;border-radius:50%;background:var(--rule);margin:0 auto;transition:all 0.15s}
+.day-tog.on .day-tog-name{color:var(--green)}
+.day-tog.on .day-tog-dot{background:var(--green)}
+
+/* slot length */
+#slotLengthBtns{display:flex;gap:8px;flex-wrap:wrap}
+/* JS uses .btn class to toggle .btn-primary / .btn-ghost */
+.btn{
+  border-radius:20px;padding:9px 18px;
+  font-family:var(--font);font-size:0.52rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.15s;border:1.5px solid var(--rule);background:var(--paper2);color:var(--dim);
+}
+.btn-primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn-ghost{background:var(--paper2);color:var(--dim);border-color:var(--rule)}
+
+/* block form */
+.block-form{padding:16px 20px;background:var(--paper);border-bottom:1px solid var(--rule)}
+.bf-label{font-size:0.44rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:block}
+.bf-input{
+  width:100%;background:var(--paper2);border:1.5px solid var(--rule);border-radius:8px;
+  padding:10px 12px;font-family:var(--font);font-size:0.88rem;color:var(--ink);outline:none;
+}
+.bf-input:focus{border-color:var(--ink)}
+.bf-input::placeholder{color:var(--dim2)}
+.bf-select{
+  background:var(--paper2);border:1.5px solid var(--rule);border-radius:8px;
+  padding:10px 12px;font-family:var(--font);font-size:0.88rem;color:var(--ink);outline:none;
+}
+.bf-group{margin-bottom:12px}
+
+/* quick block buttons */
+.preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.preset-btn{
+  background:var(--paper2);border:1.5px solid var(--rule);border-radius:20px;
+  padding:8px 14px;font-size:0.48rem;font-weight:500;letter-spacing:0.08em;
+  color:var(--dim);cursor:pointer;transition:all 0.15s;
+}
+.preset-btn:hover{background:var(--paper3);color:var(--ink)}
+
+.block-list{background:var(--paper)}
 .block-item{
   display:flex;align-items:center;justify-content:space-between;
-  background:var(--s1);border:1px solid var(--border);
-  border-left:2px solid var(--red);
-  border-radius:4px;padding:10px 14px;
-  font-size:14px;letter-spacing:0.08em;
+  padding:12px 20px;border-bottom:1px solid var(--rule);gap:12px;
 }
-.block-item-info{color:var(--dim)}
-.block-item-info strong{color:var(--text);font-weight:400}
+.block-date-label{font-size:0.5rem;font-weight:500;letter-spacing:0.06em;color:var(--ink)}
+.block-time-label{font-size:0.44rem;letter-spacing:0.06em;color:var(--dim)}
+.block-del-btn{
+  background:none;border:none;color:var(--dim2);font-size:1.2rem;
+  cursor:pointer;padding:4px;transition:color 0.15s;
+}
+.block-del-btn:hover{color:var(--red)}
 
-/* ── MODAL ── */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-bg.open{display:flex}
-.modal{background:var(--s1);border:1px solid var(--border);border-radius:6px;width:100%;max-width:420px;overflow:hidden}
-.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
-.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:0.06em;text-transform:uppercase;color:var(--cream)}
-.modal-close{background:none;border:none;color:var(--dim);font-size:19px;cursor:pointer;line-height:1;padding:2px 6px}
-.modal-close:hover{color:var(--text)}
-.modal-body{padding:20px}
-.modal-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border2);font-size:14px;letter-spacing:0.08em}
-.modal-row:last-child{border-bottom:none}
-.modal-row .k{color:var(--dim)}.modal-row .v{color:var(--cream)}
-.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+/* save button */
+.big-save{
+  display:block;width:calc(100% - 40px);margin:16px 20px;
+  background:var(--ink);color:var(--paper);border:none;border-radius:12px;
+  padding:15px 20px;font-family:var(--display);font-size:1.1rem;letter-spacing:0.05em;
+  cursor:pointer;transition:opacity 0.15s;text-align:center;
+}
+.big-save:hover{opacity:0.88}
+.big-save.secondary{background:transparent;color:var(--dim);border:1.5px solid var(--rule)}
 
-/* ── SEARCH ── */
-.search-bar{
-  display:flex;align-items:center;gap:8px;
-  background:var(--s1);border:1px solid var(--border);border-radius:3px;
-  padding:7px 12px;margin-bottom:14px;
-}
-.search-bar input{background:none;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:15px;letter-spacing:0.06em;outline:none;flex:1}
-.search-bar input::placeholder{color:var(--dim2)}
-.search-icon{color:var(--dim);font-size:11px}
-
-/* ── EMPTY STATE ── */
-.empty{text-align:center;padding:40px 20px;color:var(--dim);font-size:13px;letter-spacing:0.1em}
-.empty-icon{font-size:2rem;margin-bottom:10px;opacity:0.3;display:block}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--s2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:13px;letter-spacing:0.1em;padding:10px 16px;z-index:9999;opacity:0;transition:all 0.22s;pointer-events:none;transform:translateY(8px)}
-.toast.show{opacity:1;transform:translateY(0)}
-.toast.ok{border-color:rgba(76,175,114,0.3);color:var(--green)}
-.toast.err{border-color:rgba(192,57,43,0.3);color:#e07060}
-
-
-/* ── PIN SCREEN ── */
-.pin-screen{
-  position:fixed;inset:0;background:var(--bg);z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:32px 24px;
-}
-.pin-screen.unlocked{display:none}
-.pin-logo{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:0.18em;color:var(--cream);margin-bottom:4px}
-.pin-sub{font-size:11px;letter-spacing:0.24em;color:var(--dim);text-transform:uppercase;margin-bottom:36px}
-.pin-dots{display:flex;gap:12px;margin-bottom:28px}
-.pin-dot{width:12px;height:12px;border-radius:50%;background:var(--border);transition:background 0.15s}
-.pin-dot.filled{background:var(--gold)}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:240px;margin-bottom:20px}
-.pin-key{
-  background:var(--s1);border:1px solid var(--border);border-radius:6px;
-  height:60px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:1.6rem;letter-spacing:0.06em;color:var(--cream);
-  cursor:pointer;transition:all 0.12s;-webkit-user-select:none;user-select:none;
-  display:flex;align-items:center;justify-content:center;
-}
-.pin-key:active{background:var(--s2);transform:scale(0.95)}
-.pin-key.del{font-size:1.1rem;color:var(--dim)}
-.pin-key.empty{background:none;border-color:transparent;pointer-events:none}
-.pin-error{font-size:11px;letter-spacing:0.14em;color:var(--red);text-transform:uppercase;min-height:16px;margin-bottom:8px;text-align:center;opacity:0;transition:opacity 0.2s}
-.pin-error.show{opacity:1}
-.pin-master{font-size:10px;letter-spacing:0.1em;color:var(--dim2);text-align:center;cursor:pointer;text-decoration:underline;margin-top:4px}
-.pin-master:hover{color:var(--dim)}
-
-
-/* ── DAY CARD (new availability) ── */
-.day-card-list{display:flex;flex-direction:column;gap:6px}
-.day-card{
-  background:var(--s1);border:1px solid var(--border);
-  border-radius:4px;padding:0;
-  transition:border-color 0.18s;overflow:hidden;
-}
-.day-card.on{border-left:3px solid var(--gold)}
-.day-card.off{opacity:0.5}
-.day-card-top{display:flex;align-items:center;gap:12px;padding:11px 14px}
-.day-card-toggle{
-  width:40px;height:22px;background:var(--border);border-radius:11px;
-  cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;
-  -webkit-user-select:none;user-select:none;
-}
-.day-card-toggle.on{background:var(--gold)}
-.day-card-toggle::after{
-  content:'';position:absolute;width:16px;height:16px;
-  background:#fff;border-radius:50%;top:3px;left:3px;
-  transition:transform 0.2s;
-}
-.day-card-toggle.on::after{transform:translateX(18px)}
-.day-card-name{
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;
-  color:var(--cream);width:40px;flex-shrink:0;
-}
-.day-card-status{font-size:12px;letter-spacing:0.04em;color:var(--dim);flex:1}
-.day-card-status.open{color:var(--green)}
-.day-card-hours{
-  display:flex;align-items:center;gap:10px;
-  padding:8px 14px 11px 66px;
-  border-top:1px solid var(--border2);
-  background:var(--s2);
-}
-.dh-sel{
-  background:var(--s1);border:1px solid var(--border);border-radius:3px;
-  color:var(--text);font-family:'DM Mono',monospace;font-size:12px;
-  padding:5px 8px;outline:none;cursor:pointer;flex:1;
-}
-.dh-sel:focus{border-color:var(--gold)}
-
-
-/* ── THEME GRID ── */
-.theme-group-label{font-size:10px;letter-spacing:0.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
-.theme-grid-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
-.theme-card{
-  border-radius:6px;padding:12px 10px;cursor:pointer;
-  border:2px solid transparent;transition:all 0.18s;
-  -webkit-user-select:none;user-select:none;
-}
-.theme-card.active{outline:2px solid var(--gold);outline-offset:1px}
-.theme-card:hover{transform:translateY(-2px)}
-.theme-card-name{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:2px}
-.theme-card-desc{font-size:10px;letter-spacing:0.04em;line-height:1.4;margin-bottom:8px}
-.theme-card-dots{display:flex;gap:4px}
-.theme-card-dot{width:10px;height:10px;border-radius:50%}
-/* ── FONT GRID ── */
-.font-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-.font-card{
-  border-radius:5px;padding:12px 14px;cursor:pointer;
-  border:2px solid var(--border);background:var(--s1);
-  transition:all 0.16s;-webkit-user-select:none;user-select:none;
-}
-.font-card.active{border-color:var(--gold);background:var(--s2)}
-.font-card:hover{border-color:var(--border2);transform:translateY(-1px)}
-.font-card-name{font-size:1.1rem;font-weight:700;color:var(--cream);margin-bottom:3px;letter-spacing:0.02em}
-.font-card-desc{font-size:10px;letter-spacing:0.08em;color:var(--dim);text-transform:uppercase}
-
-/* ── SETTINGS PREVIEW BAR ── */
+/* ══ SETTINGS ══ */
 .settings-preview-bar{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  background:rgba(196,169,125,0.07);border:1px solid rgba(196,169,125,0.18);
-  border-radius:5px;padding:10px 14px;margin-bottom:16px;
-  font-size:11px;letter-spacing:0.06em;color:var(--dim);
+  background:#fdf8ee;border-bottom:1.5px solid #e8d080;
+  padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
 }
-/* ── PAGE COPY ── */
-.copy-row{background:var(--s2);border:1px solid var(--border2);border-radius:4px;padding:12px}
-.copy-default{font-size:10px;letter-spacing:0.08em;color:var(--dim);margin-bottom:8px;line-height:1.5}
-.copy-default em{color:var(--gold);font-style:italic}
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:3px;height:3px}
-::-webkit-scrollbar-thumb{background:var(--border)}
-/* ── SETTINGS TABS ── */
-.stab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto}
-.stab{padding:10px 18px;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;-webkit-user-select:none;user-select:none}
-.stab:hover{color:var(--text)}
-.stab.active{color:var(--cream);border-bottom-color:var(--gold)}
-.stab-panel{display:none;max-width:100%;width:100%;box-sizing:border-box}.stab-panel.active{display:block}
+.settings-preview-bar span{font-size:0.5rem;font-weight:500;letter-spacing:0.08em;color:var(--gold)}
+.settings-preview-bar a{text-decoration:none}
+.preview-btn{
+  background:var(--gold);color:#fff;border:none;border-radius:20px;
+  padding:8px 16px;font-size:0.5rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;
+}
 
-/* ── SERVICE EDITOR ── */
-.svc-editor-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.svc-row{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:10px 14px}
-.svc-row-name{flex:2;font-size:13px;letter-spacing:0.04em;color:var(--cream)}
-.svc-row-price{width:70px;font-size:13px;color:var(--gold);text-align:right}
-.svc-row-dur{width:60px;font-size:12px;color:var(--dim);text-align:right}
-.svc-row-drag{color:var(--dim2);cursor:grab;font-size:1rem;padding:0 4px;flex-shrink:0}
-.svc-row-del{background:none;border:none;color:var(--dim2);cursor:pointer;font-size:1rem;padding:0 2px;transition:color 0.15s;flex-shrink:0}
-.svc-row-del:hover{color:var(--red)}
-.add-svc-form{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end}
+/* settings tab bar */
+.stab-bar{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  background:var(--paper);border-bottom:1px solid var(--rule);
+  padding:0 20px;gap:0;
+}
+.stab-bar::-webkit-scrollbar{display:none}
+/* .stab class used by JS */
+.stab{
+  flex-shrink:0;padding:14px 14px 12px;
+  font-size:0.46rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;
+  white-space:nowrap;transition:all 0.15s;
+}
+.stab.active{color:var(--ink);border-bottom-color:var(--gold)}
 
-/* ── COLOR SWATCHES ── */
-.swatch-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.swatch{width:32px;height:32px;border-radius:4px;cursor:pointer;border:2px solid transparent;transition:all 0.15s;flex-shrink:0;-webkit-user-select:none;user-select:none}
-.swatch.active{border-color:var(--cream);transform:scale(1.1)}
-.color-custom{display:flex;align-items:center;gap:8px;margin-top:10px}
-.color-preview{width:32px;height:32px;border-radius:4px;border:1px solid var(--border);flex-shrink:0}
+/* stab-panel used by JS */
+.stab-panel{display:none}
+.stab-panel.active{display:block}
 
-/* ── TOGGLE SWITCH ── */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border2)}
-.toggle-row:last-child{border-bottom:none}
-.toggle-info .tl{font-size:13px;letter-spacing:0.04em;color:var(--cream);margin-bottom:2px}
-.toggle-info .td{font-size:11px;letter-spacing:0.06em;color:var(--dim)}
-.tog{width:40px;height:22px;background:var(--border);border-radius:11px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;-webkit-user-select:none;user-select:none}
-.tog.on{background:var(--gold)}
-.tog::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s}
-.tog.on::after{transform:translateX(18px)}
+/* config sections */
+.cfg-section{
+  padding:14px 20px 8px;background:var(--paper2);
+  font-size:0.4rem;font-weight:600;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);
+  border-bottom:1px solid var(--rule);
+}
+.block-form.settings-row{padding:14px 20px;background:var(--paper)}
+.settings-row .bf-group:last-child{margin-bottom:0}
 
-/* ── RANGE SLIDER ── */
-.range-wrap{display:flex;align-items:center;gap:12px;margin-top:8px}
+/* toggle */
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+}
+.toggle-info .tl{font-size:0.54rem;font-weight:500;color:var(--ink);letter-spacing:0.02em}
+.toggle-info .td{font-size:0.44rem;letter-spacing:0.04em;color:var(--dim);margin-top:3px;line-height:1.5}
+.tog{
+  width:46px;height:26px;border-radius:13px;
+  background:var(--paper2);border:1.5px solid var(--rule);
+  position:relative;cursor:pointer;flex-shrink:0;transition:all 0.2s;
+}
+.tog::after{
+  content:'';position:absolute;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--dim2);top:3px;left:3px;transition:all 0.2s;
+}
+.tog.on{background:#e6f4ea;border-color:#8fc29a}
+.tog.on::after{background:var(--green);transform:translateX(20px)}
+
+/* range */
+.range-wrap{display:flex;align-items:center;gap:10px;margin-top:8px}
 .range-wrap input[type=range]{flex:1;accent-color:var(--gold)}
-.range-val{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);min-width:40px}
+.range-val{font-family:var(--display);font-size:1.1rem;color:var(--ink);min-width:36px;text-align:right}
 
-/* ── SECTION DIVIDER ── */
-.cfg-section{font-size:10px;letter-spacing:0.28em;color:var(--gold);text-transform:uppercase;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
-.cfg-section::after{content:'';flex:1;height:1px;background:var(--border)}
-
-
-/* ── MOBILE ── */
-html,body{max-width:100%;overflow-x:hidden}
-
-@media(max-width:768px){
-  /* bottom tab bar */
-  .sidebar{width:100%;height:56px;top:auto;bottom:0;left:0;right:0;flex-direction:row;border-right:none;border-top:1px solid var(--border)}
-  .sb-logo,.sb-footer,.sb-section{display:none}
-  .sb-nav{display:flex;flex-direction:row;padding:0;width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
-  .sb-nav::-webkit-scrollbar{display:none}
-  .sb-item{flex-direction:column;gap:2px;padding:8px 2px;flex:1;font-size:9px;letter-spacing:0.03em;border-left:none;border-top:3px solid transparent;min-width:0;justify-content:center;text-align:center;white-space:nowrap}
-  .sb-item.active{border-left-color:transparent;border-top-color:var(--gold);color:var(--cream)}
-  .sb-icon{font-size:1.2rem;width:auto;display:block;margin:0 auto 2px}
-
-  /* main */
-  .main{margin-left:0;padding-bottom:64px;min-width:0;width:100%;overflow-x:hidden}
-  .topbar{padding:10px 14px;gap:8px;flex-wrap:nowrap}
-  .topbar-title{font-size:18px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .topbar-right .btn-refresh{display:none}
-  .topbar-right{gap:8px;flex-shrink:0}
-  .content{padding:12px 14px;overflow-x:hidden;width:100%;box-sizing:border-box}
-
-  /* stats */
-  .stats-row{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-  .stat-card{padding:12px 14px}
-  .stat-val{font-size:26px}
-  .stat-label{font-size:10px}
-
-  /* table — contained scroll */
-  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;border:1px solid var(--border);border-radius:4px}
-  .tbl{font-size:12px;min-width:480px}
-  .tbl th{font-size:10px;padding:8px}
-  .tbl td{padding:10px 8px}
-
-  /* search */
-  .search-bar{width:100%}
-
-  /* clients */
-  .client-grid{grid-template-columns:1fr}
-
-  /* schedule */
-  .sec-hdr{flex-direction:column;align-items:flex-start;gap:10px}
-  .time-slot{padding:10px 12px;gap:8px}
-  .ts-time{font-size:13px;width:52px}
-  .ts-actions{flex-wrap:wrap;gap:4px}
-  .ts-actions .btn{padding:4px 8px;font-size:10px}
-
-  /* availability day cards */
-  .day-card-top{padding:10px 12px;gap:10px}
-  .day-card-hours{padding:8px 12px 10px 12px;gap:8px}
-  .dh-sel{font-size:13px;padding:6px 4px;flex:1}
-  .day-card-name{font-size:0.95rem}
-  .day-card-status{font-size:11px}
-
-  /* settings */
-  .panel-settings-inner{width:100%;overflow-x:hidden}
-  .stab-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;width:100%}
-  .stab-bar::-webkit-scrollbar{display:none}
-  .stab{padding:10px 14px;font-size:10px;letter-spacing:0.1em;white-space:nowrap;flex-shrink:0}
-  .stab-panel{max-width:100%;overflow-x:hidden}
-  .add-svc-form{grid-template-columns:1fr 1fr;gap:8px}
-  .add-svc-form button{grid-column:1/-1}
-  .bf-input,.bf-select{width:100%!important;box-sizing:border-box}
-  .block-form{padding:14px}
-  .bf-group{width:100%;min-width:0}
-  .block-form>div[style*="grid"]{grid-template-columns:1fr!important}
-  .color-custom{flex-wrap:wrap}
-
-  /* pin screen */
-  .pin-pad{gap:8px;width:210px}
-  .pin-key{height:54px;font-size:1.5rem}
-
-  /* modal */
-  .modal-bg{padding:8px}
-  .modal{max-width:100%;margin:0;width:100%}
-  .modal-body{padding:16px}
+/* theme grid */
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 20px}
+.theme-btn{
+  border-radius:10px;padding:12px 6px 8px;cursor:pointer;text-align:center;
+  border:2px solid var(--rule);background:var(--paper2);transition:all 0.15s;
 }
+.theme-btn.sel{border-color:var(--gold)}
+.theme-swatch{width:24px;height:24px;border-radius:50%;margin:0 auto 6px;border:1px solid rgba(0,0,0,0.1)}
+.theme-name{font-size:0.38rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)}
+
+/* font grid */
+.font-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 20px}
+.font-btn{
+  background:var(--paper2);border:2px solid var(--rule);border-radius:10px;
+  padding:14px;cursor:pointer;text-align:center;transition:all 0.15s;
+}
+.font-btn.sel{border-color:var(--gold);background:#fdf8ee}
+.font-sample{font-size:1.4rem;color:var(--ink);margin-bottom:4px}
+.font-lbl{font-size:0.4rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim)}
+
+/* swatch row */
+.swatch-row{display:flex;gap:10px;flex-wrap:wrap;padding:14px 20px}
+.swatch{
+  width:34px;height:34px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;transition:all 0.15s;
+}
+.swatch.sel{border-color:var(--ink);transform:scale(1.12)}
+.color-custom{display:flex;align-items:center;gap:10px;padding:0 20px 14px}
+.color-preview{width:34px;height:34px;border-radius:50%;border:2px solid var(--rule);flex-shrink:0}
+
+/* service editor */
+.svc-editor-list{background:var(--paper)}
+.svc-row{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 20px;border-bottom:1px solid var(--rule);
+}
+.svc-name{font-family:var(--display);font-size:1.05rem;flex:1;color:var(--ink)}
+.svc-price{font-family:var(--display);font-size:1.1rem;color:var(--gold)}
+.svc-dur{font-size:0.42rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);min-width:36px;text-align:right}
+.svc-del{background:none;border:none;font-size:1.1rem;color:var(--dim2);cursor:pointer;padding:4px;transition:color 0.15s}
+.svc-del:hover{color:var(--red)}
+
+/* add service form */
+.add-svc-form{
+  display:grid;grid-template-columns:1fr 80px 90px auto;gap:8px;align-items:end;
+  padding:14px 20px;background:var(--paper);border-bottom:1px solid var(--rule);
+}
+
+/* copy rows */
+.copy-row{
+  padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--paper);
+  display:flex;flex-direction:column;gap:6px;
+}
+.copy-default{font-size:0.42rem;letter-spacing:0.06em;color:var(--dim);font-style:italic}
+
+/* reviews */
+.review-item{
+  padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--paper);
+  display:flex;flex-direction:column;gap:3px;
+}
+.review-stars{color:var(--gold);font-size:0.8rem}
+.review-text{font-size:0.52rem;color:var(--dim);line-height:1.5}
+.review-author{font-size:0.42rem;letter-spacing:0.1em;color:var(--dim2)}
+
+/* modal */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(26,20,16,0.6);
+  z-index:5000;display:none;align-items:flex-end;justify-content:center;
+  padding:0;
+}
+.modal-bg.show,.modal-bg.open{display:flex}
+.modal{
+  background:var(--paper);width:100%;max-width:500px;
+  border-radius:20px 20px 0 0;
+  max-height:82vh;overflow-y:auto;
+  padding-bottom:env(safe-area-inset-bottom,20px);
+}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--rule2);margin:12px auto 0}
+.modal-hdr{
+  padding:16px 20px 14px;border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-title{font-family:var(--display);font-size:1.3rem;letter-spacing:-0.01em;color:var(--ink)}
+.modal-close{
+  background:none;border:none;font-size:1.2rem;color:var(--dim);cursor:pointer;padding:4px;
+}
+.modal-body{padding:16px 20px}
+.modal-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:9px 0;border-bottom:1px solid var(--rule);gap:12px;
+}
+.modal-row:last-child{border-bottom:none}
+.modal-row .k{font-size:0.42rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim);flex-shrink:0}
+.modal-row .v{font-size:0.52rem;letter-spacing:0.04em;color:var(--ink);text-align:right}
+.modal-footer{
+  padding:14px 20px;border-top:1px solid var(--rule);
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+
+/* badges */
+.badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:0.42rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
+.badge-green{background:#e6f4ea;color:var(--green);border:1px solid #8fc29a}
+.badge-red{background:#fdf2f2;color:var(--red);border:1px solid #d09090}
+.badge-blue{background:#eef4f8;color:var(--blue);border:1px solid #8ab0c8}
+.badge-dim{background:var(--paper2);color:var(--dim);border:1px solid var(--rule)}
+
+/* toast */
+.toast{
+  position:fixed;bottom:96px;left:50%;
+  transform:translateX(-50%) translateY(6px);
+  background:var(--ink);color:var(--paper);
+  border-radius:24px;padding:11px 20px;
+  font-size:0.52rem;font-weight:500;letter-spacing:0.08em;
+  z-index:9999;opacity:0;pointer-events:none;
+  transition:all 0.22s;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:#8b2525}
+.toast.ok{background:var(--green)}
+
+/* warn/info boxes */
+.info-box{
+  margin:14px 20px;padding:12px 14px;background:#fdf8ee;
+  border:1.5px solid #e8d080;border-radius:10px;
+  font-size:0.46rem;letter-spacing:0.06em;color:var(--gold);line-height:1.7;
+}
+.warn-box{
+  margin:14px 20px;padding:12px 14px;background:#fdf2f2;
+  border:1.5px solid #e0a0a0;border-radius:10px;
+  font-size:0.46rem;letter-spacing:0.06em;color:var(--red);line-height:1.7;
+}
+
+/* pin change grid */
+.pin-change-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+
+/* vacation preview */
+.vaca-preview-box{
+  margin:14px 20px;padding:20px;background:var(--paper2);
+  border:1px solid var(--rule);border-radius:12px;text-align:center;
+}
+
+/* ── DAY CARD GRID (rendered by JS) ── */
+.day-card-list{display:flex;flex-direction:column;gap:8px}
+.day-card{background:var(--paper2);border:1.5px solid var(--rule);border-radius:10px;padding:12px 14px;transition:all 0.15s}
+.day-card.on{background:var(--paper);border-color:var(--rule2)}
+.day-card-top{display:flex;align-items:center;gap:10px}
+.day-card-toggle{
+  width:38px;height:22px;border-radius:11px;
+  background:var(--rule);border:1.5px solid var(--rule2);
+  position:relative;cursor:pointer;flex-shrink:0;transition:all 0.2s;
+}
+.day-card-toggle::after{
+  content:'';position:absolute;width:14px;height:14px;border-radius:50%;
+  background:#fff;top:3px;left:3px;transition:all 0.2s;
+}
+.day-card-toggle.on{background:#8fc29a;border-color:#6aad7c}
+.day-card-toggle.on::after{transform:translateX(16px)}
+.day-card-name{font-family:var(--display);font-size:1rem;color:var(--ink);flex:1}
+.day-card-status{font-size:0.44rem;letter-spacing:0.08em;color:var(--dim2)}
+.day-card-status.open{color:var(--green)}
+.day-card-hours{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
+.dh-sel{background:var(--paper2);border:1.5px solid var(--rule);border-radius:6px;padding:7px 10px;font-family:var(--font);font-size:0.82rem;color:var(--ink);outline:none;flex:1}
+/* svc-row for service editor */
+.svc-row{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--paper)}
+/* qt-row for quick text modal */
+.qt-row{padding:12px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:background 0.12s;border-radius:4px}
+.qt-row:last-child{border-bottom:none}
+.qt-row:hover{background:var(--paper2)}
+.qt-label{font-size:0.54rem;font-weight:500;color:var(--ink);margin-bottom:3px;letter-spacing:0.04em}
+.qt-preview{font-size:0.44rem;letter-spacing:0.04em;color:var(--dim);line-height:1.5}
 </style>
 </head>
 <body>
 
-<!-- PIN SCREEN -->
-<div class="pin-screen" id="pinScreen">
-  <div class="pin-logo" id="pinLogo">MOON</div>
-  <div class="pin-sub">Dashboard — Enter PIN</div>
+<!-- ══ PIN SCREEN ══ -->
+<div id="pinScreen">
+  <div class="pin-wordmark" id="pinLogo">Moon Cuts</div>
+  <div class="pin-tagline">Barber Dashboard</div>
   <div class="pin-dots" id="pinDots">
-    <div class="pin-dot" id="pd0"></div>
-    <div class="pin-dot" id="pd1"></div>
-    <div class="pin-dot" id="pd2"></div>
-    <div class="pin-dot" id="pd3"></div>
-  </div>
-  <div class="pin-error" id="pinError">Incorrect PIN</div>
+  <div class="pin-dot" id="pd0"></div>
+  <div class="pin-dot" id="pd1"></div>
+  <div class="pin-dot" id="pd2"></div>
+  <div class="pin-dot" id="pd3"></div>
+</div>
   <div class="pin-pad">
     <div class="pin-key" onclick="pinKey('1')">1</div>
     <div class="pin-key" onclick="pinKey('2')">2</div>
@@ -540,512 +660,370 @@ html,body{max-width:100%;overflow-x:hidden}
     <div class="pin-key" onclick="pinKey('7')">7</div>
     <div class="pin-key" onclick="pinKey('8')">8</div>
     <div class="pin-key" onclick="pinKey('9')">9</div>
-    <div class="pin-key empty"></div>
-    <div class="pin-key" onclick="pinKey('0')">0</div>
+    <div class="pin-key zero" onclick="pinKey('0')">0</div>
     <div class="pin-key del" onclick="pinDel()">⌫</div>
   </div>
-  <div class="pin-master" onclick="showMasterPrompt()">Forgot PIN?</div>
+  <div class="pin-err" id="pinError"></div>
 </div>
 
-<div class="layout">
+<!-- ══ APP ══ -->
+<div id="app">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-main">MOON</div>
-      <div class="sb-logo-sub">Barber Dashboard</div>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div>
+      <div class="sb-logo-main" id="topShopName">Moon Cuts</div>
+      <div class="topbar-clock">
+        <span id="sbTime"></span>
+        <span>·</span>
+        <span id="sbDate"></span>
+      </div>
     </div>
-    <nav class="sb-nav">
-      <div class="sb-section">Main</div>
-      <div class="sb-item active" onclick="showPanel('schedule',this)"><span class="sb-icon">📅</span>Schedule</div>
-      <div class="sb-item" onclick="showPanel('bookings',this)"><span class="sb-icon">📋</span>Bookings</div>
-      <div class="sb-item" onclick="showPanel('clients',this)"><span class="sb-icon">👥</span>Clients</div>
-      <div class="sb-section">Manage</div>
-      <div class="sb-item" onclick="showPanel('availability',this)"><span class="sb-icon">🗓</span>Availability</div>
-      <div class="sb-item" onclick="showPanel('settings',this)"><span class="sb-icon">⚙️</span>Settings</div>
-    </nav>
-    <div class="sb-footer">
-      <div class="sb-time" id="sbTime"></div>
-      <div class="sb-date" id="sbDate"></div>
+    <div class="topbar-right">
+      <!-- topbarTitle hidden but kept for JS compat -->
+      <span id="topbarTitle" style="display:none"></span>
+      <div class="tb-pill" onclick="loadData()">↻ Refresh</div>
+      <a href="index.html" target="_blank"><div class="tb-pill accent">Booking Page ↗</div></a>
     </div>
   </div>
 
-  <!-- MAIN -->
-  <div class="main">
-    <div class="topbar">
-      <div class="topbar-title" id="topbarTitle">Schedule</div>
-      <div class="topbar-right">
-        <button class="btn btn-ghost btn-refresh" onclick="loadData()">↻ Refresh</button>
-        <a href="index.html" target="_blank"><button class="btn btn-primary">View Booking Page ↗</button></a>
+  <!-- ══ SCHEDULE ══ -->
+  <div class="panel active" id="panel-schedule">
+    <div id="statsRow"></div>
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-hdr-title" id="schedTitle">Today</div>
+        <div class="sec-hdr-sub" id="schedSub"></div>
+      </div>
+      <div class="day-nav">
+        <div class="sched-arrow" onclick="shiftDay(-1)">←</div>
+        <div class="sched-arrow" onclick="shiftDay(0)">Today</div>
+        <div class="sched-arrow" onclick="shiftDay(1)">→</div>
       </div>
     </div>
-
-    <div class="content">
-
-      <!-- ══ SCHEDULE PANEL ══ -->
-      <div class="panel active" id="panel-schedule">
-        <div class="stats-row" id="statsRow"></div>
-        <div class="sec-hdr">
-          <div>
-            <div class="sec-hdr-title" id="schedTitle">Today's Schedule</div>
-            <div class="sec-hdr-sub" id="schedSub"></div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <div class="sched-arrow" onclick="shiftDay(-1)">←</div>
-            <div class="sched-arrow" onclick="shiftDay(0)">Today</div>
-            <div class="sched-arrow" onclick="shiftDay(1)">→</div>
-          </div>
-        </div>
-        <div class="time-slot-list" id="slotList"></div>
-      </div>
-
-      <!-- ══ BOOKINGS PANEL ══ -->
-      <div class="panel" id="panel-bookings">
-        <div class="sec-hdr">
-          <div class="sec-hdr-title">All Bookings</div>
-          <span class="sec-hdr-sub" id="bookingCount"></span>
-        </div>
-        <div class="search-bar">
-          <span class="search-icon">⌕</span>
-          <input type="text" id="bookingSearch" placeholder="Search by name, service, date..." oninput="renderBookings()">
-        </div>
-        <div class="tbl-wrap">
-          <table class="tbl" id="bookingTable">
-            <thead><tr>
-              <th>Client</th><th>Service</th><th>Date</th><th>Time</th><th>Price</th><th>Status</th><th>Actions</th>
-            </tr></thead>
-            <tbody id="bookingBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ══ CLIENTS PANEL ══ -->
-      <div class="panel" id="panel-clients">
-        <div class="sec-hdr">
-          <div class="sec-hdr-title">Client List</div>
-          <span class="sec-hdr-sub" id="clientCount"></span>
-        </div>
-        <div class="search-bar">
-          <span class="search-icon">⌕</span>
-          <input type="text" id="clientSearch" placeholder="Search clients..." oninput="renderClients()">
-        </div>
-        <div class="client-grid" id="clientGrid"></div>
-      </div>
-
-      <!-- ══ AVAILABILITY PANEL ══ -->
-      <div class="panel" id="panel-availability">
-
-        <!-- WORK DAYS -->
-        <div class="avail-section">
-          <div class="avail-title">Work Days</div>
-          <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:16px;line-height:1.7">Toggle each day on or off. Set your open and close time per day.</div>
-          <div id="daysGrid"></div>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border2)">
-            <div class="avail-title">Time Slot Length</div>
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:12px;line-height:1.7">How long each appointment slot is on the booking page.</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap" id="slotLengthBtns">
-              <button class="btn btn-ghost" onclick="setSlotLen(15,this)">15 min</button>
-              <button class="btn btn-ghost" onclick="setSlotLen(30,this)">30 min</button>
-              <button class="btn btn-ghost" onclick="setSlotLen(45,this)">45 min</button>
-              <button class="btn btn-ghost" onclick="setSlotLen(60,this)">60 min</button>
-            </div>
-          </div>
-          <button class="btn btn-primary" style="margin-top:16px" onclick="saveWorkDays()">Save Work Days</button>
-        </div>
-
-        <!-- BLOCK OFF TIME -->
-        <div class="avail-section">
-          <div class="avail-title">Block Off Time</div>
-          <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">Block specific dates or times — clients won't be able to book those slots.</div>
-          <div class="block-form">
-
-            <div class="bf-group" style="margin-bottom:16px">
-              <label class="bf-label">Date</label>
-              <input class="bf-input" type="date" id="blockDate" style="width:180px">
-            </div>
-
-            <div class="bf-label" style="margin-bottom:10px">Quick block</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
-              <button class="btn btn-ghost" onclick="applyPreset('morning')">🌅 Morning off</button>
-              <button class="btn btn-ghost" onclick="applyPreset('lunch')">🥪 Lunch break</button>
-              <button class="btn btn-ghost" onclick="applyPreset('afternoon')">🌇 Afternoon off</button>
-              <button class="btn btn-ghost" onclick="applyPreset('fullday')">🚫 Full day off</button>
-            </div>
-
-            <div class="bf-label" style="margin-bottom:10px">Custom time range</div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
-              <div class="bf-group" style="min-width:120px">
-                <label class="bf-label">From</label>
-                <select class="bf-select" id="blockFrom" style="width:100%"></select>
-              </div>
-              <div class="bf-group" style="min-width:120px">
-                <label class="bf-label">To</label>
-                <select class="bf-select" id="blockTo" style="width:100%"></select>
-              </div>
-              <div class="bf-group" style="flex:1;min-width:140px">
-                <label class="bf-label">Reason (optional)</label>
-                <input class="bf-input" type="text" id="blockReason" placeholder="e.g. lunch, personal..." style="width:100%">
-              </div>
-            </div>
-            <button class="btn btn-primary" onclick="addBlock()">Add Block</button>
-          </div>
-          <div class="block-list" id="blockList" style="margin-top:14px"></div>
-        </div>
-
-      </div>
-
-      <!-- ══ SETTINGS PANEL ══ -->
-      <div class="panel" id="panel-settings">
-        <div class="settings-preview-bar">
-          <span>Make changes, then preview your booking page</span>
-          <a href="index.html" target="_blank"><button class="btn btn-primary" style="padding:7px 14px;font-size:11px">Preview ↗</button></a>
-        </div>
-        <div class="sec-hdr"><div class="sec-hdr-title">Settings</div><span class="sec-hdr-sub">Changes save instantly</span></div>
-
-        <!-- TABS -->
-        <div class="stab-bar">
-          <div class="stab active" onclick="showStab('shop',this)">Shop</div>
-          <div class="stab" onclick="showStab('services',this)">Services</div>
-          <div class="stab" onclick="showStab('appearance',this)">Appearance</div>
-          <div class="stab" onclick="showStab('rules',this)">Booking Rules</div>
-          <div class="stab" onclick="showStab('gallery',this)">Gallery</div>
-          <div class="stab" onclick="showStab('reviews',this)">Reviews</div>
-          <div class="stab" onclick="showStab('vacation',this)">Vacation</div>
-          <div class="stab" onclick="showStab('keys',this)">API Keys</div>
-        </div>
-
-        <!-- TAB: SHOP -->
-        <div class="stab-panel active" id="stab-shop">
-          <div class="cfg-section">Your Info</div>
-          <div class="block-form">
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">Shop / Barber Name</label>
-              <input class="bf-input" id="cfgShopName" placeholder="e.g. Moon Cuts" style="width:100%" oninput="livePreview()">
-            </div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">Phone Number</label>
-              <input class="bf-input" id="cfgPhone" placeholder="+1 (805) 000-0000" style="width:100%">
-            </div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">Instagram Handle</label>
-              <input class="bf-input" id="cfgInstagram" placeholder="@yourhandle" style="width:100%">
-            </div>
-            <div class="bf-group" style="margin-bottom:0">
-              <label class="bf-label">Welcome Message (shown on booking page)</label>
-              <input class="bf-input" id="cfgWelcome" placeholder="e.g. Cuts &amp; Fades — Book Online" style="width:100%">
-            </div>
-          </div>
-          <div class="cfg-section">Custom Confirmation SMS</div>
-          <div class="block-form">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:10px;line-height:1.7">Write your own booking confirmation text. Leave blank to use the default. Use these placeholders: <span style="color:var(--gold)">{name} {service} {date} {time} {payment} {shop}</span></div>
-            <div class="bf-group" style="margin-bottom:0">
-              <label class="bf-label">Custom SMS text</label>
-              <textarea class="bf-input" id="cfgCustomSms" rows="4" placeholder="Hey {name}! You're booked for a {service} on {date} at {time}. Payment: {payment}. See you soon! — {shop}" style="width:100%;resize:vertical;font-size:12px;line-height:1.6"></textarea>
-            </div>
-          </div>
-
-          <div class="cfg-section">Payment Handles</div>
-          <div class="block-form">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:12px;line-height:1.7">Leave blank to hide that option. Clients will see only what you fill in.</div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">💲 CashApp $tag</label>
-              <input class="bf-input" id="cfgCashapp" placeholder="$yourname" style="width:100%">
-            </div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">💙 Venmo @handle</label>
-              <input class="bf-input" id="cfgVenmo" placeholder="@yourname" style="width:100%">
-            </div>
-            <div class="bf-group" style="margin-bottom:0">
-              <label class="bf-label">🅿️ PayPal.me username</label>
-              <input class="bf-input" id="cfgPaypal" placeholder="yourname" style="width:100%">
-            </div>
-          </div>
-          <button class="btn btn-primary" style="margin-top:14px" onclick="saveSettings()">Save</button>
-
-          <div class="cfg-section">Page Copy</div>
-          <div class="block-form">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">Replace the default barber-specific phrases with your own wording. Leave blank to keep the default.</div>
-            <div style="display:grid;gap:10px">
-              <div class="copy-row">
-                <div class="copy-default">"What are we doing" · "Pick your <em>cut</em>"</div>
-                <input class="bf-input" id="cpyS1top" placeholder='e.g. What are we doing today' style="width:100%">
-                <input class="bf-input" id="cpyS1main" placeholder='e.g. Pick your <em>service</em>' style="width:100%;margin-top:6px">
-              </div>
-              <div class="copy-row">
-                <div class="copy-default">"Pick your appointment" · "When you <em>coming in?</em>"</div>
-                <input class="bf-input" id="cpyS2top" placeholder='e.g. Choose your appointment' style="width:100%">
-                <input class="bf-input" id="cpyS2main" placeholder='e.g. When are you <em>coming in?</em>' style="width:100%;margin-top:6px">
-              </div>
-              <div class="copy-row">
-                <div class="copy-default">"Almost done" · "Who's <em>getting fresh?</em>"</div>
-                <input class="bf-input" id="cpyS3top" placeholder='e.g. Almost done' style="width:100%">
-                <input class="bf-input" id="cpyS3main" placeholder='e.g. Your <em>details</em>' style="width:100%;margin-top:6px">
-              </div>
-              <div class="copy-row">
-                <div class="copy-default">"Review &amp; confirm" · "Lock it <em>in.</em>"</div>
-                <input class="bf-input" id="cpyS4top" placeholder='e.g. Review & confirm' style="width:100%">
-                <input class="bf-input" id="cpyS4main" placeholder='e.g. Lock it <em>in.</em>' style="width:100%;margin-top:6px">
-              </div>
-              <div class="copy-row">
-                <div class="copy-default">Info note: "Moon will text you a confirmation…"</div>
-                <textarea class="bf-input" id="cpyInfoNote" rows="2" placeholder="e.g. You'll get a text confirmation when you book. No app needed." style="width:100%;resize:vertical;font-size:12px;line-height:1.6"></textarea>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-primary" style="margin-top:14px" onclick="saveCopy()">Save Page Copy</button>
-        </div>
-
-        <!-- TAB: SERVICES -->
-        <div class="stab-panel" id="stab-services">
-          <div class="cfg-section">Your Services</div>
-          <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">Add, edit or remove services. Drag to reorder.</div>
-          <div class="svc-editor-list" id="svcEditorList"></div>
-
-          <div class="cfg-section">Add New Service</div>
-          <div class="block-form">
-            <div class="add-svc-form">
-              <div class="bf-group">
-                <label class="bf-label">Service Name</label>
-                <input class="bf-input" id="newSvcName" placeholder="e.g. BRAID">
-              </div>
-              <div class="bf-group">
-                <label class="bf-label">Price ($)</label>
-                <input class="bf-input" id="newSvcPrice" placeholder="35" type="number" min="0">
-              </div>
-              <div class="bf-group">
-                <label class="bf-label">Duration</label>
-                <select class="bf-select" id="newSvcDur">
-                  <option>15min</option><option>20min</option><option selected>30min</option>
-                  <option>45min</option><option>60min</option><option>75min</option><option>90min</option>
-                </select>
-              </div>
-              <div class="bf-group">
-                <label class="bf-label">&nbsp;</label>
-                <button class="btn btn-primary" onclick="addService()">Add</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB: APPEARANCE -->
-        <div class="stab-panel" id="stab-appearance">
-          <div class="cfg-section">Theme</div>
-          <div class="block-form">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:16px;line-height:1.7">Pick the overall feel of your booking page.</div>
-            <div class="theme-grid" id="themeGrid"></div>
-          </div>
-
-          <div class="cfg-section">Accent Color</div>
-          <div class="block-form">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:12px;line-height:1.7">The highlight color on buttons, selections, and details.</div>
-            <div class="swatch-row" id="swatchRow"></div>
-            <div class="color-custom">
-              <div class="color-preview" id="colorPreview"></div>
-              <input class="bf-input" id="cfgAccent" placeholder="#c4a97d" style="width:120px" oninput="applyAccent(this.value)">
-              <span style="font-size:11px;color:var(--dim);letter-spacing:0.06em">Custom hex</span>
-            </div>
-          </div>
-
-          <div class="cfg-section">Font</div>
-          <div class="block-form">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">Changes the heading style on your booking page.</div>
-            <div class="font-grid" id="fontGrid"></div>
-          </div>
-
-          <button class="btn btn-primary" style="margin-top:14px" onclick="saveAppearance()">Save Appearance</button>
-        </div>
-
-        <!-- TAB: BOOKING RULES -->
-        <div class="stab-panel" id="stab-rules">
-          <div class="cfg-section">Cancellation</div>
-          <div class="block-form">
-            <div class="bf-group">
-              <label class="bf-label">Cancellation notice required</label>
-              <div class="range-wrap">
-                <input type="range" min="1" max="48" value="2" id="cancelHours" oninput="document.getElementById('cancelVal').textContent=this.value+'h'">
-                <span class="range-val" id="cancelVal">2h</span>
-              </div>
-              <div style="font-size:11px;color:var(--dim);margin-top:6px;letter-spacing:0.06em">Shown on confirmation SMS and booking page</div>
-            </div>
-          </div>
-
-          <div class="cfg-section">Capacity</div>
-          <div class="block-form">
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <div class="tl">Max bookings per day</div>
-                <div class="td">Automatically blocks new bookings when limit is reached</div>
-              </div>
-              <div class="tog" id="togMaxDay" onclick="this.classList.toggle('on')"></div>
-            </div>
-            <div class="bf-group" style="margin-top:12px">
-              <label class="bf-label">Daily booking limit</label>
-              <input class="bf-input" id="cfgMaxDay" type="number" min="1" max="50" value="12" style="width:100px">
-            </div>
-          </div>
-
-          <div class="cfg-section">Walk-In Mode</div>
-          <div class="block-form">
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <div class="tl">Show "I'm here now" button</div>
-                <div class="td">Walk-ins can tap it to text you instantly — uses your phone number from Shop settings</div>
-              </div>
-              <div class="tog" id="togWalkin" onclick="this.classList.toggle('on')"></div>
-            </div>
-          </div>
-
-          <div class="cfg-section">Quick Text Button</div>
-          <div class="block-form">
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <div class="tl">Show "Text us" button on booking page</div>
-                <div class="td">Clients can tap to open messages pre-filled with your number — uses your phone from Shop settings</div>
-              </div>
-              <div class="tog on" id="togQuickText" onclick="this.classList.toggle('on')"></div>
-            </div>
-          </div>
-
-          <div class="cfg-section">SMS Reminders</div>
-          <div class="block-form">
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <div class="tl">Send day-before reminder</div>
-                <div class="td">Client gets a reminder text the evening before their appointment</div>
-              </div>
-              <div class="tog on" id="togReminder" onclick="this.classList.toggle('on')"></div>
-            </div>
-          </div>
-          <button class="btn btn-primary" style="margin-top:14px" onclick="saveRules()">Save Rules</button>
-        </div>
-
-
-        <!-- TAB: GALLERY -->
-        <div class="stab-panel" id="stab-gallery">
-          <div class="cfg-section">Photo Gallery</div>
-          <div class="block-form">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">Paste image URLs one per line — direct image links (.jpg, .png) or hosted images. These show as a scrollable strip on your booking page.</div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">Image URLs (one per line)</label>
-              <textarea class="bf-input" id="cfgPhotos" rows="6" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg" style="width:100%;resize:vertical;font-size:12px;line-height:1.6"></textarea>
-            </div>
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">💡 Tip: Upload photos to <a href="https://imgur.com" target="_blank" style="color:var(--gold)">imgur.com</a> for free, then paste the direct image link.</div>
-          </div>
-          <div class="cfg-section">About You</div>
-          <div class="block-form">
-            <div class="bf-group" style="margin-bottom:0">
-              <label class="bf-label">Short bio (shown under your name on booking page)</label>
-              <textarea class="bf-input" id="cfgAbout" rows="3" placeholder="e.g. 5 years cutting in the 805. Specializing in fades and skin tapers. Walk-ins welcome." style="width:100%;resize:vertical;font-size:12px;line-height:1.6"></textarea>
-            </div>
-          </div>
-          <button class="btn btn-primary" style="margin-top:14px" onclick="saveGallery()">Save Gallery & About</button>
-        </div>
-
-        <!-- TAB: REVIEWS -->
-        <div class="stab-panel" id="stab-reviews">
-          <div class="cfg-section">Client Reviews</div>
-          <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">Reviews are left by clients after they book. They show as a scrollable strip on your booking page to build trust.</div>
-          <div id="reviewsDashList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
-          <button class="btn btn-ghost btn-sm" onclick="loadDashReviews()">↻ Refresh</button>
-        </div>
-
-        <!-- TAB: VACATION -->
-        <div class="stab-panel" id="stab-vacation">
-          <div class="cfg-section">Vacation Mode</div>
-          <div class="block-form">
-            <div class="toggle-row" style="margin-bottom:14px">
-              <div class="toggle-info">
-                <div class="tl">Pause all bookings</div>
-                <div class="td">Clients see your message instead of the booking form</div>
-              </div>
-              <div class="tog" id="togVaca" onclick="this.classList.toggle('on')"></div>
-            </div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">Vacation icon (emoji)</label>
-              <input class="bf-input" id="cfgVacaIcon" placeholder="✈️" style="width:80px;font-size:1.2rem">
-            </div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">Title</label>
-              <input class="bf-input" id="cfgVacaTitle" placeholder="We'll be back." style="width:100%">
-            </div>
-            <div class="bf-group" style="margin-bottom:0">
-              <label class="bf-label">Message to clients</label>
-              <textarea class="bf-input" id="cfgVacaMsg" rows="3" placeholder="Taking a week off. Back on March 20th — can't wait to see you." style="width:100%;resize:vertical;font-size:12px;line-height:1.6"></textarea>
-            </div>
-          </div>
-          <button class="btn btn-primary" style="margin-top:14px" onclick="saveVacation()">Save Vacation Settings</button>
-        </div>
-
-        <!-- TAB: CUSTOM SMS -->
-        <!-- TAB: API KEYS -->
-        <div class="stab-panel" id="stab-keys">
-          <div class="cfg-section">SMS</div>
-          <div class="block-form" style="margin-bottom:4px">
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <div class="tl">Send confirmation texts via Twilio</div>
-                <div class="td">Keep OFF until your A2P campaign is approved — bookings still save and the native SMS fallback still works. Turn ON only when Twilio is live.</div>
-              </div>
-              <div class="tog" id="togSms" onclick="this.classList.toggle('on')"></div>
-            </div>
-          </div>
-          <div class="cfg-section">Dashboard PIN</div>
-          <div class="block-form" style="margin-bottom:16px">
-            <div style="font-size:11px;color:var(--dim);letter-spacing:0.06em;margin-bottom:14px;line-height:1.7">
-              Change your 4-digit PIN. Default is <span style="color:var(--gold);letter-spacing:0.14em">1234</span> — change it now if you haven't.
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
-              <div class="bf-group">
-                <label class="bf-label">New PIN (4 digits)</label>
-                <input class="bf-input" id="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" style="width:100%;letter-spacing:0.3em;font-size:1.1rem">
-              </div>
-              <div class="bf-group">
-                <label class="bf-label">Confirm PIN</label>
-                <input class="bf-input" id="confirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" style="width:100%;letter-spacing:0.3em;font-size:1.1rem">
-              </div>
-              <button class="btn btn-primary" onclick="savePin()">Save PIN</button>
-            </div>
-            <div style="background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.2);border-radius:3px;padding:10px 14px;margin-top:12px;font-size:11px;color:#e07060;letter-spacing:0.06em;line-height:1.7">
-              ⚠ Write your PIN down somewhere safe. Master reset PIN is <span style="letter-spacing:0.2em;font-weight:bold">0000</span> — use it if you forget.
-            </div>
-          </div>
-
-          <div style="background:rgba(196,169,125,0.06);border:1px solid rgba(196,169,125,0.15);border-radius:4px;padding:12px 16px;margin-bottom:16px;font-size:11px;color:var(--gold);letter-spacing:0.08em;line-height:1.7">
-            ⚠ These API keys connect your booking system. Don't share them publicly.
-          </div>
-          <div class="block-form">
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">JSONBin Bin ID</label>
-              <input class="bf-input" id="cfgBinId" style="width:100%">
-            </div>
-            <div class="bf-group" style="margin-bottom:12px">
-              <label class="bf-label">JSONBin API Key</label>
-              <input class="bf-input" id="cfgBinKey" type="password" style="width:100%">
-            </div>
-            <div class="bf-group" style="margin-bottom:0">
-              <label class="bf-label">SMS Worker URL</label>
-              <input class="bf-input" id="cfgSms" style="width:100%">
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-            <button class="btn btn-primary" onclick="saveSettings()">Save Keys</button>
-            <a href="https://jsonbin.io" target="_blank" style="text-decoration:none"><button class="btn btn-ghost">↗ JSONBin</button></a>
-            <a href="https://console.twilio.com" target="_blank" style="text-decoration:none"><button class="btn btn-ghost">↗ Twilio</button></a>
-            <a href="https://dash.cloudflare.com" target="_blank" style="text-decoration:none"><button class="btn btn-ghost">↗ Cloudflare</button></a>
-          </div>
-        </div>
-
-      </div>
-
+    <div id="remindBanner" style="display:none">
+      <div id="remindText"></div>
+      <button id="btnRemindAll" onclick="remindAllTomorrow()">📱 Remind All</button>
     </div>
+    <div class="time-slot-list" id="slotList"></div>
   </div>
-</div>
 
-<!-- BOOKING DETAIL MODAL -->
+  <!-- ══ BOOKINGS ══ -->
+  <div class="panel" id="panel-bookings">
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-hdr-title">All Bookings</div>
+        <div class="sec-hdr-sub" id="bookingCount"></div>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="bookingSearch" placeholder="Search name, service, date…" oninput="renderBookings()">
+    </div>
+    <div id="bookingBody"></div>
+  </div>
+
+  <!-- ══ CLIENTS ══ -->
+  <div class="panel" id="panel-clients">
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-hdr-title">Clients</div>
+        <div class="sec-hdr-sub" id="clientCount"></div>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="clientSearch" placeholder="Search name or phone…" oninput="renderClients()">
+    </div>
+    <div id="clientGrid"></div>
+  </div>
+
+  <!-- ══ AVAILABILITY ══ -->
+  <div class="panel" id="panel-availability">
+    <div class="sec-hdr"><div class="sec-hdr-title">Hours & Schedule</div></div>
+
+    <div class="avail-section">
+      <div class="avail-title">Work Days</div>
+      <div class="avail-hint">Tap to turn each day on or off</div>
+      <div id="daysGrid"></div>
+    </div>
+
+    <div class="avail-section">
+      <div class="avail-title">Appointment Length</div>
+      <div class="avail-hint">How long each slot appears on your booking page</div>
+      <div id="slotLengthBtns">
+        <button class="btn btn-ghost" onclick="setSlotLen(15,this)">15 min</button>
+        <button class="btn btn-ghost" onclick="setSlotLen(30,this)">30 min</button>
+        <button class="btn btn-ghost" onclick="setSlotLen(45,this)">45 min</button>
+        <button class="btn btn-ghost" onclick="setSlotLen(60,this)">60 min</button>
+      </div>
+    </div>
+    <button class="big-save" onclick="saveWorkDays()">Save Work Days ✓</button>
+
+    <div class="sec-hdr" style="margin-top:8px"><div class="sec-hdr-title">Block Off Time</div></div>
+    <div class="block-form">
+      <div class="bf-group">
+        <label class="bf-label">Date</label>
+        <input class="bf-input" type="date" id="blockDate" style="width:180px">
+      </div>
+      <div class="bf-label" style="margin-bottom:8px">Quick block</div>
+      <div class="preset-row">
+        <div class="preset-btn" onclick="applyPreset('morning')">🌅 Morning off</div>
+        <div class="preset-btn" onclick="applyPreset('lunch')">🥪 Lunch break</div>
+        <div class="preset-btn" onclick="applyPreset('afternoon')">🌇 Afternoon off</div>
+        <div class="preset-btn" onclick="applyPreset('fullday')">🚫 Full day off</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div class="bf-group" style="margin-bottom:0">
+          <label class="bf-label">From</label>
+          <select class="bf-select" id="blockFrom" style="width:100%"></select>
+        </div>
+        <div class="bf-group" style="margin-bottom:0">
+          <label class="bf-label">To</label>
+          <select class="bf-select" id="blockTo" style="width:100%"></select>
+        </div>
+      </div>
+      <div class="bf-group">
+        <label class="bf-label">Reason (optional)</label>
+        <input class="bf-input" type="text" id="blockReason" placeholder="e.g. lunch, personal…">
+      </div>
+      <button class="big-save" onclick="addBlock()" style="margin:4px 0 0">Add Block</button>
+    </div>
+    <div class="block-list" id="blockList"></div>
+  </div>
+
+  <!-- ══ SETTINGS ══ -->
+  <div class="panel" id="panel-settings">
+    <div class="settings-preview-bar">
+      <span>Make changes, then preview your booking page</span>
+      <a href="index.html" target="_blank"><button class="preview-btn">Preview ↗</button></a>
+    </div>
+    <div class="sec-hdr" style="border-bottom:none;padding-bottom:0">
+      <div class="sec-hdr-title">Settings</div>
+      <div class="sec-hdr-sub">Changes save when you tap Save</div>
+    </div>
+
+    <!-- Tab bar — .stab class required by JS -->
+    <div class="stab-bar">
+      <div class="stab active" onclick="showStab('shop',this)">My Shop</div>
+      <div class="stab" onclick="showStab('services',this)">Services</div>
+      <div class="stab" onclick="showStab('appearance',this)">Look & Feel</div>
+      <div class="stab" onclick="showStab('rules',this)">Rules</div>
+      <div class="stab" onclick="showStab('gallery',this)">Photos</div>
+      <div class="stab" onclick="showStab('reviews',this)">Reviews</div>
+      <div class="stab" onclick="showStab('vacation',this)">Vacation</div>
+      <div class="stab" onclick="showStab('keys',this)">Advanced</div>
+    </div>
+
+    <!-- TAB: SHOP -->
+    <div class="stab-panel active" id="stab-shop">
+      <div class="cfg-section">Your Info</div>
+      <div class="block-form settings-row">
+        <div class="bf-group"><label class="bf-label">Shop / Barber Name</label><input class="bf-input" id="cfgShopName" placeholder="e.g. Moon Cuts" oninput="livePreview()"></div>
+        <div class="bf-group"><label class="bf-label">Phone Number</label><input class="bf-input" id="cfgPhone" placeholder="+1 (805) 000-0000" type="tel"></div>
+        <div class="bf-group"><label class="bf-label">Instagram Handle</label><input class="bf-input" id="cfgInstagram" placeholder="@yourhandle"></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">Welcome Message (on booking page)</label><input class="bf-input" id="cfgWelcome" placeholder="e.g. Cuts & Fades — Book Online"></div>
+      </div>
+
+      <div class="cfg-section">Custom Confirmation Text</div>
+      <div class="block-form settings-row">
+        <div style="font-size:0.44rem;color:var(--dim);margin-bottom:10px;line-height:1.7;letter-spacing:0.04em">Use these placeholders: <span style="color:var(--gold)">{name} {service} {date} {time} {payment} {shop}</span></div>
+        <div class="bf-group" style="margin-bottom:0"><textarea class="bf-input" id="cfgCustomSms" rows="4" placeholder="Hey {name}! You're booked for {service} on {date} at {time}. — {shop}" style="resize:vertical"></textarea></div>
+      </div>
+
+      <div class="cfg-section">Payment Handles</div>
+      <div class="block-form settings-row">
+        <div style="font-size:0.44rem;color:var(--dim);margin-bottom:10px;line-height:1.7">Leave blank to hide that payment option</div>
+        <div class="bf-group"><label class="bf-label">💲 CashApp $tag</label><input class="bf-input" id="cfgCashapp" placeholder="$yourname"></div>
+        <div class="bf-group"><label class="bf-label">💙 Venmo @handle</label><input class="bf-input" id="cfgVenmo" placeholder="@yourname"></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">🅿️ PayPal.me username</label><input class="bf-input" id="cfgPaypal" placeholder="yourname"></div>
+      </div>
+      <button class="big-save" onclick="saveSettings()">Save My Info ✓</button>
+
+      <div class="cfg-section">Page Wording</div>
+      <div style="font-size:0.44rem;color:var(--dim);padding:10px 20px;line-height:1.7">Replace the default text on your booking page. Leave blank to keep defaults.</div>
+      <div class="copy-row"><div class="copy-default">"What are we doing" / "Pick your cut"</div><input class="bf-input" id="cpyS1top" placeholder="Top line"><input class="bf-input" id="cpyS1main" placeholder='Main heading e.g. Pick your service' style="margin-top:6px"></div>
+      <div class="copy-row"><div class="copy-default">"Pick your appointment" / "When you coming in?"</div><input class="bf-input" id="cpyS2top" placeholder="Top line"><input class="bf-input" id="cpyS2main" placeholder="Main heading" style="margin-top:6px"></div>
+      <div class="copy-row"><div class="copy-default">"Almost done" / "Who's getting fresh?"</div><input class="bf-input" id="cpyS3top" placeholder="Top line"><input class="bf-input" id="cpyS3main" placeholder="Main heading" style="margin-top:6px"></div>
+      <div class="copy-row"><div class="copy-default">"Review & confirm" / "Lock it in."</div><input class="bf-input" id="cpyS4top" placeholder="Top line"><input class="bf-input" id="cpyS4main" placeholder="Main heading" style="margin-top:6px"></div>
+      <div class="copy-row"><div class="copy-default">Info note on step 3</div><textarea class="bf-input" id="cpyInfoNote" rows="2" placeholder="e.g. You'll get a text when you book. No app needed." style="resize:vertical"></textarea></div>
+      <button class="big-save" onclick="saveCopy()">Save Wording ✓</button>
+    </div>
+
+    <!-- TAB: SERVICES -->
+    <div class="stab-panel" id="stab-services">
+      <div class="cfg-section">Your Services</div>
+      <div class="svc-editor-list" id="svcEditorList"></div>
+      <div class="cfg-section">Add New Service</div>
+      <div class="add-svc-form">
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">Name</label><input class="bf-input" id="newSvcName" placeholder="e.g. BRAID"></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">Price ($)</label><input class="bf-input" id="newSvcPrice" placeholder="35" type="number" min="0"></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">Duration</label>
+          <select class="bf-select" id="newSvcDur">
+            <option>15min</option><option>20min</option><option selected>30min</option>
+            <option>45min</option><option>60min</option><option>75min</option><option>90min</option>
+          </select>
+        </div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">&nbsp;</label><button class="big-save" onclick="addService()" style="margin:0;padding:10px 16px">Add</button></div>
+      </div>
+    </div>
+
+    <!-- TAB: APPEARANCE -->
+    <div class="stab-panel" id="stab-appearance">
+      <div class="cfg-section">Theme</div>
+      <div style="font-size:0.44rem;color:var(--dim);padding:10px 20px 0;line-height:1.7">Pick the overall feel of your booking page</div>
+      <div class="theme-grid" id="themeGrid"></div>
+      <div class="cfg-section">Accent Color</div>
+      <div style="font-size:0.44rem;color:var(--dim);padding:10px 20px 0;line-height:1.7">The highlight color on buttons and selections</div>
+      <div class="swatch-row" id="swatchRow"></div>
+      <div class="color-custom">
+        <div class="color-preview" id="colorPreview"></div>
+        <input class="bf-input" id="cfgAccent" placeholder="#c4a97d" style="width:120px" oninput="applyAccent(this.value)">
+        <span style="font-size:0.44rem;color:var(--dim)">Custom hex color</span>
+      </div>
+      <div class="cfg-section">Font</div>
+      <div style="font-size:0.44rem;color:var(--dim);padding:10px 20px 0;line-height:1.7">Heading style on your booking page</div>
+      <div class="font-grid" id="fontGrid"></div>
+      <button class="big-save" onclick="saveAppearance()">Save Look & Feel ✓</button>
+    </div>
+
+    <!-- TAB: RULES -->
+    <div class="stab-panel" id="stab-rules">
+      <div class="cfg-section">Cancellation</div>
+      <div class="block-form settings-row">
+        <div class="bf-label">How much notice to cancel?</div>
+        <div class="range-wrap">
+          <input type="range" min="1" max="48" value="2" id="cancelHours" oninput="document.getElementById('cancelVal').textContent=this.value+'h'">
+          <span class="range-val" id="cancelVal">2h</span>
+        </div>
+        <div style="font-size:0.44rem;color:var(--dim);margin-top:6px">Shown on confirmation text and booking page</div>
+      </div>
+
+      <div class="cfg-section">Daily Limit</div>
+      <div class="block-form settings-row">
+        <div class="toggle-row" style="margin-bottom:12px">
+          <div class="toggle-info"><div class="tl">Max bookings per day</div><div class="td">Auto-blocks new bookings when limit is reached</div></div>
+          <div class="tog" id="togMaxDay" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">Daily limit</label><input class="bf-input" id="cfgMaxDay" type="number" min="1" max="50" value="12" style="width:100px"></div>
+      </div>
+
+      <div class="cfg-section">Walk-In Button</div>
+      <div class="block-form settings-row">
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="tl">Show "I'm here now" button</div><div class="td">Walk-ins tap it to text you instantly</div></div>
+          <div class="tog" id="togWalkin" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+
+      <div class="cfg-section">Text Us Button</div>
+      <div class="block-form settings-row">
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="tl">Show "Text us" button on booking page</div><div class="td">Clients can tap to message you directly</div></div>
+          <div class="tog on" id="togQuickText" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+
+      <div class="cfg-section">SMS Reminders</div>
+      <div class="block-form settings-row">
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="tl">Send day-before reminder</div><div class="td">Client gets a reminder text the evening before their appointment</div></div>
+          <div class="tog on" id="togReminder" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+      <button class="big-save" onclick="saveRules()">Save Rules ✓</button>
+    </div>
+
+    <!-- TAB: GALLERY -->
+    <div class="stab-panel" id="stab-gallery">
+      <div class="cfg-section">Photo Gallery</div>
+      <div class="block-form settings-row">
+        <div style="font-size:0.44rem;color:var(--dim);margin-bottom:10px;line-height:1.7">Paste image URLs one per line — shows as a scrollable strip on your booking page.<br>💡 Upload photos free at <a href="https://imgur.com" target="_blank" style="color:var(--gold)">imgur.com</a> then paste the link.</div>
+        <textarea class="bf-input" id="cfgPhotos" rows="6" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg" style="resize:vertical"></textarea>
+      </div>
+      <div class="cfg-section">About You</div>
+      <div class="block-form settings-row">
+        <label class="bf-label">Short bio (shown on booking page)</label>
+        <textarea class="bf-input" id="cfgAbout" rows="3" placeholder="e.g. 5 years cutting in the 805. Specializing in fades. Walk-ins welcome." style="resize:vertical"></textarea>
+      </div>
+      <button class="big-save" onclick="saveGallery()">Save Photos & Bio ✓</button>
+    </div>
+
+    <!-- TAB: REVIEWS -->
+    <div class="stab-panel" id="stab-reviews">
+      <div class="cfg-section">Client Reviews</div>
+      <div style="font-size:0.44rem;color:var(--dim);padding:10px 20px;line-height:1.7">Reviews from clients show on your booking page to build trust with new clients.</div>
+      <div id="reviewsDashList"></div>
+      <button class="big-save secondary" onclick="loadDashReviews()" style="margin-top:8px">↻ Refresh Reviews</button>
+    </div>
+
+    <!-- TAB: VACATION -->
+    <div class="stab-panel" id="stab-vacation">
+      <div class="cfg-section">Vacation Mode</div>
+      <div class="block-form settings-row">
+        <div class="toggle-row" style="margin-bottom:16px">
+          <div class="toggle-info"><div class="tl">Pause all bookings</div><div class="td">Clients see your message instead of the booking form</div></div>
+          <div class="tog" id="togVaca" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="bf-group"><label class="bf-label">Icon (emoji)</label><input class="bf-input" id="cfgVacaIcon" placeholder="✈️" style="width:80px;font-size:1.2rem"></div>
+        <div class="bf-group"><label class="bf-label">Title</label><input class="bf-input" id="cfgVacaTitle" placeholder="We'll be back."></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">Message to clients</label><textarea class="bf-input" id="cfgVacaMsg" rows="3" placeholder="Taking a week off. Back on March 20th — can't wait to see you." style="resize:vertical"></textarea></div>
+      </div>
+      <button class="big-save" onclick="saveVacation()">Save Vacation ✓</button>
+    </div>
+
+    <!-- TAB: API KEYS / ADVANCED -->
+    <div class="stab-panel" id="stab-keys">
+      <div class="cfg-section">SMS (Twilio)</div>
+      <div class="block-form settings-row">
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="tl">Send confirmation texts via Twilio</div><div class="td" style="color:#c07060">Keep OFF until your A2P campaign is approved</div></div>
+          <div class="tog" id="togSms" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+
+      <div class="cfg-section">Dashboard PIN</div>
+      <div class="block-form settings-row">
+        <div style="font-size:0.44rem;color:var(--dim);margin-bottom:12px;line-height:1.7">Change your 4-digit PIN. Default is <strong style="color:var(--gold)">1234</strong> — change it now if you haven't.</div>
+        <div class="pin-change-row">
+          <div class="bf-group" style="margin-bottom:0"><label class="bf-label">New PIN</label><input class="bf-input" id="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" style="letter-spacing:0.3em;font-size:1.1rem"></div>
+          <div class="bf-group" style="margin-bottom:0"><label class="bf-label">Confirm PIN</label><input class="bf-input" id="confirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" style="letter-spacing:0.3em;font-size:1.1rem"></div>
+          <div class="bf-group" style="margin-bottom:0"><label class="bf-label">&nbsp;</label><button class="big-save" onclick="savePin()" style="margin:0;padding:10px 16px">Save</button></div>
+        </div>
+        <div class="warn-box" style="margin:12px 0 0">⚠ Write your PIN down. Master reset is <strong>0000</strong>.</div>
+      </div>
+
+      <div class="cfg-section">API Keys</div>
+      <div class="info-box" style="margin-bottom:0">⚠ These connect your booking system. Don't share them publicly.</div>
+      <div class="block-form settings-row">
+        <div class="bf-group"><label class="bf-label">JSONBin Bin ID</label><input class="bf-input" id="cfgBinId"></div>
+        <div class="bf-group"><label class="bf-label">JSONBin API Key</label><input class="bf-input" id="cfgBinKey" type="password"></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">SMS Worker URL</label><input class="bf-input" id="cfgSms"></div>
+      </div>
+      <div style="display:flex;gap:8px;padding:14px 20px;flex-wrap:wrap">
+        <button class="big-save" onclick="saveSettings()" style="flex:1;margin:0">Save Keys ✓</button>
+        <a href="https://jsonbin.io" target="_blank"><button class="big-save secondary" style="margin:0;padding:14px 16px">JSONBin ↗</button></a>
+        <a href="https://console.twilio.com" target="_blank"><button class="big-save secondary" style="margin:0;padding:14px 16px">Twilio ↗</button></a>
+      </div>
+    </div>
+
+  </div><!-- /settings panel -->
+
+</div><!-- /app -->
+
+<!-- ══ BOTTOM NAV — .sb-item class used by JS ══ -->
+<nav class="bottom-nav">
+  <div class="sb-item active" onclick="showPanel('schedule',this)"><span class="sb-icon">📅</span>Today</div>
+  <div class="sb-item" onclick="showPanel('bookings',this)"><span class="sb-icon">📋</span>Bookings</div>
+  <div class="sb-item" onclick="showPanel('clients',this)"><span class="sb-icon">👥</span>Clients</div>
+  <div class="sb-item" onclick="showPanel('availability',this)"><span class="sb-icon">🗓</span>Hours</div>
+  <div class="sb-item" onclick="showPanel('settings',this)"><span class="sb-icon">⚙️</span>Settings</div>
+</nav>
+
+<!-- ══ BOOKING DETAIL MODAL ══ -->
 <div class="modal-bg" id="modal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-hdr">
-      <div class="modal-title" id="modalTitle">Booking Details</div>
+      <div class="modal-title" id="modalTitle">Booking</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
@@ -1053,9 +1031,10 @@ html,body{max-width:100%;overflow-x:hidden}
   </div>
 </div>
 
-<!-- QUICK TEXT MODAL -->
+<!-- ══ QUICK TEXT MODAL ══ -->
 <div class="modal-bg" id="qtModal" onclick="if(event.target===this)closeQT()">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-hdr">
       <div class="modal-title">💬 Quick Text</div>
       <button class="modal-close" onclick="closeQT()">✕</button>
@@ -1065,7 +1044,6 @@ html,body{max-width:100%;overflow-x:hidden}
 </div>
 
 <div class="toast" id="toast"></div>
-
 <script src="config.js"></script>
 <script src="services.js"></script>
 <script>
@@ -1367,7 +1345,7 @@ function renderSchedule() {
   let html = '';
 
   if (!isWorkDay) {
-    html = `<div class="empty"><span class="empty-icon">🚫</span>Day off — not a scheduled work day</div>`;
+    html = `<div class="empty-state"><div class="empty-icon">🚫</div><div class="empty-label">Day off</div></div>`;
   } else {
     TIMES.forEach(t => {
       const bk = dayBks.find(b => b.time === t);
@@ -1387,33 +1365,33 @@ function renderSchedule() {
       if (isPast && !bk && !blocked) return;
 
       if (blocked) {
-        html += `<div class="time-slot ts-blocked${isPast?' ts-past':''}">
+        html += `<div class="time-slot blocked${isPast?' past':''}">
           <div class="ts-time">${t}</div>
-          <div class="ts-body"><div class="ts-name">Blocked</div><div class="ts-svc">${blocked.reason||'Unavailable'}</div></div>
+          <div class="ts-content"><div class="ts-client-name">Blocked</div><div class="ts-svc-line">${blocked.reason||'Unavailable'}</div></div>
         </div>`;
       } else if (bk) {
-        html += `<div class="time-slot ts-booked${isPast?' ts-past':''}">
+        html += `<div class="time-slot booked${isPast?' past':''}">
           <div class="ts-time">${t}</div>
-          <div class="ts-body">
-            <div class="ts-name">${bk.name}</div>
-            <div class="ts-svc">${bk.service} · ${bk.price}</div>
+          <div class="ts-content">
+            <div class="ts-client-name">${bk.name}</div>
+            <div class="ts-svc-line">${bk.service} · ${bk.price}</div>
           </div>
           <div class="ts-actions">
-            <button class="btn btn-sm ${bk.smsConfirmed?'btn-confirm-sent':'btn-confirm'}" onclick="confirmClient('${bk.id}')">${bk.smsConfirmed?'✓ Sent':'✓ Confirm'}</button>
-            <button class="btn btn-reschedule btn-sm" onclick="rescheduleClient('${bk.id}')">🔁 Reschedule</button>
-            <button class="btn btn-done btn-sm" onclick="doneBooking('${bk.id}')">✓ Done</button>
-            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ + Text</button>
-            <button class="btn btn-ghost btn-sm" onclick="cancelBooking('${bk.id}')">✕</button>
+            <button class="act-btn confirm ${bk.smsConfirmed?'sent':''}" onclick="confirmClient('${bk.id}')">${bk.smsConfirmed?'✓ Sent':'✓ Confirm'}</button>
+            <button class="act-btn reschedule" onclick="rescheduleClient('${bk.id}')">🔁 Reschedule</button>
+            <button class="act-btn done" onclick="doneBooking('${bk.id}')">✓ Done</button>
+            <button class="act-btn cancel-text" onclick="cancelClient('${bk.id}')">✕ + Text</button>
+            <button class="act-btn cancel-silent" onclick="cancelBooking('${bk.id}')">✕</button>
           </div>
         </div>`;
       } else {
         html += `<div class="time-slot">
           <div class="ts-time">${t}</div>
-          <div class="ts-body ts-empty">Open</div>
+          <div class="ts-content"><div class="ts-open">Open</div></div>
         </div>`;
       }
     });
-    if (!html) html = `<div class="empty"><span class="empty-icon">✓</span>No more appointments today</div>`;
+    if (!html) html = `<div class="empty-state"><div class="empty-icon">☀️</div><div class="empty-label">All clear</div></div>`;
   }
 
   document.getElementById('slotList').innerHTML = html;
@@ -1422,7 +1400,9 @@ function renderSchedule() {
   if (remindBtn) {
     const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
     const tmrBks = DATA.bookings.filter(b => b.date===dStr(tomorrow) && b.status==='confirmed');
-    remindBtn.style.display = isToday && tmrBks.length ? '' : 'none';
+    const banner = document.getElementById('remindBanner');
+    if(banner) banner.style.display = isToday && tmrBks.length ? 'flex' : 'none';
+    remindBtn.style.display = '';
     remindBtn.textContent = `📱 Remind Tomorrow (${tmrBks.length})`;
   }
 }
@@ -1460,27 +1440,27 @@ function renderBookings() {
 
   const tbody = document.getElementById('bookingBody');
   if (!bks.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty">No bookings found</div></td></tr>`;
+    tbody.innerHTML = `<div class='empty-state'><div class='empty-icon'>📋</div><div class='empty-label'>No bookings found</div></div>`;
     return;
   }
 
   tbody.innerHTML = bks.map(b => {
     const dl = b.date ? new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) : '—';
-    const badgeCls = b.status==='confirmed' ? 'badge-green' : b.status==='cancelled' ? 'badge-red' : b.status==='completed' ? 'badge-blue' : 'badge-dim';
-    return `<tr>
-      <td><strong>${b.name||'—'}</strong><br><span style="color:var(--dim);font-size:13px">${b.phone||''}</span></td>
-      <td>${b.service||'—'}</td>
-      <td>${dl}</td>
-      <td>${b.time||'—'}${b.cancelledAt?'<br><span style="color:var(--red);font-size:11px">Cancelled '+new Date(b.cancelledAt).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span>':b.completedAt?'<br><span style="color:#7aaac8;font-size:11px">Done '+new Date(b.completedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span>':''}</td>
-      <td style="color:var(--gold)">${b.price||'—'}</td>
-      <td><span class="badge ${badgeCls}">${b.status||'confirmed'}</span></td>
-      <td>
-        <div style="display:flex;gap:5px">
-          <button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')">View</button>
-          ${b.status==='confirmed'?`<button class="btn btn-danger btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>`:''}
-        </div>
-      </td>
-    </tr>`;
+    const dotCls = b.status==='confirmed' ? 'confirmed' : b.status==='cancelled' ? 'cancelled' : b.status==='completed' ? 'completed' : 'other';
+    const timeNote = b.cancelledAt ? ' · <span style="color:var(--red);font-size:0.4rem">Cancelled '+new Date(b.cancelledAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</span>'
+                   : b.completedAt ? ' · <span style="color:var(--blue);font-size:0.4rem">Done '+new Date(b.completedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</span>' : '';
+    return `<div class="bk-row" onclick="viewBooking('${b.id}')">
+      <div class="bk-dot ${dotCls}"></div>
+      <div class="bk-info">
+        <div class="bk-name">${b.name||'—'}</div>
+        <div class="bk-sub">${b.service||'—'} · ${b.time||''}${timeNote}</div>
+      </div>
+      <div class="bk-right">
+        <div class="bk-price">${b.price||'—'}</div>
+        <div class="bk-date">${dl}</div>
+        <div class="bk-status-lbl ${dotCls}">${b.status||'confirmed'}</div>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -1494,21 +1474,16 @@ function renderClients() {
 
   const grid = document.getElementById('clientGrid');
   if (!clients.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><span class="empty-icon">👥</span>No clients yet</div>`;
+    grid.innerHTML = `<div class='empty-state'><div class='empty-icon'>👥</div><div class='empty-label'>No clients yet</div></div>`;
     return;
   }
 
   grid.innerHTML = clients.map(c => {
     const lastDate = c.lastVisit ? new Date(c.lastVisit+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
-    return `<div class="client-card" onclick="viewClient('${c.phone}')">
-      <div class="cc-name">${c.name||'Unknown'}</div>
-      <div class="cc-phone">${c.phone||'—'}</div>
-      <div class="cc-stats">
-        <div class="cc-stat"><div class="cc-stat-val">${c.visits||0}</div><div class="cc-stat-l">Visits</div></div>
-        <div class="cc-stat"><div class="cc-stat-val">${c.points||0}</div><div class="cc-stat-l">Points</div></div>
-        <div class="cc-stat"><div class="cc-stat-val">${c.streak||0}</div><div class="cc-stat-l">Streak</div></div>
-        <div class="cc-stat"><div class="cc-stat-val" style="font-size:13px;color:var(--dim)">${lastDate}</div><div class="cc-stat-l">Last Visit</div></div>
-      </div>
+    return `<div class="cl-row" onclick="viewClient('${c.phone}')">
+      <div class="cl-avatar">${(c.name||'??')[0].toUpperCase()}</div>
+      <div class="cl-info"><div class="cl-name">${c.name||'Unknown'}</div><div class="cl-phone">${c.phone||'—'} · Last: ${lastDate}</div></div>
+      <div class="cl-visits-wrap"><div class="cl-count">${c.visits||0}</div><div class="cl-count-lbl">visits</div></div>
     </div>`;
   }).join('');
 }
@@ -1532,7 +1507,7 @@ function viewClient(phone) {
       return `<div class="modal-row"><span class="k">${dl} · ${b.time}</span><span class="v">${b.service} — ${b.price}</span></div>`;
     }).join('') || '<div style="color:var(--dim);font-size:13px;padding:8px 0">No bookings</div>'}
   `;
-  document.getElementById('modalFooter').innerHTML = `<button class="btn btn-ghost" onclick="closeModal()">Close</button>`;
+  document.getElementById('modalFooter').innerHTML = `<button class="act-btn" onclick="closeModal()">Close</button>`;
   openModal();
 }
 
@@ -1555,8 +1530,8 @@ function viewBooking(id) {
     <div class="modal-row"><span class="k">Booked At</span><span class="v">${b.bookedAt ? new Date(b.bookedAt).toLocaleString() : '—'}</span></div>
   `;
   document.getElementById('modalFooter').innerHTML = `
-    <button class="btn btn-ghost" onclick="closeModal()">Close</button>
-    ${b.status==='confirmed'?`<button class="btn btn-danger" onclick="closeModal();cancelBooking('${b.id}')">Cancel Booking</button>`:''}
+    <button class="act-btn" onclick="closeModal()">Close</button>
+    ${b.status==='confirmed'?`<button class="act-btn cancel-text" onclick="closeModal();cancelBooking('${b.id}')">Cancel Booking</button>`:''}
   `;
   openModal();
 }
@@ -1767,15 +1742,15 @@ function renderBlocks() {
   const upcoming = BLOCKS.filter(b => b.date >= dStr(new Date())).sort((a,b) => a.date.localeCompare(b.date));
   const list = document.getElementById('blockList');
   if (!upcoming.length) {
-    list.innerHTML = `<div style="font-size:13px;letter-spacing:0.1em;color:var(--dim);padding:8px 0">No blocked times</div>`;
+    list.innerHTML = `<div class='empty-state' style='padding:24px'><div class='empty-icon' style='font-size:1.5rem'>🗓</div><div class='empty-label'>No blocked times yet</div></div>`;
     return;
   }
   list.innerHTML = upcoming.map(b => {
     const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
     const timeStr = b.fullDay ? 'All day' : `${b.from} – ${b.to}`;
     return `<div class="block-item">
-      <div class="block-item-info"><strong>${dl}</strong> · ${timeStr}${b.reason?' · '+b.reason:''}</div>
-      <button class="btn btn-ghost btn-sm" onclick="removeBlock('${b.id}')">Remove</button>
+      <div><div class="block-date-label">${dl} · ${timeStr}</div>${b.reason?'<div class="block-time-label">'+b.reason+'</div>':''}</div>
+      <button class="block-del-btn" onclick="removeBlock('${b.id}')">✕</button>
     </div>`;
   }).join('');
 }
@@ -1945,11 +1920,11 @@ function renderSvcEditor() {
   if(!list) return;
   list.innerHTML = editServices.map((s,i) => `
     <div class="svc-row" data-i="${i}">
-      <span class="svc-row-drag">⠿</span>
-      <span class="svc-row-name" contenteditable="true" onblur="editSvcField(${i},'name',this.textContent)">${s.name}</span>
-      <span class="svc-row-price" contenteditable="true" onblur="editSvcField(${i},'price',this.textContent)" style="cursor:text">$<span>${s.priceNum}</span></span>
-      <span class="svc-row-dur">${s.dur}</span>
-      <button class="svc-row-del" onclick="deleteSvc(${i})">✕</button>
+      
+      <span class="svc-name" contenteditable="true" onblur="editSvcField(${i},'name',this.textContent)">${s.name}</span>
+      <span class="svc-price" contenteditable="true" onblur="editSvcField(${i},'price',this.textContent)" style="cursor:text">$<span>${s.priceNum}</span></span>
+      <span class="svc-dur">${s.dur}</span>
+      <button class="svc-del" onclick="deleteSvc(${i})">✕</button>
     </div>`).join('');
 }
 
@@ -2346,7 +2321,8 @@ function checkPin() {
 function unlock() {
   pinUnlocked = true;
   sessionStorage.setItem('dashUnlocked', '1');
-  document.getElementById('pinScreen').classList.add('unlocked');
+  document.getElementById('pinScreen').style.display = 'none';
+  document.getElementById('app').classList.add('unlocked');
 }
 
 function showPinError(msg) {
