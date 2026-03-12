@@ -956,19 +956,6 @@ async function confirmBooking(){
   const smsBody = buildSMS(name, S.svc.name, dl, S.time, payLabel);
   await sendSMS(fp, smsBody);
 
-  // If Twilio SMS is off, open barber's native SMS app with message pre-filled
-  const _cfg = JSON.parse(localStorage.getItem('moonCfg')||'{}');
-  if (_cfg.smsEnabled === false && _cfg.phone) {
-    const cleanPhone = fp.replace(/\D/g,'');
-    const sep = navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad') ? '&' : '?';
-    const smsUri = `sms:${cleanPhone}${sep}body=${encodeURIComponent(smsBody)}`;
-    const a = document.createElement('a');
-    a.href = smsUri;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    setTimeout(() => { a.click(); document.body.removeChild(a); }, 1400);
-  }
-
   if(!S.bookedSlots[S.date])S.bookedSlots[S.date]=[];
   S.bookedSlots[S.date].push(S.time);
   const dlLong=new Date(S.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
