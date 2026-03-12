@@ -70,7 +70,7 @@ header{
   gap:4px;padding-bottom:14px;
 }
 .hdr-date{font-size:0.44rem;letter-spacing:0.18em;color:var(--dim);text-transform:uppercase}
-.hdr-pts{font-size:0.54rem;letter-spacing:0.1em;color:var(--gold)}
+}
 
 /* red accent line — subtle nod to the pole without being corny */
 .hdr-accent{
@@ -293,13 +293,6 @@ header{
 .cfm-cell-l{font-size:0.4rem;letter-spacing:0.22em;color:var(--dim);text-transform:uppercase;margin-bottom:4px}
 .cfm-cell-v{font-family:var(--font-display);font-weight:600;font-size:1.1rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--cut);line-height:1.2}
 
-.pts-row{
-  display:flex;align-items:center;justify-content:space-between;
-  border:1px solid var(--border);border-left:2px solid var(--gold);
-  border-radius:4px;padding:10px 14px;
-  font-size:0.54rem;letter-spacing:0.12em;color:var(--gold);
-  background:var(--s1);
-}
 
 /* ── FOOTER ─────────────────────────── */
 footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-bottom, 16px);border-top:1px solid var(--border)}
@@ -347,236 +340,18 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
 .succ.show .succ-sub{transform:translateY(0);opacity:1}
 
 .succ-card{background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:16px 18px;width:100%;text-align:left;margin-bottom:12px;transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.55s}
-.succ-pts{font-size:0.55rem;letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;opacity:0;transition:opacity 0.4s ease 0.65s}
-.succ.show .succ-pts{opacity:1}
+}
 .succ.show .succ-card{transform:translateY(0);opacity:1}
 .sr{display:flex;justify-content:space-between;align-items:center;font-size:0.6rem;letter-spacing:0.08em;padding:7px 0;border-bottom:1px solid var(--border)}
 .sr:last-child{border-bottom:none}
 .sr .k{color:var(--dim)}.sr .v{color:var(--cut)}
 
-.succ-pts{background:rgba(196,169,125,0.05);border:1px solid rgba(196,169,125,0.15);border-radius:4px;padding:10px 18px;font-size:0.56rem;letter-spacing:0.12em;color:var(--gold);width:100%;margin-bottom:22px;text-align:center;transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.65s}
-.succ.show .succ-pts{transform:translateY(0);opacity:1}
-
-.bagain{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.15em;color:var(--dim);background:none;border:1px solid var(--border);border-radius:4px;padding:12px 26px;cursor:pointer;text-transform:uppercase;transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.75s,border-color 0.2s,color 0.2s}
-.succ.show .bagain{transform:translateY(0);opacity:1}
-.succ.show #cashReminder{transform:translateY(0);opacity:1}
-.bagain:hover{border-color:var(--cream);color:var(--cream)}
-
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--s2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:0.54rem;letter-spacing:0.1em;padding:10px 16px;z-index:9999;opacity:0;transition:all 0.2s;white-space:nowrap;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.err{border-color:#6b2020;color:#d07070}
-
-.slide::-webkit-scrollbar{width:2px}.slide::-webkit-scrollbar-thumb{background:var(--border)}
-/* ── PAYMENT ── */
-.pay-section{margin-top:10px}
-.pay-label{font-size:0.44rem;letter-spacing:0.28em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;display:block}
-.pay-options{display:flex;flex-direction:column;gap:7px}
-
-.pay-opt{
-  display:flex;align-items:center;gap:14px;
-  background:var(--s1);border:1px solid var(--border);
-  border-radius:4px;padding:13px 16px;
-  cursor:pointer;transition:all 0.18s;
-  -webkit-user-select:none;user-select:none;
-  position:relative;
 }
-.pay-opt::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-  border-radius:4px 0 0 4px;
-  transform:scaleY(0);transition:transform 0.2s cubic-bezier(0.34,1.3,0.64,1);
 }
-.pay-opt:active{transform:scale(0.98)}
-.pay-opt.sel{background:rgba(196,169,125,0.05);border-color:var(--gold)}
-.pay-opt.sel::before{transform:scaleY(1);background:var(--gold)}
-
-.pay-opt-cash::before{background:var(--gold)}
-.pay-opt-cashapp::before{background:#00d632}
-.pay-opt-venmo::before{background:#3d95ce}
-.pay-opt-paypal::before{background:#0070ba}
-
-.pay-opt.sel.pay-opt-cashapp{border-color:#00d632}
-.pay-opt.sel.pay-opt-venmo{border-color:#3d95ce}
-.pay-opt.sel.pay-opt-paypal{border-color:#0070ba}
-
-.pay-icon{font-size:1.3rem;flex-shrink:0;width:28px;text-align:center}
-.pay-info{flex:1}
-.pay-name{font-family:var(--font-display);font-weight:700;font-size:1.1rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--cut);line-height:1;margin-bottom:2px}
-.pay-desc{font-size:0.5rem;letter-spacing:0.08em;color:var(--dim)}
-.pay-radio{width:16px;height:16px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1)}
-.pay-radio-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);transform:scale(0);transition:transform 0.18s cubic-bezier(0.34,1.56,0.64,1)}
-.pay-opt.sel .pay-radio{border-color:var(--gold)}
-.pay-opt.sel .pay-radio-dot{transform:scale(1)}
-.pay-opt.sel.pay-opt-cashapp .pay-radio{border-color:#00d632}
-.pay-opt.sel.pay-opt-cashapp .pay-radio-dot{background:#00d632}
-.pay-opt.sel.pay-opt-venmo .pay-radio{border-color:#3d95ce}
-.pay-opt.sel.pay-opt-venmo .pay-radio-dot{background:#3d95ce}
-.pay-opt.sel.pay-opt-paypal .pay-radio{border-color:#0070ba}
-.pay-opt.sel.pay-opt-paypal .pay-radio-dot{background:#0070ba}
-
-/* cash notice */
-.cash-notice{
-  display:flex;align-items:center;gap:12px;
-  background:rgba(196,169,125,0.06);
-  border:1px solid rgba(196,169,125,0.2);
-  border-left:3px solid var(--gold);
-  border-radius:4px;padding:12px 14px;
-  margin-bottom:8px;
-}
-.cash-icon{font-size:1.2rem;flex-shrink:0}
-.cash-title{font-family:var(--font-display);font-weight:700;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);line-height:1;margin-bottom:3px}
-.cash-sub{font-size:0.5rem;letter-spacing:0.08em;color:var(--dim);line-height:1.5}
-
-
-/* ── VACATION MODE ── */
-.vaca-screen{position:fixed;inset:0;background:var(--bg);z-index:5000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center}
-.vaca-screen.on{display:flex}
-.vaca-icon{font-size:3rem;margin-bottom:16px}
-.vaca-title{font-family:var(--font-display);font-weight:700;font-size:2.8rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--cut);margin-bottom:8px;line-height:1}
-.vaca-msg{font-size:13px;letter-spacing:0.08em;color:var(--dim);line-height:1.8;max-width:300px}
-
-/* ── ABOUT STRIP ── */
-.about-strip{background:var(--s1);border-bottom:1px solid var(--border);padding:12px 16px;display:none}
-.about-strip.on{display:block}
-.about-text{font-size:11px;letter-spacing:0.06em;color:var(--dim);line-height:1.7}
-.about-insta{display:inline-flex;align-items:center;gap:5px;font-size:11px;letter-spacing:0.08em;color:var(--gold);text-decoration:none;margin-top:4px}
-
-/* ── GALLERY ── */
-.gallery-strip{display:none;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-bottom:1px solid var(--border)}
-.gallery-strip.on{display:flex}
-.gallery-strip::-webkit-scrollbar{display:none}
-.gallery-img{width:72px;height:72px;border-radius:4px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);cursor:pointer;transition:opacity 0.2s}
-.gallery-img:hover{opacity:0.8}
-
-/* ── LIGHTBOX ── */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:8000;display:none;align-items:center;justify-content:center;padding:20px}
-.lightbox.on{display:flex}
-.lightbox img{max-width:100%;max-height:90vh;border-radius:6px;object-fit:contain}
-.lightbox-close{position:absolute;top:16px;right:20px;font-size:1.6rem;color:var(--dim);cursor:pointer;background:none;border:none}
-
-/* ── REVIEWS ── */
-.reviews-strip{display:none;padding:10px 16px 0;flex-shrink:0}
-.reviews-strip.on{display:block}
-.reviews-label{font-size:10px;letter-spacing:0.28em;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
-.reviews-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none}
-.reviews-row::-webkit-scrollbar{display:none}
-.rev-card{flex-shrink:0;width:180px;background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:10px 12px}
-.rev-stars{color:var(--gold);font-size:11px;margin-bottom:4px;letter-spacing:2px}
-.rev-text{font-size:11px;letter-spacing:0.04em;color:var(--text);line-height:1.6;margin-bottom:6px}
-.rev-name{font-size:10px;letter-spacing:0.1em;color:var(--dim)}
 
 /* ── POST-BOOKING REVIEW PROMPT ── */
-.review-prompt{width:100%;background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:14px 16px;margin-bottom:12px;transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.85s;text-align:left}
-.succ.show .review-prompt{transform:translateY(0);opacity:1}
-.rp-label{font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
-.rp-stars{display:flex;gap:6px;margin-bottom:8px}
-.rp-star{font-size:1.4rem;cursor:pointer;opacity:0.3;transition:opacity 0.15s;-webkit-user-select:none;user-select:none}
-.rp-star.lit{opacity:1}
-.rp-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;padding:8px 10px;outline:none;resize:none;margin-bottom:8px;transition:border-color 0.2s}
-.rp-input:focus{border-color:var(--gold)}
-.rp-submit{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;background:var(--gold);color:var(--bg);border:none;border-radius:3px;padding:7px 14px;cursor:pointer}
-.rp-thanks{font-size:11px;letter-spacing:0.1em;color:var(--gold);display:none;padding:4px 0}
-
-
-/* ── LOCK ICON (dashboard link) ── */
-.lock-btn{
-  background:none;border:none;cursor:pointer;
-  color:var(--dim2);font-size:0.75rem;
-  padding:2px 4px;transition:color 0.2s;
-  flex-shrink:0;line-height:1;
-  -webkit-user-select:none;user-select:none;
 }
-.lock-btn:hover{color:var(--dim)}
-
-/* ── QUICK TEXT BUTTON ── */
-.quick-text-btn{
-  display:none;
-  align-items:center;gap:6px;
-  background:rgba(196,169,125,0.08);
-  border:1px solid rgba(196,169,125,0.2);
-  border-radius:3px;padding:5px 12px;
-  font-family:'DM Mono',monospace;
-  font-size:10px;letter-spacing:0.14em;
-  text-transform:uppercase;color:var(--gold);
-  text-decoration:none;cursor:pointer;
-  transition:all 0.15s;flex-shrink:0;
 }
-.quick-text-btn.on{display:flex}
-.quick-text-btn:hover{background:rgba(196,169,125,0.14)}
-
-/* ── WALK-IN BANNER ── */
-.walkin-bar{
-  display:none;flex-shrink:0;
-  background:rgba(196,169,125,0.06);
-  border-bottom:1px solid rgba(196,169,125,0.2);
-  padding:8px 16px;
-  align-items:center;justify-content:space-between;gap:10px;
-}
-.walkin-bar.on{display:flex}
-.walkin-label{font-size:11px;letter-spacing:0.1em;color:var(--dim)}
-.walkin-btn{
-  font-family:'DM Mono',monospace;font-size:10px;
-  letter-spacing:0.14em;text-transform:uppercase;
-  background:var(--gold);color:var(--bg);
-  border:none;border-radius:3px;padding:7px 14px;
-  cursor:pointer;white-space:nowrap;transition:opacity 0.15s;
-  text-decoration:none;
-}
-.walkin-btn:active{opacity:0.8}
-
-/* ── CLIENT LOYALTY CARD (post-booking) ── */
-.loyalty-card{
-  width:100%;background:linear-gradient(135deg,var(--s1) 0%,#161410 100%);
-  border:1px solid rgba(196,169,125,0.25);border-radius:6px;
-  padding:16px 18px;margin-bottom:12px;
-  transform:translateY(14px);opacity:0;
-  transition:all 0.4s ease 0.6s;
-  position:relative;overflow:hidden;
-}
-.succ.show .loyalty-card{transform:translateY(0);opacity:1}
-.loyalty-card::before{
-  content:'';position:absolute;top:-40px;right:-40px;
-  width:120px;height:120px;border-radius:50%;
-  background:rgba(196,169,125,0.04);
-}
-.lc-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.lc-name{font-family:var(--font-display);font-weight:700;font-size:1.4rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--cut);line-height:1}
-.lc-member{font-size:10px;letter-spacing:0.18em;color:var(--dim);text-transform:uppercase;margin-top:2px}
-.lc-pts{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);line-height:1}
-.lc-pts-label{font-size:10px;letter-spacing:0.14em;color:var(--dim);text-align:right}
-.lc-bar-wrap{margin-bottom:10px}
-.lc-bar-label{display:flex;justify-content:space-between;font-size:10px;letter-spacing:0.1em;color:var(--dim);margin-bottom:5px}
-.lc-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
-.lc-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1s ease 0.8s}
-.lc-next{font-size:11px;letter-spacing:0.08em;color:var(--dim);margin-bottom:12px}
-.lc-next strong{color:var(--gold)}
-.lc-share{
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  width:100%;padding:9px;border-radius:3px;
-  border:1px solid rgba(196,169,125,0.25);
-  font-family:'DM Mono',monospace;font-size:10px;
-  letter-spacing:0.14em;text-transform:uppercase;
-  color:var(--gold);background:none;cursor:pointer;
-  transition:all 0.15s;
-}
-.lc-share:hover{background:rgba(196,169,125,0.08)}
-
-
-/* ── MOBILE FIXES ─────────────────────── */
-@media(max-height:700px){
-  .sh{font-size:clamp(1.4rem,6vw,2rem);margin-bottom:8px}
-  .sh .small{display:none}
-  .sec-label{margin-bottom:6px}
-  .date-strip{margin-bottom:8px}
-  header{padding:6px 16px 0}
-  .logo{font-size:1.8rem}
-  .tagline{padding:2px 0 6px}
-  .step-strip .stp{padding:4px}
-}
-
-@media(max-width:390px){
-  .sh{font-size:clamp(1.5rem,7vw,2.2rem)}
-  .tc{padding:12px 2px;font-size:12px}
-  .dc{width:54px}
 }
 
 /* date strip — show scroll indicator */
@@ -609,7 +384,7 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
     <div class="hdr-right">
       <a class="quick-text-btn" id="quickTextBtn" href="#">💬 Text us</a>
       <div class="hdr-date" id="hdrDate"></div>
-      <div class="hdr-pts" id="hdrPts"></div>
+
     </div>
   </header>
 
@@ -628,10 +403,6 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
   <!-- GALLERY -->
   <div class="gallery-strip" id="galleryStrip"></div>
 
-  <!-- REVIEWS -->
-  <div class="reviews-strip" id="reviewsStrip">
-    <div class="reviews-label">What clients say</div>
-    <div class="reviews-row" id="reviewsRow"></div>
   </div>
 
   <div class="step-strip">
@@ -686,7 +457,6 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
           <span class="pay-label">How are you paying?</span>
           <div class="pay-options" id="payOptions"></div>
         </div>
-        <div class="pts-row"><span>Loyalty points this visit</span><span>+10 pts</span></div>
       </div>
     </div>
 
@@ -710,43 +480,10 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
   <div class="succ-title">You're Booked.</div>
   <div class="succ-sub" id="succSub">See you soon.</div>
   <div class="succ-card" id="sCard"></div>
-  <div class="succ-pts" id="sPts"></div>
-
-  <!-- LOYALTY CARD -->
-  <div class="loyalty-card" id="loyaltyCard">
-    <div class="lc-row">
-      <div>
-        <div class="lc-name" id="lcName">—</div>
-        <div class="lc-member">Regular</div>
-      </div>
-      <div style="text-align:right">
-        <div class="lc-pts" id="lcPts">0</div>
-        <div class="lc-pts-label">points</div>
-      </div>
-    </div>
-    <div class="lc-bar-wrap">
-      <div class="lc-bar-label">
-        <span id="lcBarLabel">Next reward</span>
-        <span id="lcBarPct">0%</span>
-      </div>
-      <div class="lc-bar"><div class="lc-bar-fill" id="lcBarFill" style="width:0%"></div></div>
-    </div>
-    <div class="lc-next" id="lcNext"></div>
-    <button class="lc-share" onclick="shareBookingPage()">↗ Share this barber with a friend</button>
-  </div>
 
   <!-- CASH REMINDER -->
   <div style="display:flex;align-items:center;gap:10px;background:rgba(196,169,125,0.06);border:1px solid rgba(196,169,125,0.2);border-radius:4px;padding:10px 16px;width:100%;margin-bottom:10px;font-size:11px;letter-spacing:0.1em;color:var(--gold);transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.75s" id="cashReminder">
     <span>💵</span><span>Remember — cash at the shop</span>
-  </div>
-
-  <!-- REVIEW PROMPT -->
-  <div class="review-prompt" id="reviewPrompt">
-    <div class="rp-label">Rate your experience</div>
-    <div class="rp-stars" id="rpStars"></div>
-    <textarea class="rp-input" id="rpText" rows="2" placeholder="Leave a note (optional)..."></textarea>
-    <button class="rp-submit" onclick="submitReview()">Submit</button>
-    <div class="rp-thanks" id="rpThanks">Thanks! ✓</div>
   </div>
 
   <button class="bagain" onclick="resetBooking()">Book Again</button>
@@ -896,8 +633,7 @@ let S={slide:1,svc:null,date:null,time:null,payMethod:null,bookedSlots:{}};
 (async()=>{
   const now=new Date();
   document.getElementById('hdrDate').textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
-  const pts=+localStorage.getItem('moonPts')||0;
-  if(pts>0)document.getElementById('hdrPts').textContent=`${pts} pts`;
+
 
   // apply welcome message & shop name from dashboard settings
   if(MOON_CONFIG.WELCOME) document.querySelector('.tagline').textContent=MOON_CONFIG.WELCOME;
@@ -930,7 +666,6 @@ let S={slide:1,svc:null,date:null,time:null,payMethod:null,bookedSlots:{}};
   applyVacationMode();
   applyAbout();
   applyGallery();
-  loadReviews();
   applyQuickText();
   applyWalkinMode();
   renderSvcs();renderDates();
@@ -1168,8 +903,7 @@ async function confirmBooking(){
     document.body.appendChild(a);
     setTimeout(() => { a.click(); document.body.removeChild(a); }, 1400);
   }
-  const pts=(+localStorage.getItem('moonPts')||0)+10;
-  localStorage.setItem('moonPts',pts);
+
   if(!S.bookedSlots[S.date])S.bookedSlots[S.date]=[];
   S.bookedSlots[S.date].push(S.time);
   const dlLong=new Date(S.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
@@ -1178,7 +912,7 @@ async function confirmBooking(){
     <div class="sr"><span class="k">Date</span><span class="v">${dlLong}</span></div>
     <div class="sr"><span class="k">Time</span><span class="v">${S.time}</span></div>
     <div class="sr"><span class="k">Confirmation</span><span class="v">${(()=>{const c=JSON.parse(localStorage.getItem('moonCfg')||'{}');return c.smsEnabled===false?'Barber will text you':'Text sent to '+phone;})()}</span></div>`;
-  document.getElementById('sPts').textContent=`+10 points — you now have ${pts} pts`;
+
   if(S.payMethod && S.payMethod !== 'cash'){
     let payUrl = '';
     const amt = S.svc.priceNum || S.svc.price.replace(/\D/g,'');
@@ -1192,12 +926,9 @@ async function confirmBooking(){
     if(S.payMethod==='paypal'  && _pp) payUrl = `https://paypal.me/${_pp}/${amt}`;
     if(payUrl) setTimeout(()=>window.open(payUrl,'_blank'), 800);
   }
-  const clientName = document.getElementById('nameInput').value.trim();
-  renderLoyaltyCard(clientName);
   const shopName = JSON.parse(localStorage.getItem('moonCfg')||'{}').shopName || MOON_CONFIG.SHOP_NAME || 'your barber';
   document.getElementById('succSub').textContent = `${shopName} has your slot.`;
   document.getElementById('successScreen').classList.add('show');
-  initReviewPrompt();
   } catch(err) {
     console.error('confirmBooking error:', err);
     toast('Something went wrong. Please try again.', true);
@@ -1224,12 +955,10 @@ function resetBooking(){
   document.getElementById('slide1').classList.add('active');
   ['st1','st2','st3','st4'].forEach((id,i)=>document.getElementById(id).className='stp'+(i===0?' active':''));
   document.getElementById('btnBack').className='bbk hidden';
-  const pts=+localStorage.getItem('moonPts')||0;
-  if(pts>0)document.getElementById('hdrPts').textContent=`${pts} pts`;
+
   applyVacationMode();
   applyAbout();
   applyGallery();
-  loadReviews();
   applyQuickText();
   applyWalkinMode();
   renderSvcs();renderDates();renderTimes();updateFooter();
@@ -1279,52 +1008,6 @@ function applyGallery() {
 }
 
 // ── REVIEWS ────────────────────────────────────────────────
-function loadReviews() {
-  const strip = document.getElementById('reviewsStrip');
-  const row   = document.getElementById('reviewsRow');
-  // load from localStorage (saved by submitReview)
-  const reviews = JSON.parse(localStorage.getItem('moonReviews') || '[]');
-  if (!reviews.length) return;
-  strip.classList.add('on');
-  row.innerHTML = reviews.slice(-8).reverse().map(r => `
-    <div class="rev-card">
-      <div class="rev-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-      <div class="rev-text">${r.text || 'Great experience!'}</div>
-      <div class="rev-name">${r.name || 'Client'}</div>
-    </div>`
-  ).join('');
-}
-
-// ── REVIEW PROMPT (post-booking) ───────────────────────────
-let reviewRating = 0;
-function initReviewPrompt() {
-  reviewRating = 0;
-  document.getElementById('rpText').value = '';
-  document.getElementById('rpThanks').style.display = 'none';
-  document.querySelector('.rp-submit').style.display = 'inline-block';
-  const stars = document.getElementById('rpStars');
-  stars.innerHTML = [1,2,3,4,5].map(i =>
-    `<span class="rp-star" onclick="setReviewStar(${i})">★</span>`
-  ).join('');
-}
-
-function setReviewStar(n) {
-  reviewRating = n;
-  document.querySelectorAll('.rp-star').forEach((s,i) => {
-    s.classList.toggle('lit', i < n);
-  });
-}
-
-function submitReview() {
-  if (!reviewRating) { return; }
-  const name = document.getElementById('nameInput')?.value?.trim() || 'Client';
-  const text = document.getElementById('rpText').value.trim();
-  const reviews = JSON.parse(localStorage.getItem('moonReviews') || '[]');
-  reviews.push({ stars: reviewRating, text, name, date: new Date().toISOString() });
-  localStorage.setItem('moonReviews', JSON.stringify(reviews));
-  document.getElementById('rpThanks').style.display = 'block';
-  document.querySelector('.rp-submit').style.display = 'none';
-  loadReviews();
 }
 
 // ── CUSTOM SMS ─────────────────────────────────────────────
@@ -1379,46 +1062,6 @@ function applyWalkinMode() {
   bar.classList.add('on');
 }
 
-// ── LOYALTY CARD (post-booking) ───────────────────────────
-const REWARD_THRESHOLD = 50; // points needed for a reward
-
-function renderLoyaltyCard(clientName) {
-  const pts  = +localStorage.getItem('moonPts') || 0;
-  const pct  = Math.min(100, Math.round((pts / REWARD_THRESHOLD) * 100));
-  const left = Math.max(0, REWARD_THRESHOLD - pts);
-
-  document.getElementById('lcName').textContent  = clientName || 'Client';
-  document.getElementById('lcPts').textContent   = pts;
-  document.getElementById('lcBarPct').textContent = pct + '%';
-
-  // animate bar fill after short delay
-  setTimeout(() => {
-    document.getElementById('lcBarFill').style.width = pct + '%';
-  }, 100);
-
-  if (pts >= REWARD_THRESHOLD) {
-    document.getElementById('lcBarLabel').textContent = '🎉 Reward unlocked!';
-    document.getElementById('lcNext').innerHTML = '<strong>You earned a free service.</strong> Show this to your barber.';
-  } else {
-    document.getElementById('lcBarLabel').textContent = 'Next reward';
-    document.getElementById('lcNext').innerHTML = `<strong>${left} more points</strong> until your next reward`;
-  }
-}
-
-// ── SHARE BOOKING PAGE ────────────────────────────────────
-function shareBookingPage() {
-  const cfg      = JSON.parse(localStorage.getItem('moonCfg') || '{}');
-  const shopName = cfg.shopName || MOON_CONFIG.SHOP_NAME || 'My Barber';
-  const url      = window.location.href.split('?')[0];
-  const text     = `Book with ${shopName} — ${url}`;
-
-  if (navigator.share) {
-    navigator.share({ title: shopName, text, url })
-      .catch(() => copyToClipboard(url));
-  } else {
-    copyToClipboard(url);
-  }
-}
 
 function copyToClipboard(text) {
   navigator.clipboard?.writeText(text)
