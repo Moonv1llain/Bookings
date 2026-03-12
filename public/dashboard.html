@@ -1239,7 +1239,7 @@ function renderStats() {
 
 
 // ── QUICK TEXT TEMPLATES ──────────────────────────────────
-function openQuickText(id, showCancelOption) {
+function openQuickText(id) {
   const b = DATA.bookings.find(x => x.id === id);
   if (!b) return;
   const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
@@ -1254,50 +1254,33 @@ function openQuickText(id, showCancelOption) {
     { label: '🔁 Reschedule',             msg: `Hey ${b.name}, something came up for your ${dl} at ${b.time}. Can we reschedule? Reply here or rebook online. Sorry! — ${shop}` },
   ];
 
-  const rows = templates.map(t => `
-    <div class="qt-row" onclick="sendQT('${b.phone}', ${JSON.stringify(t.msg).replace(/'/g,"&#39;")})">
+  const rows = templates.map((t, i) => `
+    <div class="qt-row" onclick="sendQTByIdx(${i})">
       <div class="qt-label">${t.label}</div>
       <div class="qt-preview">${t.msg.substring(0,80)}…</div>
     </div>`).join('');
 
-  const cancelBtn = showCancelOption ? `
-    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:8px">
-      <button class="btn btn-ghost" style="flex:1" onclick="closeQT()">Skip & Keep Booking</button>
-      <button class="btn btn-danger" style="flex:1" onclick="closeQT();cancelBooking('${b.id}')">Just Cancel It</button>
-    </div>` : '';
-
   document.getElementById('qtBody').innerHTML = `
     <div style="font-size:11px;color:var(--dim);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px">
-      ${showCancelOption ? 'Send a message first, then booking will be cancelled' : 'Tap a message → opens your SMS app'}
-      <br><span style="color:var(--gold)">${b.name} · ${b.phone}</span>
+      Tap → opens SMS app pre-filled for ${b.name} (${b.phone})
     </div>
-    ${rows}
-    ${cancelBtn}`;
+    ${rows}`;
   document.getElementById('qtModal').classList.add('show');
-
-  // store booking id for cancel-after-text flow
-  document.getElementById('qtModal').dataset.pendingCancel = showCancelOption ? b.id : '';
+  // store for sendQTByIdx
+  window._qtPhone = b.phone;
+  window._qtTemplates = templates;
 }
 
-function sendQT(phone, msg) {
-  // use window.location.href — most reliable on mobile browsers
-  const clean = phone.replace(/\D/g,'');
+function sendQTByIdx(idx) {
+  const msg = window._qtTemplates[idx].msg;
+  const clean = (window._qtPhone || '').replace(/\D/g,'');
   const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
-  const pendingCancel = document.getElementById('qtModal').dataset.pendingCancel;
   closeQT();
-  // small delay so modal closes first
-  setTimeout(() => {
-    window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`;
-    // if triggered from cancel flow, cancel the booking after SMS opens
-    if (pendingCancel) {
-      setTimeout(() => cancelBooking(pendingCancel), 800);
-    }
-  }, 150);
+  setTimeout(() => { window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`; }, 150);
 }
 
 function closeQT() {
   document.getElementById('qtModal').classList.remove('show');
-  document.getElementById('qtModal').dataset.pendingCancel = '';
 }
 
 // ── NATIVE SMS REMINDERS ──────────────────────────────────
@@ -1392,7 +1375,8 @@ function renderSchedule() {
           <div class="ts-actions">
             <button class="btn btn-confirm btn-sm" onclick="confirmClient('${bk.id}')">✓ Confirm</button>
             <button class="btn btn-sms btn-sm" onclick="openQuickText('${bk.id}')">💬 Text</button>
-            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ Cancel</button>
+            <button class="btn btn-ghost btn-sm" onclick="cancelBooking('${bk.id}')">✕</button>
+            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ + Text</button>
           </div>
         </div>`;
       } else {
@@ -1455,7 +1439,7 @@ function renderBookings() {
       <td>
         <div style="display:flex;gap:5px">
           <button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')">View</button>
-          ${b.status==='confirmed'?`<button class="btn btn-danger btn-sm" onclick="promptCancel('${b.id}')">Cancel</button>`:''}
+          ${b.status==='confirmed'?`<button class="btn btn-danger btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>`:''}
         </div>
       </td>
     </tr>`;
@@ -1534,7 +1518,7 @@ function viewBooking(id) {
   `;
   document.getElementById('modalFooter').innerHTML = `
     <button class="btn btn-ghost" onclick="closeModal()">Close</button>
-    ${b.status==='confirmed'?`<button class="btn btn-danger" onclick="closeModal();promptCancel('${b.id}')">Cancel Booking</button>`:''}
+    ${b.status==='confirmed'?`<button class="btn btn-danger" onclick="closeModal();cancelBooking('${b.id}')">Cancel Booking</button>`:''}
   `;
   openModal();
 }
