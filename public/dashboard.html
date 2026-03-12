@@ -1237,37 +1237,66 @@ function renderStats() {
 
 
 // ── QUICK TEXT TEMPLATES ──────────────────────────────────
-function openQuickText(id) {
+function openQuickText(id, showCancelOption) {
   const b = DATA.bookings.find(x => x.id === id);
   if (!b) return;
   const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
   const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-  const sep = navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad') ? '&' : '?';
 
   const templates = [
-    { label: '✅ Confirmed',         msg: `Hey ${b.name}! Your ${b.service} is confirmed for ${dl} at ${b.time}. See you then! — ${shop}` },
+    { label: '✅ Confirmed',              msg: `Hey ${b.name}! Your ${b.service} is confirmed for ${dl} at ${b.time}. See you then! — ${shop}` },
     { label: '❌ Denied / Can\'t Make It', msg: `Hey ${b.name}, sorry — we can't take your ${b.service} on ${dl} at ${b.time}. Please rebook at a different time. — ${shop}` },
-    { label: '⏰ Reminder',          msg: `Hey ${b.name}! Reminder — ${b.service} tomorrow at ${b.time}. See you then! — ${shop}` },
-    { label: '🕐 Running Late',      msg: `Hey ${b.name}, we're running a little behind. Your ${b.time} may start 10-15 min late. Thanks for your patience! — ${shop}` },
-    { label: '🚫 No Show Follow-up', msg: `Hey ${b.name}, we missed you today for your ${b.time} ${b.service}. Feel free to rebook when you're ready! — ${shop}` },
-    { label: '🔁 Reschedule',        msg: `Hey ${b.name}, something came up for your ${dl} at ${b.time}. Can we reschedule? Reply here or rebook online. Sorry! — ${shop}` },
+    { label: '⏰ Reminder',               msg: `Hey ${b.name}! Reminder — ${b.service} tomorrow at ${b.time}. See you then! — ${shop}` },
+    { label: '🕐 Running Late',           msg: `Hey ${b.name}, we're running a little behind. Your ${b.time} may start 10-15 min late. Thanks! — ${shop}` },
+    { label: '🚫 No Show Follow-up',      msg: `Hey ${b.name}, we missed you today for your ${b.time} ${b.service}. Feel free to rebook when you're ready! — ${shop}` },
+    { label: '🔁 Reschedule',             msg: `Hey ${b.name}, something came up for your ${dl} at ${b.time}. Can we reschedule? Reply here or rebook online. Sorry! — ${shop}` },
   ];
 
-  const rows = templates.map(t => {
-    const link = `sms:${b.phone.replace(/\D/g,'')}${sep}body=${encodeURIComponent(t.msg)}`;
-    return `<a href="${link}" class="qt-row" onclick="setTimeout(closeQT,400)">
+  const rows = templates.map(t => `
+    <div class="qt-row" onclick="sendQT('${b.phone}', ${JSON.stringify(t.msg).replace(/'/g,"&#39;")})">
       <div class="qt-label">${t.label}</div>
       <div class="qt-preview">${t.msg.substring(0,80)}…</div>
-    </a>`;
-  }).join('');
+    </div>`).join('');
+
+  const cancelBtn = showCancelOption ? `
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeQT()">Skip & Keep Booking</button>
+      <button class="btn btn-danger" style="flex:1" onclick="closeQT();cancelBooking('${b.id}')">Just Cancel It</button>
+    </div>` : '';
 
   document.getElementById('qtBody').innerHTML = `
     <div style="font-size:11px;color:var(--dim);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px">
-      Tap → opens SMS app pre-filled for ${b.name} (${b.phone})
-    </div>${rows}`;
+      ${showCancelOption ? 'Send a message first, then booking will be cancelled' : 'Tap a message → opens your SMS app'}
+      <br><span style="color:var(--gold)">${b.name} · ${b.phone}</span>
+    </div>
+    ${rows}
+    ${cancelBtn}`;
   document.getElementById('qtModal').classList.add('show');
+
+  // store booking id for cancel-after-text flow
+  document.getElementById('qtModal').dataset.pendingCancel = showCancelOption ? b.id : '';
 }
-function closeQT() { document.getElementById('qtModal').classList.remove('show'); }
+
+function sendQT(phone, msg) {
+  // use window.location.href — most reliable on mobile browsers
+  const clean = phone.replace(/\D/g,'');
+  const sep = /iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?';
+  const pendingCancel = document.getElementById('qtModal').dataset.pendingCancel;
+  closeQT();
+  // small delay so modal closes first
+  setTimeout(() => {
+    window.location.href = `sms:${clean}${sep}body=${encodeURIComponent(msg)}`;
+    // if triggered from cancel flow, cancel the booking after SMS opens
+    if (pendingCancel) {
+      setTimeout(() => cancelBooking(pendingCancel), 800);
+    }
+  }, 150);
+}
+
+function closeQT() {
+  document.getElementById('qtModal').classList.remove('show');
+  document.getElementById('qtModal').dataset.pendingCancel = '';
+}
 
 // ── NATIVE SMS REMINDERS ──────────────────────────────────
 function buildReminderMsg(name, service, date, time) {
@@ -1361,7 +1390,7 @@ function renderSchedule() {
           <div class="ts-actions">
             <button class="btn btn-ghost btn-sm" onclick="viewBooking('${bk.id}')">View</button>
             <button class="btn btn-sms btn-sm" onclick="openQuickText('${bk.id}')">💬 Text</button>
-            <button class="btn btn-danger btn-sm" onclick="cancelBooking('${bk.id}')">Cancel</button>
+            <button class="btn btn-danger btn-sm" onclick="promptCancel('${bk.id}')">Cancel</button>
           </div>
         </div>`;
       } else {
@@ -1424,7 +1453,7 @@ function renderBookings() {
       <td>
         <div style="display:flex;gap:5px">
           <button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')">View</button>
-          ${b.status==='confirmed'?`<button class="btn btn-danger btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>`:''}
+          ${b.status==='confirmed'?`<button class="btn btn-danger btn-sm" onclick="promptCancel('${b.id}')">Cancel</button>`:''}
         </div>
       </td>
     </tr>`;
@@ -1503,19 +1532,23 @@ function viewBooking(id) {
   `;
   document.getElementById('modalFooter').innerHTML = `
     <button class="btn btn-ghost" onclick="closeModal()">Close</button>
-    ${b.status==='confirmed'?`<button class="btn btn-danger" onclick="cancelBooking('${b.id}');closeModal()">Cancel Booking</button>`:''}
+    ${b.status==='confirmed'?`<button class="btn btn-danger" onclick="closeModal();promptCancel('${b.id}')">Cancel Booking</button>`:''}
   `;
   openModal();
 }
 
 async function cancelBooking(id) {
-  if (!confirm('Cancel this booking?')) return;
   const bk = DATA.bookings.find(b => b.id === id);
   if (!bk) return;
   bk.status = 'cancelled';
   await saveData();
   renderAll();
   toast('Booking cancelled', 'ok');
+}
+
+function promptCancel(id) {
+  // open quick text modal in cancel mode — barber can text first, then it cancels
+  openQuickText(id, true);
 }
 
 // ── AVAILABILITY ──────────────────────────────────────────
