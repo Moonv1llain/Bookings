@@ -161,6 +161,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .badge-red{background:rgba(192,57,43,0.12);color:#e07060;border:1px solid rgba(192,57,43,0.2)}
 .badge-gold{background:rgba(196,169,125,0.12);color:var(--gold);border:1px solid rgba(196,169,125,0.2)}
 .badge-dim{background:rgba(255,255,255,0.04);color:var(--dim);border:1px solid var(--border)}
+.badge-blue{background:rgba(74,127,165,0.12);color:#7aaac8;border:1px solid rgba(74,127,165,0.2)}
 
 /* ── CLIENT CARD ── */
 .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
@@ -1401,7 +1402,8 @@ function renderSchedule() {
             <button class="btn btn-sm ${bk.smsConfirmed?'btn-confirm-sent':'btn-confirm'}" onclick="confirmClient('${bk.id}')">${bk.smsConfirmed?'✓ Sent':'✓ Confirm'}</button>
             <button class="btn btn-reschedule btn-sm" onclick="rescheduleClient('${bk.id}')">🔁 Reschedule</button>
             <button class="btn btn-done btn-sm" onclick="doneBooking('${bk.id}')">✓ Done</button>
-            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ Cancel</button>
+            <button class="btn btn-danger btn-sm" onclick="cancelClient('${bk.id}')">✕ + Text</button>
+            <button class="btn btn-ghost btn-sm" onclick="cancelBooking('${bk.id}')">✕</button>
           </div>
         </div>`;
       } else {
@@ -1453,7 +1455,7 @@ function renderBookings() {
 
   tbody.innerHTML = bks.map(b => {
     const dl = b.date ? new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) : '—';
-    const badgeCls = b.status==='confirmed' ? 'badge-green' : b.status==='cancelled' ? 'badge-red' : 'badge-dim';
+    const badgeCls = b.status==='confirmed' ? 'badge-green' : b.status==='cancelled' ? 'badge-red' : b.status==='completed' ? 'badge-blue' : 'badge-dim';
     return `<tr>
       <td><strong>${b.name||'—'}</strong><br><span style="color:var(--dim);font-size:13px">${b.phone||''}</span></td>
       <td>${b.service||'—'}</td>
@@ -1528,7 +1530,7 @@ function viewBooking(id) {
   const b = DATA.bookings.find(x => x.id === id);
   if (!b) return;
   const dl = b.date ? new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) : '—';
-  const badgeCls = b.status==='confirmed'?'badge-green':b.status==='cancelled'?'badge-red':'badge-dim';
+  const badgeCls = b.status==='confirmed'?'badge-green':b.status==='cancelled'?'badge-red':b.status==='completed'?'badge-blue':'badge-dim';
 
   document.getElementById('modalTitle').textContent = 'Booking — ' + (b.name||'Unknown');
   document.getElementById('modalBody').innerHTML = `
@@ -1574,7 +1576,7 @@ function cancelClient(id) {
   if (!b) return;
   const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
   const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-  const msg = `Hey ${b.name}, sorry — we have to cancel your ${b.service} on ${dl} at ${b.time}. Please rebook at a different time. — ${shop}`;
+  const msg = `Hey ${b.name}, sorry — we can't take your ${b.service} on ${dl} at ${b.time}. Feel free to rebook at a different time. — ${shop}`;
   // Cancel booking FIRST so dismissing SMS doesn't leave ghost bookings
   cancelBooking(id);
   setTimeout(() => openSMS(b.phone, msg), 300);
