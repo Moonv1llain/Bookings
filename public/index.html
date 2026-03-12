@@ -576,18 +576,31 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
 <script src="services.js"></script>
 <script src="sms-templates.js"></script>
 <script>
-// ── LOAD DASHBOARD SETTINGS FROM LOCALSTORAGE ──────────────
-// Anything the barber sets in the dashboard overwrites config.js
-(function applySavedSettings(){
-  const saved = JSON.parse(localStorage.getItem('moonCfg') || '{}');
+const CFG={JSONBIN_BIN_ID:MOON_CONFIG.JSONBIN_BIN_ID,JSONBIN_API_KEY:MOON_CONFIG.JSONBIN_API_KEY,SMS_ENDPOINT:MOON_CONFIG.SMS_ENDPOINT};
 
-  // merge into MOON_CONFIG so everything downstream just works
+// natural descriptions — sounds like a barbershop menu board
+const DESC={
+  fade:'Skin fade, low, mid or high.',
+  cut:'Full cut, shaped and styled.',
+  lineup:'Edge up, crisp lines.',
+  beard:'Shape, trim and define.',
+  shave:'Hot towel straight razor.',
+  kids:'Clean cut for the young ones.',
+};
+
+let S={slide:1,svc:null,date:null,time:null,payMethod:null,bookedSlots:{}};
+
+// ── APPLY SETTINGS OBJECT → DOM ────────────────────────────
+// Called once from localStorage (fast) then again after cloud fetch (accurate)
+function applySettings(saved) {
+  if (!saved || !Object.keys(saved).length) return;
+
+  // merge into MOON_CONFIG
   if(saved.binId)    MOON_CONFIG.JSONBIN_BIN_ID  = saved.binId;
   if(saved.binKey)   MOON_CONFIG.JSONBIN_API_KEY  = saved.binKey;
   if(saved.sms)      MOON_CONFIG.SMS_ENDPOINT     = saved.sms;
   if(saved.shopName) MOON_CONFIG.SHOP_NAME        = saved.shopName;
   if(saved.phone)    MOON_CONFIG.SHOP_PHONE       = saved.phone;
-  if(saved.instagram)MOON_CONFIG.SHOP_INSTAGRAM   = saved.instagram;
   if(saved.cashapp)  MOON_CONFIG.CASHAPP          = saved.cashapp;
   if(saved.venmo)    MOON_CONFIG.VENMO            = saved.venmo;
   if(saved.paypal)   MOON_CONFIG.PAYPAL           = saved.paypal;
@@ -596,13 +609,7 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
   if(saved.welcome)  MOON_CONFIG.WELCOME          = saved.welcome;
   if(saved.cancelHours !== undefined) MOON_CONFIG.CANCEL_HOURS = saved.cancelHours;
 
-  // apply accent color
-  if(saved.accent) {
-    document.documentElement.style.setProperty('--gold',  saved.accent);
-    document.documentElement.style.setProperty('--gold2', saved.accent);
-  }
-
-  // apply full theme
+  // theme
   const themes = {
     smoke:     { '--bg':'#090909','--s1':'#111111','--s2':'#181818','--text':'#f0ebe2','--cut':'#e2d9c8','--border':'#222','--dim':'#666' },
     noir:      { '--bg':'#000000','--s1':'#0d0d0d','--s2':'#141414','--text':'#ffffff','--cut':'#ffffff','--border':'#1a1a1a','--dim':'#555' },
@@ -624,88 +631,89 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
   const t = themes[saved.bgTheme] || themes.smoke;
   Object.entries(t).forEach(([k,v]) => document.documentElement.style.setProperty(k, v));
 
-  // apply font
-  if (saved.fontId) {
-    const fontUrls = {
-      barlow:    'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&display=swap',
-      playfair:  'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap',
-      cormorant: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap',
-      josefin:   'https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap',
-      dm:        'https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap',
-      nunito:    'https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap',
-      raleway:   'https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap',
-      italiana:  'https://fonts.googleapis.com/css2?family=Italiana&display=swap',
-    };
-    const fontFamilies = {
-      barlow:    "'Barlow Condensed',sans-serif",
-      playfair:  "'Playfair Display',serif",
-      cormorant: "'Cormorant Garamond',serif",
-      josefin:   "'Josefin Sans',sans-serif",
-      dm:        "'DM Serif Display',serif",
-      nunito:    "'Nunito',sans-serif",
-      raleway:   "'Raleway',sans-serif",
-      italiana:  "'Italiana',serif",
-    };
-    if (fontUrls[saved.fontId]) {
-      const l = document.createElement('link');
-      l.rel = 'stylesheet'; l.href = fontUrls[saved.fontId];
-      document.head.appendChild(l);
-      document.documentElement.style.setProperty('--font-display', fontFamilies[saved.fontId]);
-    }
+  // accent color
+  if(saved.accent) {
+    document.documentElement.style.setProperty('--gold',  saved.accent);
+    document.documentElement.style.setProperty('--gold2', saved.accent);
   }
 
-  // load custom services (overwrite SERVICES array in place)
-  const savedSvcs = localStorage.getItem('moonServices');
-  if(savedSvcs) {
+  // font
+  const fontUrls = {
+    barlow:'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&display=swap',
+    playfair:'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap',
+    cormorant:'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap',
+    josefin:'https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap',
+    dm:'https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap',
+    nunito:'https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap',
+    raleway:'https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap',
+    italiana:'https://fonts.googleapis.com/css2?family=Italiana&display=swap',
+  };
+  const fontFamilies = {
+    barlow:"'Barlow Condensed',sans-serif", playfair:"'Playfair Display',serif",
+    cormorant:"'Cormorant Garamond',serif", josefin:"'Josefin Sans',sans-serif",
+    dm:"'DM Serif Display',serif", nunito:"'Nunito',sans-serif",
+    raleway:"'Raleway',sans-serif", italiana:"'Italiana',serif",
+  };
+  if(saved.fontId && fontUrls[saved.fontId]) {
+    const l = document.createElement('link');
+    l.rel='stylesheet'; l.href=fontUrls[saved.fontId];
+    document.head.appendChild(l);
+    document.documentElement.style.setProperty('--font-display', fontFamilies[saved.fontId]);
+  }
+
+  // services
+  if(saved._services && saved._services.length) {
     SERVICES.length = 0;
-    JSON.parse(savedSvcs).forEach(s => SERVICES.push(s));
+    saved._services.forEach(s => SERVICES.push(s));
   }
 
-  // rebuild TIMES from saved open/close/slotLen
+  // work days & hours
+  if(saved._workDays) MOON_CONFIG.WORK_DAYS = saved._workDays;
+  if(saved._dayHours) localStorage.setItem('moonDayHours', JSON.stringify(saved._dayHours));
+  if(saved._blocks)   localStorage.setItem('moonBlocks',   JSON.stringify(saved._blocks));
+
+  // rebuild TIMES
   const open    = MOON_CONFIG.OPEN_HOUR  || 9;
   const close   = MOON_CONFIG.CLOSE_HOUR || 18;
   const slotLen = saved.slotLen || 30;
   TIMES.length = 0;
   for(let mins = open*60; mins < close*60; mins += slotLen){
-    const h = Math.floor(mins/60);
-    const m = mins % 60;
-    const ampm = h < 12 ? 'AM' : 'PM';
-    const h12  = h === 0 ? 12 : h > 12 ? h - 12 : h;
-    TIMES.push(`${h12}:${m.toString().padStart(2,'0')} ${ampm}`);
+    const h=Math.floor(mins/60), m=mins%60, ap=h<12?'AM':'PM', h12=h===0?12:h>12?h-12:h;
+    TIMES.push(`${h12}:${m.toString().padStart(2,'0')} ${ap}`);
   }
-})();
 
-// ── WORK DAYS (which days are open) ────────────────────────
-(function applyWorkDays(){
-  const wd = localStorage.getItem('moonWorkDays');
-  if(wd) MOON_CONFIG.WORK_DAYS = JSON.parse(wd);
-})();
-
-const CFG={JSONBIN_BIN_ID:MOON_CONFIG.JSONBIN_BIN_ID,JSONBIN_API_KEY:MOON_CONFIG.JSONBIN_API_KEY,SMS_ENDPOINT:MOON_CONFIG.SMS_ENDPOINT};
-
-// natural descriptions — sounds like a barbershop menu board
-const DESC={
-  fade:'Skin fade, low, mid or high.',
-  cut:'Full cut, shaped and styled.',
-  lineup:'Edge up, crisp lines.',
-  beard:'Shape, trim and define.',
-  shave:'Hot towel straight razor.',
-  kids:'Clean cut for the young ones.',
-};
-
-let S={slide:1,svc:null,date:null,time:null,payMethod:null,bookedSlots:{}};
+  // shop name + tagline
+  if(MOON_CONFIG.SHOP_NAME) {
+    const logo = document.querySelector('.logo');
+    if(logo) logo.textContent = MOON_CONFIG.SHOP_NAME;
+    document.title = MOON_CONFIG.SHOP_NAME + ' — Book';
+  }
+  if(MOON_CONFIG.WELCOME) document.querySelector('.tagline').textContent = MOON_CONFIG.WELCOME;
+}
 
 (async()=>{
-  const now=new Date();
-  document.getElementById('hdrDate').textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+  document.getElementById('hdrDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
 
+  // 1. Apply localStorage immediately (barber's own device — instant)
+  const localCfg = JSON.parse(localStorage.getItem('moonCfg') || '{}');
+  applySettings(localCfg);
 
-  // apply welcome message & shop name from dashboard settings
-  if(MOON_CONFIG.WELCOME) document.querySelector('.tagline').textContent=MOON_CONFIG.WELCOME;
-  if(MOON_CONFIG.SHOP_NAME) {
-    const logo=document.querySelector('.logo');
-    if(logo) logo.textContent=MOON_CONFIG.SHOP_NAME;
-  }
+  // 2. Fetch cloud settings — applies to ALL devices (customers included)
+  try {
+    const binId  = MOON_CONFIG.JSONBIN_BIN_ID;
+    const binKey = MOON_CONFIG.JSONBIN_API_KEY;
+    if(binId && binKey) {
+      const r = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, { headers:{'X-Master-Key':binKey} });
+      if(r.ok) {
+        const { record } = await r.json();
+        if(record.settings) {
+          // cache to localStorage so next load is instant
+          localStorage.setItem('moonCfg', JSON.stringify(record.settings));
+          applySettings(record.settings);
+        }
+      }
+    }
+  } catch(e) { /* no cloud — fall back to whatever we applied from localStorage */ }
 
   // apply custom page copy
   const saved = JSON.parse(localStorage.getItem('moonCfg')||'{}');
@@ -713,20 +721,13 @@ let S={slide:1,svc:null,date:null,time:null,payMethod:null,bookedSlots:{}};
   function setCopy(selector, top, main, defTop, defMain) {
     const el = document.querySelector(selector+' .sh');
     if (!el) return;
-    const sm = el.querySelector('.small');
-    if (sm) sm.textContent = top || defTop;
-    // rebuild innerHTML keeping .small intact then appending main text
-    const mainHtml = main || defMain;
-    el.innerHTML = `<span class="small">${top || defTop}</span>${mainHtml}`;
+    el.innerHTML = `<span class="small">${top || defTop}</span>${main || defMain}`;
   }
   setCopy('#slide1', cp.s1top, cp.s1main, 'What are we doing', 'Pick your <em>cut</em>');
   setCopy('#slide2', cp.s2top, cp.s2main, 'Pick your appointment', 'When you <em>coming in?</em>');
   setCopy('#slide3', cp.s3top, cp.s3main, 'Almost done', "Who's <em>getting fresh?</em>");
   setCopy('#slide4', cp.s4top, cp.s4main, 'Review &amp; confirm', 'Lock it <em>in.</em>');
-  if (cp.infoNote) {
-    const note = document.querySelector('.info-note');
-    if (note) note.innerHTML = cp.infoNote;
-  }
+  if(cp.infoNote) { const note=document.querySelector('.info-note'); if(note) note.innerHTML=cp.infoNote; }
 
   applyVacationMode();
   applyAbout();
