@@ -1165,7 +1165,7 @@ async function loadData() {
       { headers: { 'X-Master-Key': CFG.binKey } });
     if (!r.ok) { toast('Could not load data', 'err'); return; }
     const { record } = await r.json();
-    DATA = { bookings: record.bookings || [], clients: record.clients || [] };
+    DATA = { bookings: record.bookings || [], clients: record.clients || [], settings: record.settings || {} };
 
     // ── CLOUD RESTORE ──────────────────────────────────────
     // Restore settings from cloud whenever they exist — covers cache clears,
@@ -1205,11 +1205,22 @@ async function loadData() {
 }
 
 async function saveData() {
+  // Always do a fresh GET before PUT to avoid overwriting concurrent booking-page saves
   try {
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${CFG.binId}/latest`,
+      { headers: { 'X-Master-Key': CFG.binKey } });
+    if (!r.ok) { toast('Save failed', 'err'); return; }
+    const { record } = await r.json();
+    // Merge: keep fresh bookings+clients from server, overlay our local changes
+    const merged = {
+      ...record,
+      bookings: DATA.bookings,
+      clients:  DATA.clients,
+    };
     await fetch(`https://api.jsonbin.io/v3/b/${CFG.binId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Master-Key': CFG.binKey },
-      body: JSON.stringify(DATA)
+      body: JSON.stringify(merged)
     });
   } catch(e) { toast('Save failed', 'err'); }
 }
