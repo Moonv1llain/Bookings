@@ -1437,7 +1437,18 @@ function isTimeBlocked(time, from, to) {
 // ── BOOKINGS ──────────────────────────────────────────────
 function renderBookings() {
   const q = (document.getElementById('bookingSearch')?.value || '').toLowerCase();
-  let bks = [...DATA.bookings].sort((a,b) => (b.date+b.time).localeCompare(a.date+a.time));
+  const statusOrder = { confirmed: 0, completed: 1, cancelled: 2 };
+  const today = dStr(new Date());
+  let bks = [...DATA.bookings].sort((a, b) => {
+    const sa = statusOrder[a.status] ?? 0;
+    const sb = statusOrder[b.status] ?? 0;
+    if (sa !== sb) return sa - sb;
+    // within same status: upcoming before past, then newest date first
+    const aFuture = a.date >= today ? 0 : 1;
+    const bFuture = b.date >= today ? 0 : 1;
+    if (aFuture !== bFuture) return aFuture - bFuture;
+    return (b.date + b.time).localeCompare(a.date + a.time);
+  });
   if (q) bks = bks.filter(b =>
     b.name?.toLowerCase().includes(q) ||
     b.service?.toLowerCase().includes(q) ||
@@ -1460,7 +1471,7 @@ function renderBookings() {
       <td><strong>${b.name||'—'}</strong><br><span style="color:var(--dim);font-size:13px">${b.phone||''}</span></td>
       <td>${b.service||'—'}</td>
       <td>${dl}</td>
-      <td>${b.time||'—'}</td>
+      <td>${b.time||'—'}${b.cancelledAt?'<br><span style="color:var(--red);font-size:11px">Cancelled '+new Date(b.cancelledAt).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span>':b.completedAt?'<br><span style="color:#7aaac8;font-size:11px">Done '+new Date(b.completedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span>':''}</td>
       <td style="color:var(--gold)">${b.price||'—'}</td>
       <td><span class="badge ${badgeCls}">${b.status||'confirmed'}</span></td>
       <td>
@@ -1554,6 +1565,7 @@ async function cancelBooking(id) {
   const bk = DATA.bookings.find(b => b.id === id);
   if (!bk) return;
   bk.status = 'cancelled';
+  bk.cancelledAt = new Date().toISOString();
   await saveData();
   renderAll();
   toast('Booking cancelled', 'ok');
@@ -1598,6 +1610,7 @@ async function doneBooking(id) {
   const b = DATA.bookings.find(x => x.id === id);
   if (!b) return;
   b.status = 'completed';
+  b.completedAt = new Date().toISOString();
   await saveData();
   renderAll();
   toast(`${b.name} marked done ✓`, 'ok');
@@ -2224,7 +2237,9 @@ function showPanel(name, el) {
   if(el) el.classList.add('active');
   // re-render panels that need it
   if(name==='availability'){ renderDaysGrid(); renderBlockSelects(); renderBlocks(); highlightSlotBtn(); }
-  if(name==='schedule') renderSchedule();
+  if(name==='schedule')     renderSchedule();
+  if(name==='bookings')     renderBookings();
+  if(name==='clients')      renderClients();
 }
 
 // ── MODAL ─────────────────────────────────────────────────
