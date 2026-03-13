@@ -889,13 +889,57 @@ body{
       </div>
       <button class="big-save" onclick="saveSettings()">Save My Info ✓</button>
 
-      <div class="cfg-section">Page Wording</div>
-      <div style="font-size:0.44rem;color:var(--dim);padding:10px 20px;line-height:1.7">Replace the default text on your booking page. Leave blank to keep defaults.</div>
-      <div class="copy-row"><div class="copy-default">"What are we doing" / "Pick your cut"</div><input class="bf-input" id="cpyS1top" placeholder="Top line"><input class="bf-input" id="cpyS1main" placeholder='Main heading e.g. Pick your service' style="margin-top:6px"></div>
-      <div class="copy-row"><div class="copy-default">"Pick your appointment" / "When you coming in?"</div><input class="bf-input" id="cpyS2top" placeholder="Top line"><input class="bf-input" id="cpyS2main" placeholder="Main heading" style="margin-top:6px"></div>
-      <div class="copy-row"><div class="copy-default">"Almost done" / "Who's getting fresh?"</div><input class="bf-input" id="cpyS3top" placeholder="Top line"><input class="bf-input" id="cpyS3main" placeholder="Main heading" style="margin-top:6px"></div>
-      <div class="copy-row"><div class="copy-default">"Review & confirm" / "Lock it in."</div><input class="bf-input" id="cpyS4top" placeholder="Top line"><input class="bf-input" id="cpyS4main" placeholder="Main heading" style="margin-top:6px"></div>
-      <div class="copy-row"><div class="copy-default">Info note on step 3</div><textarea class="bf-input" id="cpyInfoNote" rows="2" placeholder="e.g. You'll get a text when you book. No app needed." style="resize:vertical"></textarea></div>
+     <div class="cfg-section">Page Wording</div>
+      <div style="font-size:13px;color:var(--dim);padding:12px 20px;line-height:1.8">Replace the default text on your booking page. Leave blank to keep the defaults.</div>
+
+      <!-- Step 1 -->
+      <div style="padding:14px 20px;border-bottom:1px solid var(--rule);background:var(--paper)">
+        <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">📋 Step 1 — Service</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:10px">Currently: <em>"What are we doing" / "Pick your cut"</em></div>
+        <label class="bf-label">Top line (small text above heading)</label>
+        <input class="bf-input" id="cpyS1top" placeholder="e.g. What are we doing" style="margin-bottom:8px">
+        <label class="bf-label">Main heading</label>
+        <input class="bf-input" id="cpyS1main" placeholder="e.g. Pick your cut">
+      </div>
+
+      <!-- Step 2 -->
+      <div style="padding:14px 20px;border-bottom:1px solid var(--rule);background:var(--paper)">
+        <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">📅 Step 2 — Date & Time</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:10px">Currently: <em>"Pick your appointment" / "When you coming in?"</em></div>
+        <label class="bf-label">Top line</label>
+        <input class="bf-input" id="cpyS2top" placeholder="e.g. Pick your appointment" style="margin-bottom:8px">
+        <label class="bf-label">Main heading</label>
+        <input class="bf-input" id="cpyS2main" placeholder="e.g. When you coming in?">
+      </div>
+
+      <!-- Step 3 -->
+      <div style="padding:14px 20px;border-bottom:1px solid var(--rule);background:var(--paper)">
+        <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">👤 Step 3 — Your Info</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:10px">Currently: <em>"Almost done" / "Who's getting fresh?"</em></div>
+        <label class="bf-label">Top line</label>
+        <input class="bf-input" id="cpyS3top" placeholder="e.g. Almost done" style="margin-bottom:8px">
+        <label class="bf-label">Main heading</label>
+        <input class="bf-input" id="cpyS3main" placeholder="e.g. Who's getting fresh?">
+      </div>
+
+      <!-- Step 4 -->
+      <div style="padding:14px 20px;border-bottom:1px solid var(--rule);background:var(--paper)">
+        <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">✅ Step 4 — Confirm</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:10px">Currently: <em>"Review & confirm" / "Lock it in."</em></div>
+        <label class="bf-label">Top line</label>
+        <input class="bf-input" id="cpyS4top" placeholder="e.g. Review & confirm" style="margin-bottom:8px">
+        <label class="bf-label">Main heading</label>
+        <input class="bf-input" id="cpyS4main" placeholder="e.g. Lock it in.">
+      </div>
+
+      <!-- Info note -->
+      <div style="padding:14px 20px;border-bottom:1px solid var(--rule);background:var(--paper)">
+        <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">💬 Info Note (Step 3)</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:10px">Currently: <em>"Moon will text you a confirmation when you book…"</em></div>
+        <label class="bf-label">Note text</label>
+        <textarea class="bf-input" id="cpyInfoNote" rows="3" placeholder="e.g. You'll get a text when you book. No app needed." style="resize:vertical"></textarea>
+      </div>
+
       <button class="big-save" onclick="saveCopy()">Save Wording ✓</button>
     </div>
 
