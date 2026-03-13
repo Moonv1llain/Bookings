@@ -812,6 +812,26 @@ function renderDates(){
   document.getElementById('dateStrip').innerHTML = html || '<div style="color:var(--dim);font-size:12px;padding:8px">No available dates</div>';
 }
 
+// ── FIX: convert time string to minutes for accurate block comparison ──
+function timeToMins(t) {
+  const [timePart, ap] = t.split(' ');
+  let [h, m] = timePart.split(':').map(Number);
+  if (ap === 'PM' && h !== 12) h += 12;
+  if (ap === 'AM' && h === 12) h = 0;
+  return h * 60 + m;
+}
+
+// ── FIX: check if a time slot falls within any block for S.date ──
+function isSlotBlocked(t) {
+  if (!S.date) return false;
+  const blocks = JSON.parse(localStorage.getItem('moonBlocks') || '[]');
+  return blocks.filter(b => b.date === S.date).some(b => {
+    if (b.fullDay || !b.from || !b.to) return true;
+    const slotM = timeToMins(t), fromM = timeToMins(b.from), toM = timeToMins(b.to);
+    return slotM >= fromM && slotM < toM;
+  });
+}
+
 function renderTimes(){
   const taken = S.bookedSlots[S.date] || [];
   const lbl = S.date ? new Date(S.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) : 'Time';
@@ -847,9 +867,11 @@ function renderTimes(){
     return h24 * 60 + mm > nowMins;
   });
 
-  document.getElementById('timeGrid').innerHTML = visible.map(t =>
-    `<div class="tc ${taken.includes(t)?'taken':''} ${S.time===t?'sel':''}" onclick="${taken.includes(t)?'':` pickTime('${t}')`}">${t}</div>`
-  ).join('') || '<div style="color:var(--dim);font-size:12px;padding:8px 0;letter-spacing:0.08em">No more slots today</div>';
+  // ── FIX: mark slot taken if booked OR blocked ──
+  document.getElementById('timeGrid').innerHTML = visible.map(t => {
+    const isTaken = taken.includes(t) || isSlotBlocked(t);
+    return `<div class="tc ${isTaken?'taken':''} ${S.time===t?'sel':''}" onclick="${isTaken?'':` pickTime('${t}')`}">${t}</div>`;
+  }).join('') || '<div style="color:var(--dim);font-size:12px;padding:8px 0;letter-spacing:0.08em">No more slots today</div>';
 }
 
 function renderConfirm(){
