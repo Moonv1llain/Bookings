@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Site</title>
+<title>MOON CUTS</title>
 <script>try{const s=JSON.parse(localStorage.getItem("moonCfg")||"{}");if(s.shopName)document.title=s.shopName+" — Book";} catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -1005,7 +1005,7 @@ async function confirmBooking(){
 async function sendSMS(to,body){
   // respect the SMS kill switch set in dashboard → API Keys
   const cfg = JSON.parse(localStorage.getItem('moonCfg')||'{}');
-  if(cfg.smsEnabled === false) return;
+  if(cfg.smsEnabled !== true) return;
   if(!CFG.SMS_ENDPOINT) return;
   try{await fetch(CFG.SMS_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to,body})});}catch(e){}
 }
