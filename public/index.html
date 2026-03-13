@@ -449,7 +449,7 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
     </div>
     <div class="tagline">Cuts &amp; Fades — Book Online</div>
     <div class="hdr-right">
-      <a class="quick-text-btn" id="quickTextBtn" href="#">💬 Text Me</a>
+      <a class="quick-text-btn" id="quickTextBtn" href="#">💬 Text us</a>
       <div class="hdr-date" id="hdrDate"></div>
 
     </div>
@@ -702,10 +702,15 @@ function applySettings(saved) {
       const r = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, { headers:{'X-Master-Key':binKey} });
       if(r.ok) {
         const { record } = await r.json();
-        if(record.settings) {
+       if(record.settings) {
           // cache to localStorage so next load is instant
           localStorage.setItem('moonCfg', JSON.stringify(record.settings));
           applySettings(record.settings);
+          // re-render everything now that real cloud settings are applied
+          renderSvcs();
+          renderDates();
+          renderTimes();
+          updateFooter();
         }
       }
     }
