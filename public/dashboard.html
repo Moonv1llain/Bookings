@@ -1131,10 +1131,12 @@ let CFG = {
 };
 
 // ── STATE ─────────────────────────────────────────────────
-let DATA = { bookings: [], clients: [] };
-let WORK_DAYS = [1,2,3,4,5,6]; // loaded from storage
-let BLOCKS = []; // { date, from, to, reason }
-let schedDay = new Date();
+let DATA      = { bookings: [], clients: [] };
+let WORK_DAYS = [1,2,3,4,5,6];
+let BLOCKS    = [];
+let TIMES     = [];  // populated by rebuildTimes() on init
+let SERVICES  = [];  // populated from localStorage
+let schedDay  = new Date();
 schedDay.setHours(0,0,0,0);
 
 // ── CLOCK ─────────────────────────────────────────────────
@@ -1411,7 +1413,7 @@ function renderSchedule() {
   } else {
     TIMES.forEach(t => {
       const bk = dayBks.find(b => b.time === t);
-      const blocked = dayBlocks.find(b => isTimeBlocked(t, b.from, b.to));
+      const blocked = dayBlocks.find(b => b.fullDay || isTimeBlocked(t, b.from, b.to));
 
       // check if this slot is in the past (today only)
       const slotMins = (h => {
@@ -1475,9 +1477,13 @@ function renderSchedule() {
 }
 
 function isTimeBlocked(time, from, to) {
+  // fullDay block has from=null — blocks everything
+  if (from === null || from === undefined) return true;
   const idx = TIMES.indexOf(time);
-  const fi = TIMES.indexOf(from);
-  const ti = TIMES.indexOf(to);
+  const fi  = TIMES.indexOf(from);
+  const ti  = TIMES.indexOf(to);
+  // if from/to not found in TIMES, don't block (prevents -1 false positives)
+  if (fi === -1 || ti === -1) return false;
   return idx >= fi && idx < ti;
 }
 
