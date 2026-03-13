@@ -511,7 +511,7 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
       </div>
     </div>
 
-    <div class="slide" id="slide4">
+ <div class="slide" id="slide4">
       <div class="sh"><span class="small">Review &amp; confirm</span>Lock it <em>in.</em></div>
       <div class="svc-wrap">
         <div class="cfm-banner">
@@ -519,10 +519,7 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
           <div class="cfm-svc-meta" id="cfmMeta"></div>
         </div>
         <div class="cfm-cells" id="cfmGrid"></div>
-        <div class="pay-section">
-          <span class="pay-label">How are you paying?</span>
-          <div class="pay-options" id="payOptions"></div>
-        </div>
+        <div id="payOptions" style="display:none"></div>
       </div>
     </div>
 
@@ -533,7 +530,7 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
     <div class="fb">
       <button class="bbk hidden" id="btnBack" onclick="prevSlide()">←</button>
       <button class="bnx" id="btnNext" onclick="nextSlide()" disabled>
-        <span class="bt">NEXT</span>
+        <span class="bt">NEXT →</span>
         <div class="sp"></div>
       </button>
     </div>
@@ -548,11 +545,9 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
   <div class="succ-card" id="sCard"></div>
 
   <!-- CASH REMINDER -->
-  <div style="display:flex;align-items:center;gap:10px;background:rgba(196,169,125,0.06);border:1px solid rgba(196,169,125,0.2);border-radius:4px;padding:10px 16px;width:100%;margin-bottom:10px;font-size:11px;letter-spacing:0.1em;color:var(--gold);transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.75s" id="cashReminder">
-    <span>💵</span><span>Remember — cash at the shop</span>
-  </div>
+ <div id="paymentMethods" style="width:100%;transform:translateY(14px);opacity:0;transition:all 0.4s ease 0.65s"></div>
 
-  <button class="bagain" onclick="resetBooking()">Book Again</button>
+  <button class="bagain" onclick="closeBooking()">Close</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -735,8 +730,9 @@ function applySettings(saved) {
   applyGallery();
   applyQuickText();
   applyWalkinMode();
-  renderSvcs();renderDates();
+ renderSvcs();
   await loadBookings();
+  renderDates();
   // auto-select today if it's in the date strip, else select the first available day
   if (!S.date) {
     const firstDay = document.querySelector('#dateStrip .dc');
@@ -746,7 +742,10 @@ function applySettings(saved) {
       renderDates(); // re-render to show selected state
     }
   }
-  renderTimes();updateFooter();
+  // re-render everything after cloud data is fully loaded
+  renderDates();
+  renderTimes();
+  updateFooter();
 })();
 
 async function loadBookings(){
@@ -754,8 +753,15 @@ async function loadBookings(){
     const r=await fetch(`https://api.jsonbin.io/v3/b/${CFG.JSONBIN_BIN_ID}/latest`,{headers:{'X-Master-Key':CFG.JSONBIN_API_KEY}});
     if(!r.ok)return;
     const{record}=await r.json();
+    console.log('CLOUD RECORD settings._blocks:', JSON.stringify(record.settings?._blocks));
     S.bookedSlots={};
     (record.bookings||[]).filter(b=>b.status!=='cancelled').forEach(b=>{if(!S.bookedSlots[b.date])S.bookedSlots[b.date]=[];S.bookedSlots[b.date].push(b.time);});
+    // load blocks + settings directly from cloud so ALL devices see them
+    if(record.settings){
+      if(record.settings._blocks)   localStorage.setItem('moonBlocks',   JSON.stringify(record.settings._blocks));
+      if(record.settings._dayHours) localStorage.setItem('moonDayHours', JSON.stringify(record.settings._dayHours));
+      if(record.settings._workDays) MOON_CONFIG.WORK_DAYS = record.settings._workDays;
+    }
   }catch(e){}
 }
 
@@ -796,9 +802,10 @@ function renderDates(){
   const todayStr = dStr(today);
   let html = '';
   const workDays = MOON_CONFIG.WORK_DAYS || [1,2,3,4,5,6];
-  const blocks = JSON.parse(localStorage.getItem('moonBlocks') || '[]');
-  const dayHours = JSON.parse(localStorage.getItem('moonDayHours') || '{}');
-  const slotStep = MOON_CONFIG.SLOT_LEN || 30;
+  const saved = JSON.parse(localStorage.getItem('moonCfg') || '{}');
+  const blocks = saved._blocks || JSON.parse(localStorage.getItem('moonBlocks') || '[]');
+  const dayHours = saved._dayHours || JSON.parse(localStorage.getItem('moonDayHours') || '{}');
+  const slotStep = saved.slotLen || MOON_CONFIG.SLOT_LEN || 30;
 
   for(let i = 0; i < 21; i++){
     const d = new Date(today); d.setDate(today.getDate()+i);
@@ -832,7 +839,8 @@ function renderTimes(){
   let close = MOON_CONFIG.CLOSE_HOUR || 18;
   if (S.date) {
     const dow = new Date(S.date+'T12:00:00').getDay();
-    const dayHours = JSON.parse(localStorage.getItem('moonDayHours') || '{}');
+    const saved = JSON.parse(localStorage.getItem('moonCfg') || '{}');
+    const dayHours = saved._dayHours || JSON.parse(localStorage.getItem('moonDayHours') || '{}');
     if (dayHours[dow]) { open = dayHours[dow].open; close = dayHours[dow].close; }
   }
 
@@ -857,9 +865,21 @@ function renderTimes(){
     return h24 * 60 + mm > nowMins;
   });
 
-  document.getElementById('timeGrid').innerHTML = visible.map(t =>
-    `<div class="tc ${taken.includes(t)?'taken':''} ${S.time===t?'sel':''}" onclick="${taken.includes(t)?'':` pickTime('${t}')`}">${t}</div>`
-  ).join('') || '<div style="color:var(--dim);font-size:12px;padding:8px 0;letter-spacing:0.08em">No more slots today</div>';
+ const saved = JSON.parse(localStorage.getItem('moonCfg') || '{}');
+  const blocks = saved._blocks || [];
+  const dayBlocks = blocks.filter(b => b.date === S.date);
+
+  document.getElementById('timeGrid').innerHTML = visible.map(t => {
+    const isTaken = taken.includes(t);
+    const isBlocked = dayBlocks.some(b => {
+      if (b.fullDay) return true;
+      const fi = visible.indexOf(b.from), ti = visible.indexOf(b.to), si = visible.indexOf(t);
+      if (fi === -1 || ti === -1 || si === -1) return false;
+      return si >= fi && si < ti;
+    });
+    const disabled = isTaken || isBlocked;
+    return `<div class="tc ${disabled?'taken':''} ${S.time===t?'sel':''}" onclick="${disabled?'':` pickTime('${t}')`}">${t}</div>`;
+  }).join('') || '<div style="color:var(--dim);font-size:12px;padding:8px 0;letter-spacing:0.08em">No more slots today</div>';
 }
 
 function renderConfirm(){
@@ -868,7 +888,6 @@ function renderConfirm(){
   const dl=new Date(S.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   document.getElementById('cfmSvc').textContent=S.svc.name;
   S.payMethod=null;
-  renderPayOptions();
   document.getElementById('cfmMeta').textContent=`${S.svc.price} · ${S.svc.dur}`;
   document.getElementById('cfmGrid').innerHTML=`
     <div class="cfm-cell"><div class="cfm-cell-l">Date</div><div class="cfm-cell-v">${dl}</div></div>
@@ -945,7 +964,7 @@ function updateFooter(){
   if(S.slide===1){set('Next →',!!S.svc);st.textContent=S.svc?`${S.svc.name} · ${S.svc.price} · ${S.svc.dur}`:'Select a service';st.className='fs'+(S.svc?' on':'');}
   else if(S.slide===2){const ok=S.date&&S.time;set('Next →',!!ok);const dl=S.date?new Date(S.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}):'';st.textContent=ok?`${dl} · ${S.time}`:S.date?'Now pick a time':'Pick a day first';st.className='fs'+(ok?' on':'');}
   else if(S.slide===3){const n=document.getElementById('nameInput')?.value.trim();const p=document.getElementById('phoneInput')?.value.trim();const ok=n&&p&&p.replace(/\D/g,'').length>=10;set('Review →',!!ok);st.textContent=ok?'Looking good':'Fill in your details';st.className='fs'+(ok?' on':'');}
-  else if(S.slide===4){set('Confirm Booking',true);st.textContent='2-hour cancellation policy';st.className='fs';}
+  else if(S.slide===4){set('Confirm Booking',true);st.textContent='2-hour cancellation policy';st.className='fs on';}
 }
 
 document.addEventListener('input',e=>{if(e.target.id==='nameInput'||e.target.id==='phoneInput')updateFooter();});
@@ -964,7 +983,7 @@ async function confirmBooking(){
   const bk={id:`BK-${Date.now()}`,service:S.svc.name,price:S.svc.price,dur:S.svc.dur,date:S.date,time:S.time,name,phone:fp,status:'confirmed',bookedAt:new Date().toISOString()};
   await saveBooking(bk);
   const dl=new Date(S.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-  const payLabel = S.payMethod==='cash'?'Cash at the shop':`${S.payMethod.charAt(0).toUpperCase()+S.payMethod.slice(1)} (link opening now)`;
+  const payLabel = 'Cash at the shop';
   const smsBody = buildSMS(name, S.svc.name, dl, S.time, payLabel);
   await sendSMS(fp, smsBody);
 
@@ -977,22 +996,15 @@ async function confirmBooking(){
     <div class="sr"><span class="k">Time</span><span class="v">${S.time}</span></div>
     <div class="sr"><span class="k">Confirmation</span><span class="v">${(()=>{const c=JSON.parse(localStorage.getItem('moonCfg')||'{}');return c.smsEnabled===false?'Barber will text you':'Text sent to '+phone;})()}</span></div>`;
 
-  if(S.payMethod && S.payMethod !== 'cash'){
-    let payUrl = '';
-    const amt = S.svc.priceNum || S.svc.price.replace(/\D/g,'');
-    const note = encodeURIComponent(`Moon Cuts - ${S.svc.name}`);
-    const _s = JSON.parse(localStorage.getItem('moonCfg')||'{}');
-    const _ca = _s.cashapp || MOON_CONFIG.CASHAPP || '';
-    const _vm = _s.venmo   || MOON_CONFIG.VENMO   || '';
-    const _pp = _s.paypal  || MOON_CONFIG.PAYPAL  || '';
-    if(S.payMethod==='cashapp' && _ca) payUrl = `https://cash.app/${_ca}/${amt}`;
-    if(S.payMethod==='venmo'   && _vm) payUrl = `https://venmo.com/${_vm.replace('@','')}?txn=pay&amount=${amt}&note=${note}`;
-    if(S.payMethod==='paypal'  && _pp) payUrl = `https://paypal.me/${_pp}/${amt}`;
-    if(payUrl) setTimeout(()=>window.open(payUrl,'_blank'), 800);
-  }
+  if(false){}
   const shopName = JSON.parse(localStorage.getItem('moonCfg')||'{}').shopName || MOON_CONFIG.SHOP_NAME || 'your barber';
   document.getElementById('succSub').textContent = `${shopName} has your slot.`;
   document.getElementById('successScreen').classList.add('show');
+  renderSuccessPayments();
+  setTimeout(() => {
+    const pm = document.getElementById('paymentMethods');
+    if (pm) { pm.style.transform = 'translateY(0)'; pm.style.opacity = '1'; }
+  }, 650);
   } catch(err) {
     console.error('confirmBooking error:', err);
     toast('Something went wrong. Please try again.', true);
@@ -1137,6 +1149,65 @@ function formatPhone(el){
   else if(v.length >= 4) v = '('+v.slice(0,3)+') '+v.slice(3);
   else if(v.length) v = '('+v;
   el.value = v;
+}
+function renderSuccessPayments() {
+  const cfg = JSON.parse(localStorage.getItem('moonCfg') || '{}');
+  const cashapp = cfg.cashapp || MOON_CONFIG.CASHAPP || '';
+  const venmo   = cfg.venmo   || MOON_CONFIG.VENMO   || '';
+  const paypal  = cfg.paypal  || MOON_CONFIG.PAYPAL  || '';
+  const zelle   = cfg.zelle   || MOON_CONFIG.ZELLE   || '';
+
+  const svc     = S.svc;
+  const amt     = svc?.priceNum || (svc?.price || '').replace(/\D/g,'');
+  const note    = encodeURIComponent(`${cfg.shopName || 'Barber'} - ${svc?.name || 'Cut'}`);
+
+  let html = `<div style="font-size:0.44rem;letter-spacing:0.22em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;text-align:left">Payment</div>`;
+
+  // always show cash
+  html += `<div style="display:flex;align-items:center;gap:12px;background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:13px 16px;margin-bottom:7px">
+    <span style="font-size:1.2rem">💵</span>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--cut)">Cash at the shop</div>
+      <div style="font-size:0.46rem;letter-spacing:0.08em;color:var(--dim)">Pay when you arrive — no need to do anything now</div>
+    </div>
+  </div>`;
+
+  if (cashapp) {
+    const url = `https://cash.app/${cashapp}/${amt}`;
+    html += payBtn('💲', 'CashApp', cashapp, url, '#00d632');
+  }
+  if (venmo) {
+    const url = `https://venmo.com/${venmo.replace('@','')}?txn=pay&amount=${amt}&note=${note}`;
+    html += payBtn('💙', 'Venmo', venmo, url, '#3d95ce');
+  }
+  if (paypal) {
+    const url = `https://paypal.me/${paypal}/${amt}`;
+    html += payBtn('🅿️', 'PayPal', `paypal.me/${paypal}`, url, '#0070ba');
+  }
+  if (zelle) {
+    html += payBtn('🟡', 'Zelle', zelle, null, '#6d1ed4');
+  }
+
+  document.getElementById('paymentMethods').innerHTML = html;
+}
+
+function payBtn(icon, name, handle, url, color) {
+  const inner = url
+    ? `<a href="${url}" target="_blank" style="margin-left:auto;background:${color};color:#fff;border-radius:3px;padding:6px 14px;font-size:0.46rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;white-space:nowrap;flex-shrink:0">Pay Now</a>`
+    : `<span style="margin-left:auto;font-size:0.46rem;letter-spacing:0.08em;color:var(--dim)">${handle}</span>`;
+  return `<div style="display:flex;align-items:center;gap:12px;background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:13px 16px;margin-bottom:7px">
+    <span style="font-size:1.2rem">${icon}</span>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--cut)">${name}</div>
+      <div style="font-size:0.46rem;letter-spacing:0.08em;color:var(--dim)">${handle}</div>
+    </div>
+    ${inner}
+  </div>`;
+}
+
+function closeBooking() {
+  // just reset back to step 1 cleanly
+  resetBooking();
 }
 function dStr(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.className='toast',2600);}
