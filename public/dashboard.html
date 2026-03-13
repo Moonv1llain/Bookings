@@ -695,11 +695,11 @@ body{
   <div class="pin-wordmark" id="pinLogo">Moon Cuts</div>
   <div class="pin-tagline">Barber Dashboard</div>
   <div class="pin-dots" id="pinDots">
-  <div class="pin-dot" id="pd0"></div>
-  <div class="pin-dot" id="pd1"></div>
-  <div class="pin-dot" id="pd2"></div>
-  <div class="pin-dot" id="pd3"></div>
-</div>
+    <div class="pin-dot" id="pd0"></div>
+    <div class="pin-dot" id="pd1"></div>
+    <div class="pin-dot" id="pd2"></div>
+    <div class="pin-dot" id="pd3"></div>
+  </div>
   <div class="pin-pad">
     <div class="pin-key" onclick="pinKey('1')">1</div>
     <div class="pin-key" onclick="pinKey('2')">2</div>
@@ -1131,11 +1131,11 @@ let CFG = {
 };
 
 // ── STATE ─────────────────────────────────────────────────
+// NOTE: SERVICES and TIMES are declared in services.js (loaded before this script)
+// They are const arrays that rebuildTimes() and saveServices() mutate in place.
 let DATA      = { bookings: [], clients: [] };
 let WORK_DAYS = [1,2,3,4,5,6];
 let BLOCKS    = [];
-let TIMES     = [];  // populated by rebuildTimes() on init
-let SERVICES  = [];  // populated from localStorage
 let schedDay  = new Date();
 schedDay.setHours(0,0,0,0);
 
