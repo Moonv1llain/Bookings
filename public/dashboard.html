@@ -885,7 +885,8 @@ body{
         <div style="font-size:0.44rem;color:var(--dim);margin-bottom:10px;line-height:1.7">Leave blank to hide that payment option</div>
         <div class="bf-group"><label class="bf-label">💲 CashApp $tag</label><input class="bf-input" id="cfgCashapp" placeholder="$yourname"></div>
         <div class="bf-group"><label class="bf-label">💙 Venmo @handle</label><input class="bf-input" id="cfgVenmo" placeholder="@yourname"></div>
-        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">🅿️ PayPal.me username</label><input class="bf-input" id="cfgPaypal" placeholder="yourname"></div>
+        <div class="bf-group"><label class="bf-label">🅿️ PayPal.me username</label><input class="bf-input" id="cfgPaypal" placeholder="yourname"></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">🟡 Zelle (phone or email)</label><input class="bf-input" id="cfgZelle" placeholder="(805) 000-0000 or email"></div>
       </div>
       <button class="big-save" onclick="saveSettings()">Save My Info ✓</button>
 
@@ -1084,6 +1085,11 @@ body{
           <div class="bf-group" style="margin-bottom:0"><label class="bf-label">&nbsp;</label><button class="big-save" onclick="savePin()" style="margin:0;padding:10px 16px">Save</button></div>
         </div>
         <div class="warn-box" style="margin:12px 0 0">⚠ Write your PIN down. Master reset is <strong>0000</strong>.</div>
+      <div class="cfg-section" style="margin-top:16px">Reset Local Cache</div>
+      <div class="block-form settings-row">
+        <div style="font-size:0.44rem;color:var(--dim);margin-bottom:12px;line-height:1.7">If settings aren't updating on a device, clear its local cache. The device will re-sync from the cloud on next load.</div>
+        <button class="big-save" style="background:var(--red);margin:0" onclick="resetCache()">🗑 Clear Local Cache</button>
+      </div>
       </div>
 
       <div class="cfg-section">API Keys</div>
@@ -1296,14 +1302,13 @@ async function loadData() {
       // Work days & hours: cloud wins (these are set via dashboard UI)
       if (s._workDays) { WORK_DAYS = s._workDays; localStorage.setItem('moonWorkDays', JSON.stringify(WORK_DAYS)); }
       if (s._dayHours) { DAY_HOURS = s._dayHours; localStorage.setItem('moonDayHours', JSON.stringify(DAY_HOURS)); }
-      // BLOCKS: localStorage wins — cloud is only a fallback for new devices
-      // This prevents the 2s debounce race condition from wiping freshly added blocks
-      const localBlocks = localStorage.getItem('moonBlocks');
-      if (localBlocks) {
-        BLOCKS = JSON.parse(localBlocks); // trust local — it's always up to date
-      } else if (s._blocks) {
-        BLOCKS = s._blocks; // new device — restore from cloud
+      // BLOCKS: cloud wins — this is the source of truth for all devices
+      if (s._blocks) {
+        BLOCKS = s._blocks;
         localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
+      } else {
+        const localBlocks = localStorage.getItem('moonBlocks');
+        if (localBlocks) BLOCKS = JSON.parse(localBlocks);
       }
       // Services: same pattern — local wins, cloud is fallback
       const localSvcs = localStorage.getItem('moonServices');
@@ -2036,6 +2041,7 @@ function renderSettings() {
   g('cfgCashapp').value   = C.cashapp   || MOON_CONFIG.CASHAPP         || '';
   g('cfgVenmo').value     = C.venmo     || MOON_CONFIG.VENMO           || '';
   g('cfgPaypal').value    = C.paypal    || MOON_CONFIG.PAYPAL          || '';
+  g('cfgZelle').value     = C.zelle     || '';
   g('cfgBinId').value     = C.binId     || MOON_CONFIG.JSONBIN_BIN_ID  || '';
   g('cfgBinKey').value    = C.binKey    || MOON_CONFIG.JSONBIN_API_KEY || '';
   g('cfgSms').value       = C.sms       || MOON_CONFIG.SMS_ENDPOINT    || '';
@@ -2083,6 +2089,7 @@ function saveSettings() {
   CFG.cashapp   = v('cfgCashapp');
   CFG.venmo     = v('cfgVenmo');
   CFG.paypal    = v('cfgPaypal');
+  CFG.zelle     = v('cfgZelle');
   CFG.binId     = v('cfgBinId');
   CFG.binKey    = v('cfgBinKey');
   CFG.sms       = v('cfgSms');
@@ -2755,7 +2762,13 @@ document.addEventListener('keydown', e => {
   if (e.key >= '0' && e.key <= '9') pinKey(e.key);
   if (e.key === 'Backspace') pinDel();
 });
-
+function resetCache() {
+  if (!confirm('Clear all local cache? Settings will re-sync from cloud on next load.')) return;
+  localStorage.clear();
+  sessionStorage.clear();
+  toast('Cache cleared — reloading…', 'ok');
+  setTimeout(() => location.reload(), 1200);
+}
 </script>
 </body>
 </html>
