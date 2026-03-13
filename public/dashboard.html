@@ -158,12 +158,14 @@ body{
   will-change:transform;touch-action:pan-y;
 }
 .swipe-del{
-  position:absolute;right:0;top:0;bottom:0;width:80px;
+  position:absolute;right:0;top:0;bottom:0;width:72px;
   background:var(--red);display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:2px;cursor:pointer;
-  font-size:0.4rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;
+  flex-direction:column;gap:3px;cursor:pointer;
+  font-size:0.38rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#fff;
+  opacity:0;transition:opacity 0.15s;
 }
-.swipe-del svg{width:18px;height:18px;margin-bottom:2px}
+.swipe-del svg{width:20px;height:20px;margin-bottom:1px}
+.swipe-wrap.swiped .swipe-del{opacity:1;}
 
 /* ══ SECTION HEADER ══ */
 .sec-hdr{
@@ -250,14 +252,14 @@ body{
 
 /* remind banner */
 #remindBanner{
-  margin:6px 12px;padding:7px 12px;
-  background:#fdf8ee;border:1px solid #d4b86a;border-radius:6px;
-  display:none;align-items:center;justify-content:space-between;gap:8px;
+  margin:8px 14px;padding:12px 16px;
+  background:#fdf8ee;border:1.5px solid #d4b86a;border-radius:10px;
+  display:none;align-items:center;justify-content:space-between;gap:12px;
 }
-#remindText{font-size:0.4rem;font-weight:500;letter-spacing:0.05em;color:#8a6a10}
+#remindText{font-size:0.75rem;font-weight:600;letter-spacing:0.02em;color:var(--ink)}
 #btnRemindAll{
-  background:var(--gold);color:#fff;border:none;border-radius:4px;
-  padding:5px 10px;font-size:0.38rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);border:none;border-radius:8px;
+  padding:9px 16px;font-size:0.55rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
   cursor:pointer;white-space:nowrap;
 }
 
@@ -528,6 +530,13 @@ body{
 .svc-del:hover{color:var(--red)}
 
 /* add service form */
+.add-svc-btn{
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ink);color:var(--paper);border:none;border-radius:10px;
+  padding:0 16px;height:40px;font-family:var(--display);font-size:0.85rem;
+  letter-spacing:0.04em;cursor:pointer;transition:opacity 0.15s;white-space:nowrap;width:100%;
+}
+.add-svc-btn:hover{opacity:0.85}
 .add-svc-form{
   display:grid;grid-template-columns:1fr 80px 90px auto;gap:8px;align-items:end;
   padding:14px 20px;background:var(--paper);border-bottom:1px solid var(--rule);
@@ -903,7 +912,7 @@ body{
             <option>45min</option><option>60min</option><option>75min</option><option>90min</option>
           </select>
         </div>
-        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">&nbsp;</label><button class="big-save" onclick="addService()" style="margin:0;padding:10px 16px">Add</button></div>
+        <div class="bf-group" style="margin-bottom:0"><label class="bf-label">&nbsp;</label><button class="add-svc-btn" onclick="addService()">+ Add Service</button></div>
       </div>
     </div>
 
@@ -1052,7 +1061,7 @@ body{
 
 <!-- ══ BOTTOM NAV — .sb-item class used by JS ══ -->
 <nav class="bottom-nav">
-  <div class="sb-item active" onclick="showPanel('schedule',this)"><span class="sb-icon">📅</span>Today</div>
+  <div class="sb-item active" onclick="showPanel('schedule',this)"><span class="sb-icon">📅</span>Schedule</div>
   <div class="sb-item" onclick="showPanel('bookings',this)"><span class="sb-icon">📋</span>Bookings</div>
   <div class="sb-item" onclick="showPanel('clients',this)"><span class="sb-icon">👥</span>Clients</div>
   <div class="sb-item" onclick="showPanel('availability',this)"><span class="sb-icon">🗓</span>Hours</div>
@@ -1192,39 +1201,40 @@ async function loadData() {
     const { record } = await r.json();
     DATA = { bookings: record.bookings || [], clients: record.clients || [], settings: record.settings || {} };
 
-    // ── CLOUD RESTORE ──────────────────────────────────────
-    // Restore settings from cloud whenever they exist — covers cache clears,
-    // new devices, and partial localStorage wipes
-    if (record.settings) {
+    // ── CLOUD SYNC — always apply cloud settings (cloud = source of truth) ──
+    // This ensures changes from any device (blocks, services, hours, etc.) 
+    // are reflected everywhere on every load.
+    if (record.settings && Object.keys(record.settings).length) {
       const s = record.settings;
-      const localCfg = JSON.parse(localStorage.getItem('moonCfg') || '{}');
-      const needsRestore = !localCfg.shopName && !localCfg.dashPin;
-      if (needsRestore) {
-        // never let cloud restore blank out the hardcoded keys from config.js
-        if (!s.binId)  delete s.binId;
-        if (!s.binKey) delete s.binKey;
-        Object.assign(CFG, s);
-        localStorage.setItem('moonCfg', JSON.stringify(CFG));
-        if (s._workDays) { WORK_DAYS = s._workDays; localStorage.setItem('moonWorkDays', JSON.stringify(WORK_DAYS)); }
-        if (s._dayHours) { DAY_HOURS  = s._dayHours; localStorage.setItem('moonDayHours',  JSON.stringify(DAY_HOURS)); }
-        if (s._blocks)   { BLOCKS     = s._blocks;   localStorage.setItem('moonBlocks',    JSON.stringify(BLOCKS)); }
-        if (s._services && s._services.length) {
-          localStorage.setItem('moonServices', JSON.stringify(s._services));
-          SERVICES.length = 0; s._services.forEach(sv => SERVICES.push(sv));
-        }
-        if (CFG.accent) {
-          document.documentElement.style.setProperty('--gold', CFG.accent);
-          document.documentElement.style.setProperty('--gold2', CFG.accent);
-        }
-        rebuildTimes();
-        renderDaysGrid(); renderBlockSelects(); renderBlocks();
-        renderSettings();
-        toast('Settings restored from cloud ☁', 'ok');
+      // Never overwrite hardcoded API keys from config.js with blank values
+      if (!s.binId)  delete s.binId;
+      if (!s.binKey) delete s.binKey;
+      // Merge cloud settings into CFG (cloud wins for everything except keys)
+      Object.assign(CFG, s);
+      localStorage.setItem('moonCfg', JSON.stringify(CFG));
+      // Sync auxiliary arrays
+      if (s._workDays) { WORK_DAYS = s._workDays; localStorage.setItem('moonWorkDays', JSON.stringify(WORK_DAYS)); }
+      if (s._dayHours) { DAY_HOURS = s._dayHours; localStorage.setItem('moonDayHours', JSON.stringify(DAY_HOURS)); }
+      if (s._blocks)   { BLOCKS    = s._blocks;   localStorage.setItem('moonBlocks',   JSON.stringify(BLOCKS)); }
+      if (s._services && s._services.length) {
+        localStorage.setItem('moonServices', JSON.stringify(s._services));
+        SERVICES.length = 0; s._services.forEach(sv => SERVICES.push(sv));
       }
+      if (s._reviews && s._reviews.length) {
+        localStorage.setItem('moonReviews', JSON.stringify(s._reviews));
+      }
+      // Apply accent color live
+      if (CFG.accent) {
+        document.documentElement.style.setProperty('--gold', CFG.accent);
+        document.documentElement.style.setProperty('--gold2', CFG.accent);
+      }
+      rebuildTimes();
     }
-    // ── END CLOUD RESTORE ──────────────────────────────────
+    // ── END CLOUD SYNC ─────────────────────────────────────
 
     renderAll();
+    renderDaysGrid(); renderBlockSelects(); renderBlocks();
+    renderSettings();
     toast('Data loaded', 'ok');
   } catch(e) { toast('Network error', 'err'); }
 }
@@ -1516,18 +1526,21 @@ function initSwipe(wrap, onDelete) {
   inner.addEventListener('touchend', () => {
     dragging = false;
     if (curX < -THRESH) {
-      inner.style.transform = 'translateX(-80px)';
+      inner.style.transform = 'translateX(-72px)';
+      wrap.classList.add('swiped');
       opened = true;
     } else {
       inner.style.transform = 'translateX(0)';
+      wrap.classList.remove('swiped');
       opened = false;
     }
   });
 
   // tap outside to close
   wrap.addEventListener('touchstart', e => {
-    if (opened && e.target.closest('.swipe-inner')) {
+    if (opened && !e.target.closest('.swipe-del')) {
       inner.style.transform = 'translateX(0)';
+      wrap.classList.remove('swiped');
       opened = false;
     }
   }, { passive: true });
@@ -1853,9 +1866,10 @@ function applyPreset(type) {
     BLOCKS.push({ id: `BL-${Date.now()}`, date, from: fi, to: ti, reason: p.reason });
   }
   localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
+  persist();
   renderBlocks();
   renderSchedule();
-  toast(`${p.reason} blocked`, 'ok');
+  toast(`${p.reason} blocked ✓`, 'ok');
 }
 
 function addBlock() {
@@ -1869,13 +1883,16 @@ function addBlock() {
 
   BLOCKS.push({ id: `BL-${Date.now()}`, date, from, to, reason });
   localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
+  persist();
   renderBlocks();
-  toast('Time blocked', 'ok');
+  renderSchedule();
+  toast('Time blocked ✓', 'ok');
 }
 
 function removeBlock(id) {
   BLOCKS = BLOCKS.filter(b => b.id !== id);
   localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
+  persist();
   renderBlocks();
   renderSchedule();
   toast('Block removed', 'ok');
@@ -2105,6 +2122,7 @@ function addService() {
 
 function saveServices() {
   localStorage.setItem('moonServices', JSON.stringify(editServices));
+  persist();
   // update live SERVICES array
   SERVICES.length = 0;
   editServices.forEach(s => SERVICES.push(s));
@@ -2278,6 +2296,9 @@ function deleteReview(i) {
   const reviews = JSON.parse(localStorage.getItem('moonReviews') || '[]');
   reviews.splice(i, 1);
   localStorage.setItem('moonReviews', JSON.stringify(reviews));
+  // include reviews in next cloud snapshot
+  CFG._reviews = reviews;
+  persist();
   loadDashReviews();
   toast('Review removed', 'ok');
 }
@@ -2321,6 +2342,7 @@ function persist() {
     _dayHours:  DAY_HOURS,
     _blocks:    BLOCKS,
     _services:  JSON.parse(localStorage.getItem('moonServices') || '[]'),
+    _reviews:   JSON.parse(localStorage.getItem('moonReviews')  || '[]'),
   };
   clearTimeout(_persistTimer);
   _persistTimer = setTimeout(() => backupSettingsToCloud(snapshot), 2000);
