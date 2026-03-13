@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dashboard — Your DashBoard</title>
+<title>Dashboard — Moon Cuts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
@@ -90,6 +90,7 @@ body{
   display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:100;
 }
+/* sb-logo-main used by JS to update shop name */
 .sb-logo-main{
   font-family:var(--display);font-size:1.05rem;
   letter-spacing:-0.01em;color:var(--paper);
@@ -100,6 +101,7 @@ body{
 }
 .topbar-right{display:flex;gap:8px;align-items:center}
 .topbar-right a{text-decoration:none}
+/* topbarTitle used by JS — keep it, just hide it */
 #topbarTitle{display:none}
 .tb-pill{
   background:var(--ink2);border:1px solid var(--ink3);border-radius:20px;
@@ -120,6 +122,7 @@ body{
   display:flex;z-index:200;
   padding-bottom:env(safe-area-inset-bottom,0);
 }
+/* sb-item used by JS — keep class on nav items */
 .sb-item{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:5px;cursor:pointer;
@@ -146,6 +149,7 @@ body{
   font-size:0.32rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
   color:var(--dim);
 }
+
 
 /* ══ SWIPE TO DELETE ══ */
 .swipe-wrap{position:relative;overflow:hidden;}
@@ -190,6 +194,7 @@ body{
 }
 .time-slot:last-child{border-bottom:none}
 
+/* time column */
 .ts-time{
   width:66px;flex-shrink:0;
   padding:12px 0 10px 14px;
@@ -197,13 +202,16 @@ body{
   color:var(--dim);text-transform:uppercase;
 }
 
+/* content column */
 .ts-content{flex:1;padding:12px 12px 12px 0;min-width:0}
 
+/* open slot */
 .ts-open{
   font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;
   color:var(--dim);padding-top:4px;opacity:0.45;
 }
 
+/* booked slot */
 .time-slot.booked{background:#fff}
 .ts-client-name{
   font-family:var(--display);font-size:1.15rem;letter-spacing:-0.01em;
@@ -215,14 +223,17 @@ body{
 }
 .ts-actions{display:flex;gap:5px;flex-wrap:wrap;padding-bottom:2px}
 
+/* blocked */
 .time-slot.blocked{background:var(--paper2)}
 .ts-blocked{
   font-size:0.46rem;letter-spacing:0.12em;text-transform:uppercase;
   color:var(--dim2);font-style:italic;padding-top:4px;
 }
 
+/* past dimmed */
 .time-slot.past{opacity:0.4}
 
+/* action buttons */
 .act-btn{
   display:inline-flex;align-items:center;gap:4px;
   border-radius:16px;padding:5px 10px;
@@ -239,6 +250,7 @@ body{
 .act-btn.cancel-silent{color:var(--dim2);border-color:var(--rule)}
 .act-btn.cancel-silent:hover{color:var(--red)}
 
+/* remind banner */
 #remindBanner{
   margin:8px 14px;padding:12px 16px;
   background:#fdf8ee;border:1.5px solid #d4b86a;border-radius:10px;
@@ -251,6 +263,7 @@ body{
   cursor:pointer;white-space:nowrap;
 }
 
+/* empty */
 .empty-state{
   padding:60px 24px;text-align:center;
 }
@@ -272,6 +285,7 @@ body{
 .search-bar input::placeholder{color:var(--dim2)}
 .search-bar input:focus{border-color:var(--ink)}
 
+/* booking rows */
 .bk-row{
   display:flex;align-items:center;gap:12px;
   padding:14px 20px;border-bottom:1px solid var(--rule);
@@ -330,6 +344,7 @@ body{
 }
 .avail-hint{font-size:0.46rem;letter-spacing:0.06em;color:var(--dim);margin-bottom:14px;line-height:1.6}
 
+/* days toggle grid */
 #daysGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .day-tog{
   border:1.5px solid var(--rule);border-radius:8px;
@@ -342,7 +357,9 @@ body{
 .day-tog.on .day-tog-name{color:var(--green)}
 .day-tog.on .day-tog-dot{background:var(--green)}
 
+/* slot length */
 #slotLengthBtns{display:flex;gap:8px;flex-wrap:wrap}
+/* JS uses .btn class to toggle .btn-primary / .btn-ghost */
 .btn{
   border-radius:20px;padding:9px 18px;
   font-family:var(--font);font-size:0.52rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
@@ -351,6 +368,7 @@ body{
 .btn-primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .btn-ghost{background:var(--paper2);color:var(--dim);border-color:var(--rule)}
 
+/* block form */
 .block-form{padding:16px 20px;background:var(--paper);border-bottom:1px solid var(--rule)}
 .bf-label{font-size:0.44rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:block}
 .bf-input{
@@ -365,6 +383,7 @@ body{
 }
 .bf-group{margin-bottom:12px}
 
+/* quick block buttons */
 .preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .preset-btn{
   background:var(--paper2);border:1.5px solid var(--rule);border-radius:20px;
@@ -386,6 +405,7 @@ body{
 }
 .block-del-btn:hover{color:var(--red)}
 
+/* save button */
 .big-save{
   display:block;width:calc(100% - 40px);margin:16px 20px;
   background:var(--ink);color:var(--paper);border:none;border-radius:12px;
@@ -408,12 +428,14 @@ body{
   cursor:pointer;
 }
 
+/* settings tab bar */
 .stab-bar{
   display:flex;overflow-x:auto;scrollbar-width:none;
   background:var(--paper);border-bottom:1px solid var(--rule);
   padding:0 20px;gap:0;
 }
 .stab-bar::-webkit-scrollbar{display:none}
+/* .stab class used by JS */
 .stab{
   flex-shrink:0;padding:14px 14px 12px;
   font-size:0.46rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
@@ -422,9 +444,11 @@ body{
 }
 .stab.active{color:var(--ink);border-bottom-color:var(--gold)}
 
+/* stab-panel used by JS */
 .stab-panel{display:none}
 .stab-panel.active{display:block}
 
+/* config sections */
 .cfg-section{
   padding:14px 20px 8px;background:var(--paper2);
   font-size:0.4rem;font-weight:600;letter-spacing:0.28em;text-transform:uppercase;color:var(--dim);
@@ -433,6 +457,7 @@ body{
 .block-form.settings-row{padding:14px 20px;background:var(--paper)}
 .settings-row .bf-group:last-child{margin-bottom:0}
 
+/* toggle */
 .toggle-row{
   display:flex;align-items:center;justify-content:space-between;
   gap:12px;
@@ -452,10 +477,13 @@ body{
 .tog.on{background:#e6f4ea;border-color:#8fc29a}
 .tog.on::after{background:var(--green);transform:translateX(20px)}
 
+/* range */
 .range-wrap{display:flex;align-items:center;gap:10px;margin-top:8px}
 .range-wrap input[type=range]{flex:1;accent-color:var(--gold)}
 .range-val{font-family:var(--display);font-size:1.1rem;color:var(--ink);min-width:36px;text-align:right}
 
+/* theme grid */
+/* theme grid — classes emitted by renderThemeGrid() */
 .theme-grid{padding:14px 20px}
 .theme-group-label{font-size:0.4rem;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
 .theme-grid-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
@@ -469,6 +497,7 @@ body{
 .theme-card-dots{display:flex;gap:4px;justify-content:center}
 .theme-card-dot{width:8px;height:8px;border-radius:50%}
 
+/* font grid — classes emitted by renderFontGrid() */
 .font-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 20px}
 .font-card{
   background:var(--paper2);border:2px solid var(--rule);border-radius:10px;
@@ -478,6 +507,7 @@ body{
 .font-card-name{font-size:1.4rem;color:var(--ink);margin-bottom:4px;line-height:1.2}
 .font-card-desc{font-size:0.38rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)}
 
+/* swatch row */
 .swatch-row{display:flex;gap:10px;flex-wrap:wrap;padding:14px 20px}
 .swatch{
   width:34px;height:34px;border-radius:50%;cursor:pointer;
@@ -487,6 +517,7 @@ body{
 .color-custom{display:flex;align-items:center;gap:10px;padding:0 20px 14px}
 .color-preview{width:34px;height:34px;border-radius:50%;border:2px solid var(--rule);flex-shrink:0}
 
+/* service editor */
 .svc-editor-list{background:var(--paper)}
 .svc-row{
   display:flex;align-items:center;gap:10px;
@@ -498,6 +529,7 @@ body{
 .svc-del{background:none;border:none;font-size:1.1rem;color:var(--dim2);cursor:pointer;padding:4px;transition:color 0.15s}
 .svc-del:hover{color:var(--red)}
 
+/* add service form */
 .add-svc-btn{
   display:flex;align-items:center;justify-content:center;
   background:var(--ink);color:var(--paper);border:none;border-radius:10px;
@@ -510,12 +542,14 @@ body{
   padding:14px 20px;background:var(--paper);border-bottom:1px solid var(--rule);
 }
 
+/* copy rows */
 .copy-row{
   padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--paper);
   display:flex;flex-direction:column;gap:6px;
 }
 .copy-default{font-size:0.42rem;letter-spacing:0.06em;color:var(--dim);font-style:italic}
 
+/* reviews */
 .review-item{
   padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--paper);
   display:flex;flex-direction:column;gap:3px;
@@ -524,6 +558,7 @@ body{
 .review-text{font-size:0.52rem;color:var(--dim);line-height:1.5}
 .review-author{font-size:0.42rem;letter-spacing:0.1em;color:var(--dim2)}
 
+/* modal */
 .modal-bg{
   position:fixed;inset:0;background:rgba(26,20,16,0.6);
   z-index:5000;display:none;align-items:flex-end;justify-content:center;
@@ -558,12 +593,14 @@ body{
   display:flex;gap:8px;flex-wrap:wrap;
 }
 
+/* badges */
 .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:0.42rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
 .badge-green{background:#e6f4ea;color:var(--green);border:1px solid #8fc29a}
 .badge-red{background:#fdf2f2;color:var(--red);border:1px solid #d09090}
 .badge-blue{background:#eef4f8;color:var(--blue);border:1px solid #8ab0c8}
 .badge-dim{background:var(--paper2);color:var(--dim);border:1px solid var(--rule)}
 
+/* toast */
 .toast{
   position:fixed;bottom:96px;left:50%;
   transform:translateX(-50%) translateY(6px);
@@ -577,6 +614,7 @@ body{
 .toast.err{background:#8b2525}
 .toast.ok{background:var(--green)}
 
+/* warn/info boxes */
 .info-box{
   margin:14px 20px;padding:12px 14px;background:#fdf8ee;
   border:1.5px solid #e8d080;border-radius:10px;
@@ -588,13 +626,16 @@ body{
   font-size:0.46rem;letter-spacing:0.06em;color:var(--red);line-height:1.7;
 }
 
+/* pin change grid */
 .pin-change-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
 
+/* vacation preview */
 .vaca-preview-box{
   margin:14px 20px;padding:20px;background:var(--paper2);
   border:1px solid var(--rule);border-radius:12px;text-align:center;
 }
 
+/* ── DAY CARD GRID (rendered by JS) ── */
 .day-card-list{display:flex;flex-direction:column;gap:8px}
 .day-card{background:var(--paper2);border:1.5px solid var(--rule);border-radius:10px;padding:12px 14px;transition:all 0.15s}
 .day-card.on{background:var(--paper);border-color:var(--rule2)}
@@ -615,13 +656,15 @@ body{
 .day-card-status.open{color:var(--green)}
 .day-card-hours{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
 .dh-sel{background:var(--paper2);border:1.5px solid var(--rule);border-radius:6px;padding:7px 10px;font-family:var(--font);font-size:0.82rem;color:var(--ink);outline:none;flex:1}
-
+.svc-row{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--rule);background:var(--paper)}
+/* qt-row for quick text modal */
 .qt-row{padding:12px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:background 0.12s;border-radius:4px}
 .qt-row:last-child{border-bottom:none}
 .qt-row:hover{background:var(--paper2)}
 .qt-label{font-size:0.54rem;font-weight:500;color:var(--ink);margin-bottom:3px;letter-spacing:0.04em}
 .qt-preview{font-size:0.44rem;letter-spacing:0.04em;color:var(--dim);line-height:1.5}
 
+/* ── THEME GRID (JS renders these classes) ── */
 .theme-grid{padding:14px 20px 4px}
 .theme-group-label{font-size:0.4rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;margin-top:4px}
 .theme-grid-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
@@ -632,13 +675,16 @@ body{
 .theme-card-dots{display:flex;gap:4px;justify-content:center}
 .theme-card-dot{width:8px;height:8px;border-radius:50%}
 
+/* ── FONT GRID (JS renders these classes) ── */
 .font-card{background:var(--paper2);border:2px solid var(--rule);border-radius:10px;padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.15s}
 .font-card.active{border-color:var(--gold);background:#fdf8ee}
 .font-card-name{font-size:1.4rem;color:var(--ink);margin-bottom:4px;line-height:1.2}
 .font-card-desc{font-size:0.38rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim)}
 
+/* ── SWATCH active state (JS uses .active not .sel) ── */
 .swatch.active{border-color:var(--ink)!important;transform:scale(1.15)}
 
+/* ── stat-label alias (JS emits stat-label, CSS only had stat-lbl) ── */
 .stat-label{font-size:0.45rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);margin-top:4px}
 </style>
 </head>
@@ -684,6 +730,7 @@ body{
       </div>
     </div>
     <div class="topbar-right">
+      <!-- topbarTitle hidden but kept for JS compat -->
       <span id="topbarTitle" style="display:none"></span>
       <div class="tb-pill" onclick="loadData()">↻ Refresh</div>
       <a href="index.html" target="_blank"><div class="tb-pill accent">Booking Page ↗</div></a>
@@ -702,6 +749,7 @@ body{
         <div class="sched-arrow" onclick="shiftDay(-1)">←</div>
         <div class="sched-arrow" onclick="shiftDay(0)">Today</div>
         <div class="sched-arrow" onclick="shiftDay(1)">→</div>
+        <div class="sched-arrow" onclick="openManualBooking()" style="background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:700">+ Add</div>
       </div>
     </div>
     <div id="remindBanner" style="display:none">
@@ -804,6 +852,7 @@ body{
       <div class="sec-hdr-sub">Changes save when you tap Save</div>
     </div>
 
+    <!-- Tab bar — .stab class required by JS -->
     <div class="stab-bar">
       <div class="stab active" onclick="showStab('shop',this)">My Shop</div>
       <div class="stab" onclick="showStab('services',this)">Services</div>
@@ -1011,7 +1060,7 @@ body{
 
 </div><!-- /app -->
 
-<!-- ══ BOTTOM NAV ══ -->
+<!-- ══ BOTTOM NAV — .sb-item class used by JS ══ -->
 <nav class="bottom-nav">
   <div class="sb-item active" onclick="showPanel('schedule',this)"><span class="sb-icon">📅</span>Schedule</div>
   <div class="sb-item" onclick="showPanel('bookings',this)"><span class="sb-icon">📋</span>Bookings</div>
@@ -1032,7 +1081,45 @@ body{
     <div class="modal-footer" id="modalFooter"></div>
   </div>
 </div>
-
+<!-- ══ MANUAL BOOKING MODAL ══ -->
+<div class="modal-bg" id="manualModal" onclick="if(event.target===this)closeManualModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-hdr">
+      <div class="modal-title">+ Add Booking</div>
+      <button class="modal-close" onclick="closeManualModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="bf-group">
+        <label class="bf-label">Client Name</label>
+        <input class="bf-input" id="mbName" placeholder="First name" autocomplete="off">
+      </div>
+      <div class="bf-group">
+        <label class="bf-label">Phone Number</label>
+        <input class="bf-input" id="mbPhone" placeholder="+1 (805) 000-0000" type="tel" inputmode="tel">
+      </div>
+      <div class="bf-group">
+        <label class="bf-label">Service</label>
+        <select class="bf-select" id="mbService" style="width:100%"></select>
+      </div>
+      <div class="bf-group">
+        <label class="bf-label">Date</label>
+        <input class="bf-input" id="mbDate" type="date" style="width:180px">
+      </div>
+      <div class="bf-group" style="margin-bottom:0">
+        <label class="bf-label">Time</label>
+        <select class="bf-select" id="mbTime" style="width:100%"></select>
+      </div>
+      <div id="mbConflictWarn" style="display:none;margin-top:12px;padding:10px 14px;background:#fdf2f2;border:1.5px solid #e0a0a0;border-radius:8px;font-size:0.46rem;letter-spacing:0.06em;color:var(--red);line-height:1.7">
+        ⚠ That time slot is already booked. You can still save, but it will double-book.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="act-btn cancel-silent" onclick="closeManualModal()">Cancel</button>
+      <button class="act-btn confirm" onclick="saveManualBooking()" style="flex:1;justify-content:center;padding:12px">Save Booking</button>
+    </div>
+  </div>
+</div>
 <!-- ══ QUICK TEXT MODAL ══ -->
 <div class="modal-bg" id="qtModal" onclick="if(event.target===this)closeQT()">
   <div class="modal">
@@ -1083,6 +1170,8 @@ let CFG = {
 };
 
 // ── STATE ─────────────────────────────────────────────────
+// NOTE: SERVICES and TIMES are declared in services.js (loaded before this script)
+// They are const arrays that rebuildTimes() and saveServices() mutate in place.
 let DATA      = { bookings: [], clients: [] };
 let WORK_DAYS = [1,2,3,4,5,6];
 let BLOCKS    = [];
@@ -1100,35 +1189,44 @@ updateClock();
 
 // ── INIT ─────────────────────────────────────────────────
 (async () => {
-  await initPin();
+  await initPin(); // must be first — now async, fetches PIN from cloud if localStorage empty
+  // load saved settings
   const saved = localStorage.getItem('moonCfg');
   if (saved) {
     const s = JSON.parse(saved);
+    // never let saved empty values overwrite the hardcoded keys in config.js
     if (!s.binId)  delete s.binId;
     if (!s.binKey) delete s.binKey;
     Object.assign(CFG, s);
   }
 
+  // load work days
   const wd = localStorage.getItem('moonWorkDays');
   if (wd) WORK_DAYS = JSON.parse(wd);
   else WORK_DAYS = MOON_CONFIG.WORK_DAYS || [1,2,3,4,5,6];
 
+  // load per-day hours (legacy — no longer used, kept for compat)
   const dh = localStorage.getItem('moonDayHours');
   if (dh) DAY_HOURS = JSON.parse(dh);
+  // load blocks
   const bl = localStorage.getItem('moonBlocks');
   if (bl) BLOCKS = JSON.parse(bl);
 
   await loadData();
 
+  // apply saved accent color immediately
   if(CFG.accent) {
     document.documentElement.style.setProperty('--gold', CFG.accent);
     document.documentElement.style.setProperty('--gold2', CFG.accent);
   }
 
+  // load saved services into SERVICES array
   const savedSvcs = localStorage.getItem('moonServices');
   if(savedSvcs){ SERVICES.length=0; JSON.parse(savedSvcs).forEach(s=>SERVICES.push(s)); }
 
+  // rebuild time slots from saved hours/slot length
   rebuildTimes();
+
   renderDaysGrid();
   renderBlockSelects();
   renderBlocks();
@@ -1144,20 +1242,34 @@ async function loadData() {
     const { record } = await r.json();
     DATA = { bookings: record.bookings || [], clients: record.clients || [], settings: record.settings || {} };
 
+    // ── CLOUD SYNC ─────────────────────────────────────────
     if (record.settings && Object.keys(record.settings).length) {
       const s = record.settings;
       if (!s.binId)  delete s.binId;
       if (!s.binKey) delete s.binKey;
       Object.assign(CFG, s);
       localStorage.setItem('moonCfg', JSON.stringify(CFG));
+      // Work days & hours: cloud wins (these are set via dashboard UI)
       if (s._workDays) { WORK_DAYS = s._workDays; localStorage.setItem('moonWorkDays', JSON.stringify(WORK_DAYS)); }
       if (s._dayHours) { DAY_HOURS = s._dayHours; localStorage.setItem('moonDayHours', JSON.stringify(DAY_HOURS)); }
-      if (s._blocks)   { BLOCKS    = s._blocks;   localStorage.setItem('moonBlocks',   JSON.stringify(BLOCKS)); }
-      if (s._services && s._services.length) {
+      // BLOCKS: localStorage wins — cloud is only a fallback for new devices
+      // This prevents the 2s debounce race condition from wiping freshly added blocks
+      const localBlocks = localStorage.getItem('moonBlocks');
+      if (localBlocks) {
+        BLOCKS = JSON.parse(localBlocks); // trust local — it's always up to date
+      } else if (s._blocks) {
+        BLOCKS = s._blocks; // new device — restore from cloud
+        localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
+      }
+      // Services: same pattern — local wins, cloud is fallback
+      const localSvcs = localStorage.getItem('moonServices');
+      if (localSvcs) {
+        SERVICES.length = 0; JSON.parse(localSvcs).forEach(sv => SERVICES.push(sv));
+      } else if (s._services && s._services.length) {
         localStorage.setItem('moonServices', JSON.stringify(s._services));
         SERVICES.length = 0; s._services.forEach(sv => SERVICES.push(sv));
       }
-      if (s._reviews && s._reviews.length) {
+      if (s._reviews && s._reviews.length && !localStorage.getItem('moonReviews')) {
         localStorage.setItem('moonReviews', JSON.stringify(s._reviews));
       }
       if (CFG.accent) {
@@ -1166,6 +1278,7 @@ async function loadData() {
       }
       rebuildTimes();
     }
+    // ── END CLOUD SYNC ─────────────────────────────────────
 
     renderAll();
     renderDaysGrid(); renderBlockSelects(); renderBlocks();
@@ -1175,11 +1288,13 @@ async function loadData() {
 }
 
 async function saveData() {
+  // Always do a fresh GET before PUT to avoid overwriting concurrent booking-page saves
   try {
     const r = await fetch(`https://api.jsonbin.io/v3/b/${CFG.binId}/latest`,
       { headers: { 'X-Master-Key': CFG.binKey } });
     if (!r.ok) { toast('Save failed', 'err'); return; }
     const { record } = await r.json();
+    // Merge: keep fresh bookings+clients from server, overlay our local changes
     const merged = {
       ...record,
       bookings: DATA.bookings,
@@ -1216,6 +1331,7 @@ function renderStats() {
   `;
 }
 
+
 // ── QUICK TEXT TEMPLATES ──────────────────────────────────
 function openQuickText(id) {
   const b = DATA.bookings.find(x => x.id === id);
@@ -1244,6 +1360,7 @@ function openQuickText(id) {
     </div>
     ${rows}`;
   document.getElementById('qtModal').classList.add('show');
+  // store for sendQTByIdx
   window._qtPhone = b.phone;
   window._qtTemplates = templates;
 }
@@ -1273,6 +1390,7 @@ function closeQT() {
 function buildReminderMsg(name, service, date, time) {
   const cfg = JSON.parse(localStorage.getItem('moonCfg')||'{}');
   const shop = cfg.shopName || MOON_CONFIG.SHOP_NAME || 'Your appointment';
+  const dl = new Date(date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   return `Hey ${name}! Just a reminder — you have a ${service} tomorrow at ${time}. See you then! — ${shop}`;
 }
 
@@ -1292,6 +1410,7 @@ function remindAllTomorrow() {
   const ds = dStr(tomorrow);
   const bks = DATA.bookings.filter(b => b.date===ds && b.status==='confirmed');
   if (!bks.length) { toast('No bookings tomorrow', 'err'); return; }
+  // Show a modal with one-tap SMS buttons per client (avoids group chat issues)
   const rows = bks.map(bk => {
     const msg = encodeURIComponent(buildReminderMsg(bk.name, bk.service, bk.date, bk.time));
     const clean = bk.phone.replace(/\D/g,'');
@@ -1331,6 +1450,7 @@ function renderSchedule() {
 
   const dayBks = DATA.bookings.filter(b => b.date === ds && b.status !== 'cancelled' && b.status !== 'completed');
   const dayBlocks = BLOCKS.filter(b => b.date === ds);
+  console.log('[Schedule] date:', ds, '| BLOCKS total:', BLOCKS.length, '| dayBlocks:', dayBlocks.length, dayBlocks);
   const isWorkDay = WORK_DAYS.includes(schedDay.getDay());
 
   let html = '';
@@ -1340,12 +1460,19 @@ function renderSchedule() {
   } else {
     TIMES.forEach(t => {
       const bk = dayBks.find(b => b.time === t);
-      // ── FIX: check fullDay blocks first, then time-range blocks ──
       const blocked = dayBlocks.find(b => b.fullDay || isTimeBlocked(t, b.from, b.to));
 
-      const slotMins = timeToMins(t);
+      // check if this slot is in the past (today only)
+      const slotMins = (h => {
+        const [time, ap] = t.split(' ');
+        let [hr, mn] = time.split(':').map(Number);
+        if (ap === 'PM' && hr !== 12) hr += 12;
+        if (ap === 'AM' && hr === 12) hr = 0;
+        return hr * 60 + mn;
+      })();
       const isPast = isToday && slotMins < nowMins;
 
+      // skip past empty slots — only show if booked or blocked
       if (isPast && !bk && !blocked) return;
 
       if (blocked) {
@@ -1379,6 +1506,7 @@ function renderSchedule() {
   }
 
   document.getElementById('slotList').innerHTML = html;
+  // show remind-all button only when viewing today (reminders go to tomorrow's clients)
   const remindBtn = document.getElementById('btnRemindAll');
   if (remindBtn) {
     const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
@@ -1395,26 +1523,20 @@ function renderSchedule() {
   }
 }
 
-// ── FIX 1: time-to-minutes helper (used by isTimeBlocked + renderSchedule) ──
-function timeToMins(t) {
-  const [timePart, ap] = t.split(' ');
-  let [h, m] = timePart.split(':').map(Number);
-  if (ap === 'PM' && h !== 12) h += 12;
-  if (ap === 'AM' && h === 12) h = 0;
-  return h * 60 + m;
-}
-
-// ── FIX 1: isTimeBlocked uses minute comparison, not brittle indexOf ──
 function isTimeBlocked(time, from, to) {
-  // fullDay block — from/to are null
+  // fullDay block has from=null — blocks everything
   if (from === null || from === undefined) return true;
-  const slotM = timeToMins(time);
-  const fromM = timeToMins(from);
-  const toM   = timeToMins(to);
-  return slotM >= fromM && slotM < toM;
+  const idx = TIMES.indexOf(time);
+  const fi  = TIMES.indexOf(from);
+  const ti  = TIMES.indexOf(to);
+  // if from/to not found in TIMES, don't block (prevents -1 false positives)
+  if (fi === -1 || ti === -1) return false;
+  return idx >= fi && idx < ti;
 }
 
 // ── BOOKINGS ──────────────────────────────────────────────
+
+// ── DELETE BOOKING / CLIENT ────────────────────────────────
 function deleteBookingById(id) {
   if (!confirm('Delete this booking?')) return;
   DATA.bookings = DATA.bookings.filter(b => b.id !== id);
@@ -1467,6 +1589,7 @@ function initSwipe(wrap, onDelete) {
     }
   });
 
+  // tap outside to close
   wrap.addEventListener('touchstart', e => {
     if (opened && !e.target.closest('.swipe-del')) {
       inner.style.transform = 'translateX(0)';
@@ -1475,6 +1598,7 @@ function initSwipe(wrap, onDelete) {
     }
   }, { passive: true });
 
+  // delete button
   const delBtn = wrap.querySelector('.swipe-del');
   if (delBtn) delBtn.addEventListener('click', onDelete);
 }
@@ -1496,6 +1620,7 @@ function renderBookings() {
     const sa = statusOrder[a.status] ?? 0;
     const sb = statusOrder[b.status] ?? 0;
     if (sa !== sb) return sa - sb;
+    // within same status: upcoming before past, then newest date first
     const aFuture = a.date >= today ? 0 : 1;
     const bFuture = b.date >= today ? 0 : 1;
     if (aFuture !== bFuture) return aFuture - bFuture;
@@ -1648,9 +1773,12 @@ function cancelClient(id) {
   const shop = CFG.shopName || MOON_CONFIG.SHOP_NAME || 'Your barber';
   const dl = new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   const msg = `Hey ${b.name}, sorry — we can't take your ${b.service} on ${dl} at ${b.time}. Feel free to rebook at a different time. — ${shop}`;
+  // Cancel booking FIRST so dismissing SMS doesn't leave ghost bookings
   cancelBooking(id);
   setTimeout(() => openSMS(b.phone, msg), 300);
 }
+
+
 
 function rescheduleClient(id) {
   const b = DATA.bookings.find(x => x.id === id);
@@ -1676,6 +1804,8 @@ async function doneBooking(id) {
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DAY_FULL  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
+// Per-day hours: { 1:{open:9,close:18}, 6:{open:9,close:14}, ... }
+// Defaults to global CFG.openHour / closeHour if not set
 let DAY_HOURS = {};
 
 function fmtH(h) {
@@ -1737,8 +1867,8 @@ function updateDayHours(i) {
   document.getElementById(`daystatus-${i}`).textContent = `${fmtH(o)} – ${fmtH(c)}`;
 }
 
-// ── FIX 2: saveWorkDays sets CFG._workDays and CFG._dayHours before persist ──
 function saveWorkDays() {
+  // read any dropdowns that may have changed
   DAY_NAMES.forEach((_, i) => {
     const openEl  = document.getElementById(`dayopen-${i}`);
     const closeEl = document.getElementById(`dayclose-${i}`);
@@ -1748,11 +1878,8 @@ function saveWorkDays() {
   });
   localStorage.setItem('moonWorkDays',  JSON.stringify(WORK_DAYS));
   localStorage.setItem('moonDayHours',  JSON.stringify(DAY_HOURS));
-  CFG.workDays  = WORK_DAYS;
-  CFG.dayHours  = DAY_HOURS;
-  // FIX: stamp directly on CFG so persist() snapshot includes them
-  CFG._workDays = WORK_DAYS;
-  CFG._dayHours = DAY_HOURS;
+  CFG.workDays = WORK_DAYS;
+  CFG.dayHours = DAY_HOURS;
   persist();
   toast('Schedule saved', 'ok');
 }
@@ -1763,8 +1890,11 @@ function renderBlockSelects() {
   fromSel.innerHTML = TIMES.map(t => `<option value="${t}">${t}</option>`).join('');
   toSel.innerHTML = TIMES.map(t => `<option value="${t}">${t}</option>`).join('');
   toSel.selectedIndex = 1;
+
+  // default date = today
   document.getElementById('blockDate').value = dStr(new Date());
 }
+
 
 // ── BLOCK PRESETS ─────────────────────────────────────────
 const BLOCK_PRESETS = {
@@ -1774,7 +1904,6 @@ const BLOCK_PRESETS = {
   fullday:   { from: null,       to: null,        reason: 'Day off', fullDay: true },
 };
 
-// ── FIX 3: applyPreset stamps CFG._blocks before persist ──
 function applyPreset(type) {
   const date = document.getElementById('blockDate').value;
   if (!date) { toast('Pick a date first', 'err'); return; }
@@ -1784,20 +1913,18 @@ function applyPreset(type) {
   if (p.fullDay) {
     BLOCKS.push({ id: `BL-${Date.now()}`, date, from: null, to: null, reason: p.reason, fullDay: true });
   } else {
+    // find closest TIMES
     const fi = TIMES.indexOf(p.from) >= 0 ? p.from : TIMES[0];
     const ti = TIMES.indexOf(p.to)   >= 0 ? p.to   : TIMES[TIMES.length-1];
     BLOCKS.push({ id: `BL-${Date.now()}`, date, from: fi, to: ti, reason: p.reason });
   }
   localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
-  // FIX: stamp on CFG before persist
-  CFG._blocks = BLOCKS;
   persist();
   renderBlocks();
   renderSchedule();
   toast(`${p.reason} blocked ✓`, 'ok');
 }
 
-// ── FIX 3: addBlock stamps CFG._blocks before persist ──
 function addBlock() {
   const date = document.getElementById('blockDate').value;
   const from = document.getElementById('blockFrom').value;
@@ -1805,26 +1932,20 @@ function addBlock() {
   const reason = document.getElementById('blockReason').value.trim();
 
   if (!date) { toast('Pick a date', 'err'); return; }
-  // FIX: use minute comparison so it works regardless of slot length
-  if (timeToMins(from) >= timeToMins(to)) { toast('"To" must be after "From"', 'err'); return; }
+  if (TIMES.indexOf(from) >= TIMES.indexOf(to)) { toast('"To" must be after "From"', 'err'); return; }
 
   BLOCKS.push({ id: `BL-${Date.now()}`, date, from, to, reason });
   localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
-  // FIX: stamp on CFG before persist
-  CFG._blocks = BLOCKS;
-  persist();
+  backupSettingsToCloud({...CFG, _workDays:WORK_DAYS, _dayHours:DAY_HOURS, _blocks:BLOCKS, _services:JSON.parse(localStorage.getItem('moonServices')||'[]')});
   renderBlocks();
   renderSchedule();
   toast('Time blocked ✓', 'ok');
 }
 
-// ── FIX 3: removeBlock stamps CFG._blocks before persist ──
 function removeBlock(id) {
   BLOCKS = BLOCKS.filter(b => b.id !== id);
   localStorage.setItem('moonBlocks', JSON.stringify(BLOCKS));
-  // FIX: stamp on CFG before persist
-  CFG._blocks = BLOCKS;
-  persist();
+  backupSettingsToCloud({...CFG, _workDays:WORK_DAYS, _dayHours:DAY_HOURS, _blocks:BLOCKS, _services:JSON.parse(localStorage.getItem('moonServices')||'[]')});
   renderBlocks();
   renderSchedule();
   toast('Block removed', 'ok');
@@ -1848,16 +1969,19 @@ function renderBlocks() {
 }
 
 // ── SETTINGS ──────────────────────────────────────────────
+// ── SETTINGS TABS ─────────────────────────────────────────
 function showStab(name, el) {
   document.querySelectorAll('.stab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
   document.getElementById('stab-'+name).classList.add('active');
   el.classList.add('active');
+  // re-render dynamic content each time tab opens
   if(name==='services')   renderSvcEditor();
   if(name==='appearance'){ renderSwatches(); renderThemeGrid(); renderFontGrid(); }
   if(name==='reviews')    loadDashReviews();
 }
 
+// ── RENDER SETTINGS ───────────────────────────────────────
 function renderSettings() {
   const g = id => document.getElementById(id);
   const C = CFG;
@@ -1872,28 +1996,40 @@ function renderSettings() {
   g('cfgBinKey').value    = C.binKey    || MOON_CONFIG.JSONBIN_API_KEY || '';
   g('cfgSms').value       = C.sms       || MOON_CONFIG.SMS_ENDPOINT    || '';
 
+  // cancellation slider
   const ch = C.cancelHours || 2;
   g('cancelHours').value = ch;
   g('cancelVal').textContent = ch + 'h';
 
+  // max day
   if(C.maxDayEnabled) g('togMaxDay').classList.add('on');
   g('cfgMaxDay').value = C.maxDay || 12;
 
+  // reminder toggle
   if(C.reminder !== false) g('togReminder').classList.add('on');
 
+  // accent color
   applyAccent(C.accent || '#c4a97d', false);
   renderSwatches();
+
+  // theme grid rendered on tab open
+
+  // services editor
   renderSvcEditor();
   loadCopyFields();
+  // walk-in & quick text toggles
   if(CFG.walkinOn)    document.getElementById('togWalkin')?.classList.add('on');
   if(CFG.quickTextOn !== false) document.getElementById('togQuickText')?.classList.add('on');
+  // sms toggle — on by default, off only if explicitly disabled
   if(C.smsEnabled === true) document.getElementById('togSms')?.classList.add('on');
   else document.getElementById('togSms')?.classList.remove('on');
+  // other tabs
   renderVacationTab();
   renderGalleryTab();
   loadDashReviews();
 }
 
+// ── SAVE SETTINGS ─────────────────────────────────────────
 function saveSettings() {
   const v = id => document.getElementById(id).value.trim();
   CFG.shopName  = v('cfgShopName');
@@ -1944,6 +2080,7 @@ function loadCopyFields() {
   set('cpyInfoNote',cp.infoNote);
 }
 
+// ── HOURS ─────────────────────────────────────────────────
 function highlightSlotBtn() {
   const slotLen = CFG.slotLen || 30;
   document.querySelectorAll('#slotLengthBtns .btn').forEach(b => {
@@ -1953,6 +2090,7 @@ function highlightSlotBtn() {
   });
 }
 
+// slot length helper — kept for rebuildTimes
 function setSlotLen(min, btn) {
   CFG.slotLen = min;
   document.querySelectorAll('#slotLengthBtns .btn').forEach(b => {
@@ -1995,6 +2133,7 @@ function renderSvcEditor() {
   if(!list) return;
   list.innerHTML = editServices.map((s,i) => `
     <div class="svc-row" data-i="${i}">
+      
       <span class="svc-name" contenteditable="true" onblur="editSvcField(${i},'name',this.textContent)">${s.name}</span>
       <span class="svc-price" contenteditable="true" onblur="editSvcField(${i},'price',this.textContent)" style="cursor:text">$<span>${s.priceNum}</span></span>
       <span class="svc-dur">${s.dur}</span>
@@ -2037,6 +2176,7 @@ function addService() {
 function saveServices() {
   localStorage.setItem('moonServices', JSON.stringify(editServices));
   persist();
+  // update live SERVICES array
   SERVICES.length = 0;
   editServices.forEach(s => SERVICES.push(s));
 }
@@ -2066,7 +2206,9 @@ function applyAccent(c, save=true) {
   if(save){ CFG.accent = c; }
 }
 
+// ── THEMES ────────────────────────────────────────────────
 const THEMES = [
+  // dark
   { id:'smoke',      name:'Smoke',     desc:'Classic dark',        bg:'#090909', s1:'#111111', text:'#f0ebe2', accent:'#c4a97d', dot2:'#2a2a2a', dot3:'#1a1a1a', light:false },
   { id:'noir',       name:'Noir',      desc:'All black',           bg:'#000000', s1:'#0d0d0d', text:'#ffffff', accent:'#d4d4d4', dot2:'#1a1a1a', dot3:'#0d0d0d', light:false },
   { id:'cobalt',     name:'Cobalt',    desc:'Deep blue night',     bg:'#080c18', s1:'#0d1220', text:'#e0e8f8', accent:'#6090d4', dot2:'#1a2238', dot3:'#121828', light:false },
@@ -2075,6 +2217,7 @@ const THEMES = [
   { id:'plum',       name:'Plum',      desc:'Rich purple',         bg:'#100a18', s1:'#180f22', text:'#ede0f8', accent:'#b07ed4', dot2:'#2a1a3a', dot3:'#20142e', light:false },
   { id:'rose',       name:'Rose',      desc:'Dark romantic',       bg:'#12080e', s1:'#1c0e18', text:'#f5e0ee', accent:'#e07090', dot2:'#2e1428', dot3:'#22111e', light:false },
   { id:'slate',      name:'Slate',     desc:'Cool grey',           bg:'#0c0e10', s1:'#141618', text:'#e8eaec', accent:'#90a4b8', dot2:'#222628', dot3:'#1a1e20', light:false },
+  // light
   { id:'white',      name:'White',     desc:'Clean & minimal',     bg:'#ffffff', s1:'#f8f8f8', text:'#111111', accent:'#222222', dot2:'#e0e0e0', dot3:'#f0f0f0', light:true },
   { id:'pearl',      name:'Pearl',     desc:'Soft warm white',     bg:'#faf8f5', s1:'#f2ede6', text:'#1a1814', accent:'#9a7c5a', dot2:'#ddd5c8', dot3:'#e8e0d4', light:true },
   { id:'petal',      name:'Petal',     desc:'Pink & airy',         bg:'#fdf5f7', s1:'#f8ecf0', text:'#2a1420', accent:'#c4607a', dot2:'#e8cece', dot3:'#f0dde4', light:true },
@@ -2085,6 +2228,7 @@ const THEMES = [
   { id:'mauve',      name:'Mauve',     desc:'Dusty rose',          bg:'#f8f4f6', s1:'#f0e8ec', text:'#28141e', accent:'#b06080', dot2:'#e0ccd6', dot3:'#eadae0', light:true },
 ];
 
+// ── FONTS ─────────────────────────────────────────────────
 const FONTS = [
   { id:'barlow',    name:'Barlow',    family:"'Barlow Condensed',sans-serif",    desc:'Bold condensed',     url:'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700&display=swap' },
   { id:'playfair',  name:'Playfair',  family:"'Playfair Display',serif",         desc:'Elegant serif',      url:'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap' },
@@ -2120,6 +2264,7 @@ function renderThemeGrid() {
 
 function renderFontGrid() {
   const cur = CFG.fontId || 'barlow';
+  // preload all font links into head
   FONTS.forEach(f => {
     if (!document.querySelector(`link[href="${f.url}"]`)) {
       const l = document.createElement('link');
@@ -2149,12 +2294,15 @@ function pickFont(id) {
 function setBgTheme(theme) { pickTheme(theme); }
 
 function saveAppearance() {
+  // bgTheme and fontId are already set on CFG when user clicks a card
+  // Just make sure accent is captured too
   const accentInput = document.getElementById('cfgAccent');
   if (accentInput && accentInput.value.trim()) CFG.accent = accentInput.value.trim();
   persist();
   toast('Appearance saved — booking page will update ✓', 'ok');
 }
 
+// ── BOOKING RULES ─────────────────────────────────────────
 function saveRules() {
   CFG.cancelHours   = parseInt(document.getElementById('cancelHours').value);
   CFG.maxDayEnabled = document.getElementById('togMaxDay').classList.contains('on');
@@ -2166,6 +2314,8 @@ function saveRules() {
   toast('Rules saved', 'ok');
 }
 
+
+// ── GALLERY & ABOUT ───────────────────────────────────────
 function saveGallery() {
   const raw = document.getElementById('cfgPhotos').value.trim();
   CFG.photos = raw ? raw.split('\n').map(l=>l.trim()).filter(Boolean) : [];
@@ -2175,6 +2325,7 @@ function saveGallery() {
   toast('Gallery saved', 'ok');
 }
 
+// ── REVIEWS DASHBOARD ─────────────────────────────────────
 function loadDashReviews() {
   const reviews = JSON.parse(localStorage.getItem('moonReviews') || '[]');
   const list = document.getElementById('reviewsDashList');
@@ -2198,12 +2349,14 @@ function deleteReview(i) {
   const reviews = JSON.parse(localStorage.getItem('moonReviews') || '[]');
   reviews.splice(i, 1);
   localStorage.setItem('moonReviews', JSON.stringify(reviews));
+  // include reviews in next cloud snapshot
   CFG._reviews = reviews;
   persist();
   loadDashReviews();
   toast('Review removed', 'ok');
 }
 
+// ── VACATION ──────────────────────────────────────────────
 function saveVacation() {
   CFG.vacaOn    = document.getElementById('togVaca').classList.contains('on');
   CFG.vacaIcon  = document.getElementById('cfgVacaIcon').value.trim()  || '✈️';
@@ -2228,11 +2381,14 @@ function renderGalleryTab() {
   if(CFG.customSms && g('cfgCustomSms')) g('cfgCustomSms').value = CFG.customSms;
 }
 
+// ── PERSIST (save everything to localStorage) ─────────────
 // ── PERSIST ───────────────────────────────────────────────
-// FIX 2: debounce reduced to 300ms so settings reach cloud before page close
+// Saves to localStorage instantly, and debounces a cloud backup to JSONBin
+// so if the barber ever clears their cache, settings restore automatically.
 let _persistTimer = null;
 function persist() {
   localStorage.setItem('moonCfg', JSON.stringify(CFG));
+  // also save auxiliary keys into CFG snapshot so they restore together
   const snapshot = {
     ...CFG,
     _workDays:  WORK_DAYS,
@@ -2242,8 +2398,7 @@ function persist() {
     _reviews:   JSON.parse(localStorage.getItem('moonReviews')  || '[]'),
   };
   clearTimeout(_persistTimer);
-  // FIX: 300ms debounce instead of 2000ms — settings reach cloud before page close
-  _persistTimer = setTimeout(() => backupSettingsToCloud(snapshot), 300);
+  _persistTimer = setTimeout(() => backupSettingsToCloud(snapshot), 2000);
 }
 
 async function backupSettingsToCloud(snapshot) {
@@ -2262,11 +2417,128 @@ async function backupSettingsToCloud(snapshot) {
   } catch(e) { /* silent — localStorage is primary, cloud is backup */ }
 }
 
+// ── LIVE PREVIEW ──────────────────────────────────────────
 function livePreview() {
   const name = document.getElementById('cfgShopName').value;
   if(name) document.querySelector('.sb-logo-main').textContent = name;
 }
+// ── MANUAL BOOKING ────────────────────────────────────────
+function openManualBooking() {
+  // populate service dropdown
+  const svcSel = document.getElementById('mbService');
+  svcSel.innerHTML = SERVICES.map(s => `<option value="${s.name}" data-price="${s.price}" data-dur="${s.dur}">${s.name} — ${s.price}</option>`).join('');
 
+  // default date to currently viewed schedule day
+  const ds = dStr(schedDay);
+  document.getElementById('mbDate').value = ds;
+
+  // populate time dropdown and check conflicts
+  populateMbTimes();
+
+  // clear fields
+  document.getElementById('mbName').value  = '';
+  document.getElementById('mbPhone').value = '';
+  document.getElementById('mbConflictWarn').style.display = 'none';
+
+  // wire date change to repopulate times
+  document.getElementById('mbDate').onchange = populateMbTimes;
+  document.getElementById('mbTime').onchange = checkMbConflict;
+
+  document.getElementById('manualModal').classList.add('show');
+}
+
+function populateMbTimes() {
+  const date = document.getElementById('mbDate').value;
+  const timeSel = document.getElementById('mbTime');
+
+  // build time list for that day's hours
+  let open = CFG.openHour || 9, close = CFG.closeHour || 18;
+  if (date) {
+    const dow = new Date(date + 'T12:00:00').getDay();
+    if (DAY_HOURS[dow]) { open = DAY_HOURS[dow].open; close = DAY_HOURS[dow].close; }
+  }
+  const step = CFG.slotLen || 30;
+  const slots = [];
+  for (let mins = open * 60; mins < close * 60; mins += step) {
+    const h = Math.floor(mins / 60), m = mins % 60;
+    const ap = h < 12 ? 'AM' : 'PM';
+    const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    slots.push(`${h12}:${m.toString().padStart(2, '0')} ${ap}`);
+  }
+  timeSel.innerHTML = slots.map(t => `<option value="${t}">${t}</option>`).join('');
+  checkMbConflict();
+}
+
+function checkMbConflict() {
+  const date = document.getElementById('mbDate').value;
+  const time = document.getElementById('mbTime').value;
+  const warn = document.getElementById('mbConflictWarn');
+  if (!date || !time) { warn.style.display = 'none'; return; }
+  const conflict = DATA.bookings.some(b => b.date === date && b.time === time && b.status !== 'cancelled');
+  warn.style.display = conflict ? 'block' : 'none';
+}
+
+async function saveManualBooking() {
+  const name  = document.getElementById('mbName').value.trim();
+  const phone = document.getElementById('mbPhone').value.trim();
+  const date  = document.getElementById('mbDate').value;
+  const time  = document.getElementById('mbTime').value;
+  const svcEl = document.getElementById('mbService');
+  const svcName  = svcEl.options[svcEl.selectedIndex]?.text || '';
+  const svcPrice = svcEl.options[svcEl.selectedIndex]?.dataset.price || '';
+  const svcDur   = svcEl.options[svcEl.selectedIndex]?.dataset.dur   || '';
+
+  if (!name)  { toast('Enter a client name', 'err'); return; }
+  if (!phone || phone.replace(/\D/g,'').length < 10) { toast('Enter a valid phone number', 'err'); return; }
+  if (!date)  { toast('Pick a date', 'err'); return; }
+
+  const fp = phone.startsWith('+') ? phone : '+1' + phone.replace(/\D/g, '');
+
+  const bk = {
+    id:       `BK-${Date.now()}`,
+    service:  svcName,
+    price:    svcPrice,
+    dur:      svcDur,
+    date,
+    time,
+    name,
+    phone:    fp,
+    status:   'confirmed',
+    bookedAt: new Date().toISOString(),
+    manual:   true,
+  };
+
+  try {
+    // save to JSONBin so the booking page sees the slot as taken
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${CFG.binId}/latest`,
+      { headers: { 'X-Master-Key': CFG.binKey } });
+    if (!r.ok) throw new Error('fetch failed');
+    const { record } = await r.json();
+    if (!record.bookings) record.bookings = [];
+    if (!record.clients)  record.clients  = [];
+    record.bookings.push(bk);
+    const c = record.clients.find(x => x.phone === fp);
+    if (c) { c.visits++; c.lastVisit = date; }
+    else record.clients.push({ name, phone: fp, visits: 1, lastVisit: date, joinDate: new Date().toISOString().split('T')[0] });
+    await fetch(`https://api.jsonbin.io/v3/b/${CFG.binId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': CFG.binKey },
+      body: JSON.stringify(record)
+    });
+    DATA.bookings.push(bk);
+    DATA.clients = record.clients;
+    closeManualModal();
+    renderAll();
+    toast(`${name} booked for ${time} ✓`, 'ok');
+  } catch(e) {
+    toast('Could not save — check connection', 'err');
+  }
+}
+
+function closeManualModal() {
+  document.getElementById('manualModal').classList.remove('show');
+}
+// ── PANEL NAV ─────────────────────────────────────────────
 function showPanel(name, el) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
@@ -2274,16 +2546,19 @@ function showPanel(name, el) {
   const titles = {schedule:'Schedule',bookings:'All Bookings',clients:'Clients',availability:'Availability',settings:'Settings'};
   document.getElementById('topbarTitle').textContent = titles[name] || name;
   if(el) el.classList.add('active');
+  // re-render panels that need it
   if(name==='availability'){ renderDaysGrid(); renderBlockSelects(); renderBlocks(); highlightSlotBtn(); }
   if(name==='schedule')     renderSchedule();
   if(name==='bookings')     renderBookings();
   if(name==='clients')      renderClients();
 }
 
+// ── MODAL ─────────────────────────────────────────────────
 function openModal() { document.getElementById('modal').classList.add('open'); }
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
 document.getElementById('modal').addEventListener('click', e => { if(e.target===document.getElementById('modal')) closeModal(); });
 
+// ── HELPERS ───────────────────────────────────────────────
 function dStr(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
@@ -2297,13 +2572,15 @@ function toast(msg, type='') {
 
 // ── PIN SYSTEM ────────────────────────────────────────────
 const DEFAULT_PIN   = '1234';
-const MASTER_PIN    = '0000';
+const MASTER_PIN    = '0000'; // override if barber forgets
 let   pinEntry      = '';
 let   pinUnlocked   = false;
 
 async function initPin() {
+  // Try localStorage first (fast path)
   let cfg = JSON.parse(localStorage.getItem('moonCfg') || '{}');
 
+  // If localStorage is empty, try to pull PIN + shopName from JSONBin before showing screen
   if (!cfg.dashPin && (CFG.binId && CFG.binKey)) {
     try {
       const r = await fetch(`https://api.jsonbin.io/v3/b/${CFG.binId}/latest`,
@@ -2312,6 +2589,7 @@ async function initPin() {
         const { record } = await r.json();
         if (record.settings) {
           cfg = record.settings;
+          // strip empty keys before saving so config.js values stay intact
           if (!cfg.binId)  delete cfg.binId;
           if (!cfg.binKey) delete cfg.binKey;
           localStorage.setItem('moonCfg', JSON.stringify(cfg));
@@ -2320,12 +2598,15 @@ async function initPin() {
     } catch(e) { /* fall through to default PIN */ }
   }
 
+  // update logo to shop name
   if (cfg.shopName) document.getElementById('pinLogo').textContent = cfg.shopName;
 
+  // check if already unlocked this session
   if (sessionStorage.getItem('dashUnlocked') === '1') {
     unlock();
     return;
   }
+  // pin screen is visible by default — ensure app stays hidden
   document.getElementById('app').classList.remove('unlocked');
 }
 
@@ -2355,6 +2636,7 @@ function checkPin() {
 
   if (correct) {
     if (pinEntry === MASTER_PIN && pinEntry !== savedPin) {
+      // master PIN used — prompt to set a new PIN
       setTimeout(() => {
         alert('Master PIN accepted. Go to Settings → API Keys to set a new PIN.');
       }, 400);
@@ -2362,6 +2644,7 @@ function checkPin() {
     unlock();
   } else {
     showPinError('Incorrect PIN');
+    // shake dots
     const dots = document.getElementById('pinDots');
     dots.style.transform = 'translateX(8px)';
     setTimeout(() => dots.style.transform = 'translateX(-8px)', 80);
@@ -2388,6 +2671,21 @@ function hidePinError() {
   document.getElementById('pinError').classList.remove('show');
 }
 
+function showMasterPrompt() {
+  const entered = prompt('Enter master reset PIN:');
+  if (entered === MASTER_PIN) {
+    unlock();
+    setTimeout(() => {
+      showPanel.call(document.querySelector('.sb-item:last-child'), 'settings');
+      showStab('keys', document.querySelector('.stab:last-child'));
+      alert('Go to Settings → API Keys to set your new PIN now.');
+    }, 300);
+  } else if (entered !== null) {
+    showPinError('Wrong master PIN');
+  }
+}
+
+// ── SAVE PIN ──────────────────────────────────────────────
 function savePin() {
   const np = document.getElementById('newPin').value.trim();
   const cp = document.getElementById('confirmPin').value.trim();
@@ -2407,11 +2705,13 @@ function savePin() {
   toast('PIN updated — write it down!', 'ok');
 }
 
+// keyboard support for PIN
 document.addEventListener('keydown', e => {
   if (pinUnlocked) return;
   if (e.key >= '0' && e.key <= '9') pinKey(e.key);
   if (e.key === 'Backspace') pinDel();
 });
+
 </script>
 </body>
 </html>
