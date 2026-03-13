@@ -501,7 +501,8 @@ footer{flex-shrink:0;background:var(--bg);padding:8px 16px env(safe-area-inset-b
         </div>
         <div class="fg">
           <label class="fl">Phone number</label>
-          <input class="fi" id="phoneInput" type="tel" placeholder="(805) 000-0000" autocomplete="tel" inputmode="tel">
+          <input class="fi" id="phoneInput" type="tel" placeholder="(805) 000-0000" autocomplete="tel" inputmode="tel" maxlength="14" oninput="formatPhone(this)">
+      
         </div>
         <div class="info-note">
           Moon will text you a <strong>confirmation</strong> when you book.<br>
@@ -1130,7 +1131,13 @@ function copyToClipboard(text) {
     .then(() => toast('Link copied! 📋'))
     .catch(() => toast('Copy the URL from your browser'));
 }
-
+function formatPhone(el){
+  let v = el.value.replace(/\D/g,'').slice(0,10);
+  if(v.length >= 7) v = '('+v.slice(0,3)+') '+v.slice(3,6)+'-'+v.slice(6);
+  else if(v.length >= 4) v = '('+v.slice(0,3)+') '+v.slice(3);
+  else if(v.length) v = '('+v;
+  el.value = v;
+}
 function dStr(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.className='toast',2600);}
 </script>
